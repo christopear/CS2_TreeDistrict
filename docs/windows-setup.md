@@ -4,6 +4,9 @@ The portable core is ready to develop on Ubuntu. Creating the game adapter is th
 next integration step and requires access to an installed CS2 modding toolchain.
 Do this on Windows, where the game is already installed.
 
+Continue on branch `feat/district-tool-integration`; see the
+[district-tool workstream and acceptance checks](district-integration.md).
+
 1. Start CS2 and install/update the official toolchain in **Options → Modding**.
    Let it select Unity, Burst/Entities, SDK and Node dependencies. Do not substitute
    the latest Unity release or an old BepInEx tutorial.
