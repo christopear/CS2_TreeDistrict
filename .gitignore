@@ -17,3 +17,6 @@ artifacts/
 *.dll
 *.pdb
 *.cok
+# UI test outputs are generated locally.
+ui/test-results/
+ui/playwright-report/

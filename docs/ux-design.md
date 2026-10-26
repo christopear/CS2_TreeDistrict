@@ -1,7 +1,10 @@
 # TreeDistrict UX and UI decision
 
 Status: agreed workflow, 2026-10-26. Implementation details and recommendations
-are labelled below. No in-game UI has been implemented yet.
+are labelled below. A local editor and native UI binding scaffold are now available;
+see [implementation status and host contract](ui-scaffold.md). In-game integration
+has not yet been tested. Overlapping districts are allowed in v1; handling them is
+a user responsibility until v2.
 
 ## Agreed technology
 

@@ -3,10 +3,29 @@
 A Cities: Skylines II mod in development: draw a vegetation area, choose its tree
 and shrub mix, and populate it according to density, elevation and slope rules.
 
-**Status: development foundation only; there is no installable game mod yet.**
-The repository currently contains a portable C# core, terrain eligibility rules,
-unit tests, and Linux/Windows CI. Polygon drawing, generation, persistence and the
-game adapter are the next milestones.
+**Status: local UX/settings scaffold; no installable game mod or tree generation yet.**
+The repository includes a runnable district editor preview, versioned JSON
+placeholder profiles, a native CS2 UI binding scaffold, and the portable C# core.
+See [what works and the Windows integration contract](docs/ui-scaffold.md).
+
+## Try the editor locally
+
+With Node 24 LTS installed:
+
+```bash
+npm --prefix ui ci
+npm --prefix ui run dev
+```
+
+Open http://127.0.0.1:5173. Pick a set, draw a district, then edit its settings.
+The preview stores settings in this browser and supports JSON export/import.
+All supplied vegetation is explicitly fictional; profile research comes later.
+
+```bash
+npm --prefix ui run check
+npm --prefix ui exec playwright install chromium
+npm --prefix ui run test:browser
+```
 
 ## Develop on Ubuntu
 
@@ -51,8 +70,9 @@ mod, follow [the Windows handoff](docs/windows-setup.md).
   template. NuGet lockfiles make dependency restoration reproducible.
 - The **official CS2 mod template and post-processor** for the future adapter.
   Game-facing SDK/runtime/Unity versions come from the installed toolchain.
-- The official UI generator when UI integration begins. No unrelated web app
-  framework or Node dependencies are required for this initial core.
+- React 18.3.1 / TypeScript for the shared editor, with a Vite-only local preview,
+  Vitest state tests and Playwright workflow tests. Game builds will use the
+  installed official UI generator; CS2 native controls and UIL are selected.
 
 No game assemblies, Unity installation, generated mod, or third-party source code
 are bundled here. The default solution deliberately builds without them.
@@ -61,5 +81,4 @@ See the [draft product requirements](docs/requirements.md),
 [foliage reference research and design](docs/foliage-reference-design.md),
 [UX and UI technology decision](docs/ux-design.md),
 [architecture and milestones](docs/architecture.md) and
-[reference sources](docs/references.md). An open-source licence has not yet been
-chosen; public repository visibility alone does not grant reuse permissions.
+[reference sources](docs/references.md). Licensed under [MIT](LICENSE).

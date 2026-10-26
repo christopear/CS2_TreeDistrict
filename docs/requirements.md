@@ -148,9 +148,10 @@ Existing vegetation is preserved, affects spacing/shade where relevant, and is
 not automatically assigned to a district. Neighbours outside the district may
 influence plants just inside it.
 
-Overlapping district interiors remain an open decision. Recommendation for the
-first version: reject overlapping interiors while allowing shared boundaries.
-Never duplicate planting or leave ownership ambiguous.
+Overlapping district interiors are allowed in v1 and are the user's responsibility.
+Do not reject overlaps, resolve priorities or coordinate cross-district placement
+in this version. Each future generated plant must still belong only to its creating
+district. Overlap handling is deferred to v2.
 
 ## 5. Ownership, deletion and baking
 
@@ -230,7 +231,7 @@ perform local cleanup. This never triggers automatic replacement planting.
 - Verify game growth/age transitions and future-clearance policy.
 - Tune candidate density and clumping so simple controls produce useful results.
 - Validate the reference report's proposed height-ordered interaction pass.
-- Decide district overlap rules and undo retention limits.
+- Define undo retention limits; overlap handling is deferred to v2.
 - Verify terrain, occupied geometry, asset and ownership/save APIs in Windows.
 
 The existing TerrainRules class is initial hard-filter scaffolding. Its water

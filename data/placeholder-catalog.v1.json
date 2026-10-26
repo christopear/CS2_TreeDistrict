@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "disclaimer": "Fictional UX fixtures only. Not botanical recommendations, real game prefab IDs, or production defaults.",
+  "cityDefaults": {
+    "source": "manual",
+    "referenceTemperatureC": 15,
+    "referenceElevationM": 0,
+    "coolingCPerKm": 6.5
+  },
+  "assets": [
+    {
+      "id": "placeholder:canopy",
+      "name": "Example canopy \u2014 fictional",
+      "placeholder": true,
+      "densityPercent": 100,
+      "ages": [
+        {
+          "id": "young",
+          "name": "Young",
+          "enabled": true,
+          "densityPercent": 100,
+          "footprintRadiusM": 1,
+          "heightM": 3,
+          "canopyRadiusM": 2,
+          "canopyOpacityPercent": 50,
+          "shadeTolerancePercent": 50,
+          "temperature": {
+            "min": -10,
+            "optimum": 15,
+            "max": 40
+          },
+          "slope": {
+            "min": 0,
+            "optimum": 5,
+            "max": 60
+          },
+          "limits": {
+            "minElevationM": -500,
+            "maxElevationM": 4000,
+            "maxSlopeDegrees": 60
+          }
+        },
+        {
+          "id": "mature",
+          "name": "Mature",
+          "enabled": true,
+          "densityPercent": 100,
+          "footprintRadiusM": 2,
+          "heightM": 12,
+          "canopyRadiusM": 5,
+          "canopyOpacityPercent": 50,
+          "shadeTolerancePercent": 50,
+          "temperature": {
+            "min": -10,
+            "optimum": 15,
+            "max": 40
+          },
+          "slope": {
+            "min": 0,
+            "optimum": 5,
+            "max": 60
+          },
+          "limits": {
+            "minElevationM": -500,
+            "maxElevationM": 4000,
+            "maxSlopeDegrees": 60
+          }
+        }
+      ]
+    },
+    {
+      "id": "placeholder:understorey",
+      "name": "Example understorey \u2014 fictional",
+      "placeholder": true,
+      "densityPercent": 70,
+      "ages": [
+        {
+          "id": "mature",
+          "name": "Mature",
+          "enabled": true,
+          "densityPercent": 100,
+          "footprintRadiusM": 0.5,
+          "heightM": 1,
+          "canopyRadiusM": 1,
+          "canopyOpacityPercent": 50,
+          "shadeTolerancePercent": 50,
+          "temperature": {
+            "min": -10,
+            "optimum": 15,
+            "max": 40
+          },
+          "slope": {
+            "min": 0,
+            "optimum": 5,
+            "max": 60
+          },
+          "limits": {
+            "minElevationM": -500,
+            "maxElevationM": 4000,
+            "maxSlopeDegrees": 60
+          }
+        }
+      ]
+    }
+  ],
+  "sets": [
+    {
+      "id": "builtin:example-mixed",
+      "builtIn": true,
+      "set": {
+        "name": "Example mixed vegetation",
+        "overallDensityPercent": 75,
+        "clumpingPercent": 35,
+        "climate": {},
+        "limits": {
+          "minElevationM": -500,
+          "maxElevationM": 4000,
+          "maxSlopeDegrees": 60
+        },
+        "assets": [
+          {
+            "id": "placeholder:canopy",
+            "name": "Example canopy \u2014 fictional",
+            "placeholder": true,
+            "densityPercent": 100,
+            "ages": [
+              {
+                "id": "young",
+                "name": "Young",
+                "enabled": true,
+                "densityPercent": 100,
+                "footprintRadiusM": 1,
+                "heightM": 3,
+                "canopyRadiusM": 2,
+                "canopyOpacityPercent": 50,
+                "shadeTolerancePercent": 50,
+                "temperature": {
+                  "min": -10,
+                  "optimum": 15,
+                  "max": 40
+                },
+                "slope": {
+                  "min": 0,
+                  "optimum": 5,
+                  "max": 60
+                },
+                "limits": {
+                  "minElevationM": -500,
+                  "maxElevationM": 4000,
+                  "maxSlopeDegrees": 60
+                }
+              },
+              {
+                "id": "mature",
+                "name": "Mature",
+                "enabled": true,
+                "densityPercent": 100,
+                "footprintRadiusM": 2,
+                "heightM": 12,
+                "canopyRadiusM": 5,
+                "canopyOpacityPercent": 50,
+                "shadeTolerancePercent": 50,
+                "temperature": {
+                  "min": -10,
+                  "optimum": 15,
+                  "max": 40
+                },
+                "slope": {
+                  "min": 0,
+                  "optimum": 5,
+                  "max": 60
+                },
+                "limits": {
+                  "minElevationM": -500,
+                  "maxElevationM": 4000,
+                  "maxSlopeDegrees": 60
+                }
+              }
+            ]
+          },
+          {
+            "id": "placeholder:understorey",
+            "name": "Example understorey \u2014 fictional",
+            "placeholder": true,
+            "densityPercent": 70,
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "enabled": true,
+                "densityPercent": 100,
+                "footprintRadiusM": 0.5,
+                "heightM": 1,
+                "canopyRadiusM": 1,
+                "canopyOpacityPercent": 50,
+                "shadeTolerancePercent": 50,
+                "temperature": {
+                  "min": -10,
+                  "optimum": 15,
+                  "max": 40
+                },
+                "slope": {
+                  "min": 0,
+                  "optimum": 5,
+                  "max": 60
+                },
+                "limits": {
+                  "minElevationM": -500,
+                  "maxElevationM": 4000,
+                  "maxSlopeDegrees": 60
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "builtin:example-open",
+      "builtIn": true,
+      "set": {
+        "name": "Example open canopy",
+        "overallDensityPercent": 40,
+        "clumpingPercent": 35,
+        "climate": {},
+        "limits": {
+          "minElevationM": -500,
+          "maxElevationM": 4000,
+          "maxSlopeDegrees": 60
+        },
+        "assets": [
+          {
+            "id": "placeholder:canopy",
+            "name": "Example canopy \u2014 fictional",
+            "placeholder": true,
+            "densityPercent": 100,
+            "ages": [
+              {
+                "id": "young",
+                "name": "Young",
+                "enabled": true,
+                "densityPercent": 100,
+                "footprintRadiusM": 1,
+                "heightM": 3,
+                "canopyRadiusM": 2,
+                "canopyOpacityPercent": 50,
+                "shadeTolerancePercent": 50,
+                "temperature": {
+                  "min": -10,
+                  "optimum": 15,
+                  "max": 40
+                },
+                "slope": {
+                  "min": 0,
+                  "optimum": 5,
+                  "max": 60
+                },
+                "limits": {
+                  "minElevationM": -500,
+                  "maxElevationM": 4000,
+                  "maxSlopeDegrees": 60
+                }
+              },
+              {
+                "id": "mature",
+                "name": "Mature",
+                "enabled": true,
+                "densityPercent": 100,
+                "footprintRadiusM": 2,
+                "heightM": 12,
+                "canopyRadiusM": 5,
+                "canopyOpacityPercent": 50,
+                "shadeTolerancePercent": 50,
+                "temperature": {
+                  "min": -10,
+                  "optimum": 15,
+                  "max": 40
+                },
+                "slope": {
+                  "min": 0,
+                  "optimum": 5,
+                  "max": 60
+                },
+                "limits": {
+                  "minElevationM": -500,
+                  "maxElevationM": 4000,
+                  "maxSlopeDegrees": 60
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

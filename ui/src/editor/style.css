@@ -1,0 +1,182 @@
+.td-editor {
+    width: 430px;
+    color: #edf2f3;
+    background: #202b32;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+.td-editor * {
+    box-sizing: border-box;
+}
+.td-panel-header {
+    padding: 18px 22px;
+    background: #293841;
+    font-size: 18px;
+    font-weight: bold;
+}
+.td-editor-content {
+    padding: 22px;
+    overflow-y: auto;
+    max-height: calc(100vh - 122px);
+}
+.td-editor h2 {
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 8px 0 20px;
+}
+.td-editor h3 {
+    font-size: 15px;
+    margin: 20px 0 12px;
+}
+.td-eyebrow {
+    color: #acccaa;
+    font-size: 11px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+}
+.td-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+}
+.td-field > span {
+    margin-bottom: 7px;
+    color: #c7d5da;
+    font-size: 12px;
+}
+.td-editor input:not([type="checkbox"]),
+.td-editor select {
+    width: 100%;
+    background: #142029;
+    color: #f1f6f8;
+    border: 1px solid #4a5a64;
+    border-radius: 4px;
+    padding: 9px 10px;
+    font: inherit;
+}
+.td-editor input[type="checkbox"] {
+    margin-right: 7px;
+}
+.td-editor button {
+    color: #e5eef1;
+    background: #364951;
+    border: 1px solid #536871;
+    padding: 9px 11px;
+    border-radius: 4px;
+    font: inherit;
+    cursor: pointer;
+    margin: 0 6px 6px 0;
+}
+.td-editor button:hover:not(:disabled) {
+    background: #46616a;
+}
+.td-editor button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+.td-editor button[aria-pressed="true"] {
+    border-color: #b7d99d;
+}
+.td-editor :focus-visible {
+    outline: 2px solid #d1ef99;
+    outline-offset: 2px;
+}
+.td-actions {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+.td-help {
+    color: #aabfc7;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 6px 0 14px;
+}
+.td-foldout {
+    border-top: 1px solid #415059;
+    margin-top: 16px;
+    padding-top: 12px;
+}
+.td-foldout > button {
+    background: transparent;
+    border: 0;
+    text-align: left;
+    width: 100%;
+    padding-left: 0;
+    font-weight: bold;
+}
+.td-foldout-body {
+    margin-top: 10px;
+}
+.td-foldout .td-foldout {
+    margin-left: 8px;
+}
+.td-asset {
+    padding: 14px;
+    background: #18252d;
+    border: 1px solid #43535b;
+    border-radius: 4px;
+    margin: 12px 0;
+}
+.td-asset strong {
+    display: block;
+    margin-bottom: 8px;
+}
+.td-badge {
+    display: inline-block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid #657258;
+    color: #ccd8ac;
+    padding: 3px 5px;
+    margin-bottom: 14px;
+}
+.td-override {
+    margin-bottom: 15px;
+}
+.td-editor .td-danger {
+    border-color: #ac7373;
+    color: #ffcdcd;
+}
+.td-error,
+.td-field small {
+    color: #ffc1aa;
+    font-size: 12px;
+    margin: 6px 0;
+}
+.td-curve {
+    width: 100%;
+    height: 45px;
+    color: #b7d99d;
+}
+.td-dialog {
+    position: fixed;
+    top: 25%;
+    left: 22px;
+    width: 386px;
+    padding: 22px;
+    border: 2px solid #93a9b3;
+    background: #18252d;
+    box-shadow: 0 0 0 100vmax #0009;
+    z-index: 100;
+}
+.td-game-panel {
+    position: absolute;
+    left: 16px;
+    top: 80px;
+}
+.td-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+.td-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: #0009;
+    z-index: 100;
+}
+.td-modal-backdrop .td-dialog {
+    box-shadow: none;
+}

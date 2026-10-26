@@ -1,62 +1,58 @@
-# Architecture and first milestones
+# Architecture and milestones
 
-The [product requirements draft](requirements.md) is the current design discussion.
-Use the [foliage reference design](foliage-reference-design.md) for selected source
-models, input contracts and the proposed generator pipeline.
-The milestones below predate that draft and will be revised once its decisions
-are agreed; they are not a complete statement of first-release scope.
+The [requirements](requirements.md), [reference design](foliage-reference-design.md)
+and [UX design](ux-design.md) define the intended product. The current phase is
+settings and district UX, with no vegetation generation.
 
-## Boundaries
+## Current boundaries
 
-`src/TreeDistrict.Core` owns game-independent planning and validation. It must not
-reference Unity, game DLLs, UI code, filesystem paths or live ECS entities.
-World coordinates and elevations use metres; slopes use degrees from horizontal.
-Terrain limits are inclusive. Invalid samples and occupied obstacles are rejected.
-Water-specific exclusion is out of scope. The existing TerrainRules water flag is
-legacy scaffolding and must not be wired into the new generator as a requirement.
+- `data/`: versioned JSON placeholder profiles/sets plus exported schemas. Plant
+  values are data, independent of the UI and eventual generator.
+- `ui/src/domain`: validated data contracts and pure command semantics. Districts
+  carry snapshots and comparison baselines; city climate is resolved at use time.
+- `ui/src/editor`: shared settings editor, independent of storage and drawing host.
+- `ui/src/preview`: browser-only test host for drawing, selection and persistence.
+- `ui/src/game`: native CS2 component/binding scaffold with UIL icons. The C# host
+  and installed-toolchain integration remain to be implemented on Windows.
+- `src/TreeDistrict.Core`: existing game-independent C# terrain-rule foundation.
+  Its legacy water flag is not a requirement for the future generator and is not
+  used by the editor. The core must not reference Unity, UI or runtime ECS IDs.
 
-The future `game/TreeDistrict` adapter will own input tools, terrain/obstacle
-sampling, entity creation, undo/removal, save/load and UI bindings. Its official
-toolchain must remain authoritative over game builds. The core is intentionally
-small today: only terrain eligibility has been implemented.
+See the [UI scaffold contract](ui-scaffold.md) for commands, ownership, persistence
+and exact verification limits. The preview is not a game adapter or terrain model.
 
-Vegetation areas should be independent of administrative districts. Use default on-demand generation and opt-in automatic updates on district edits,
-as specified in the agreed UX. Settings edits apply immediately to district data.
-Existing manually placed vegetation must never be implicitly adopted or removed.
+## Game host responsibilities
 
-## Planned data and generation
+Create independent vegetation districts, rather than attaching this feature to
+administrative districts. The host owns tool input, terrain-only raycasts, polygon
+editing, selection, authoritative validation, city persistence, reusable set files,
+undo and native UI bindings. Use the official mod template and postprocessor.
+Profile/set files are JSON; entity ownership and city data use verified game save
+hooks. Do not save runtime Entity indices as stable vegetation asset identities.
 
-An area needs an ID, polygon, species weights, density, terrain rules, seed and
-generator/schema versions. Persist stable prefab identifiers rather than runtime
-entity IDs. Missing assets need a visible, recoverable policy.
-
-Use a deterministic sampler with an explicitly specified random algorithm. Do not
-depend on `System.Random` producing the same sequence across runtime upgrades.
-Combine minimum spacing with patch-scale density variation and species clustering.
-Preserve area membership for every generated entity so clearing one area cannot
-delete unrelated trees. Resolve overlap ownership explicitly before supporting
-overlapping areas. Save/load and undo are part of the feature, not polish.
-
-The adapter should snapshot terrain inputs, plan placements, preview the count,
-then apply bounded batches with cancellation. Use a spatial index for proximity
-checks, cap candidate attempts and total placements, and avoid rescanning the map
-each frame. Ordinary game trees still have ordinary rendering/simulation costs.
+A field edit immediately changes district settings, not the reusable set library.
+Generation is on demand by default. Auto mode will be event-driven and coalesced
+when generation exists; currently it only persists a setting. Never claim manual
+vegetation. Overlaps are allowed and left to the user in v1, with conflict handling
+deferred to v2. Ownership must still identify one creating district per plant.
 
 ## Milestones
 
-1. **Foundation (present):** portable library, terrain-rule tests, reproducible
-   restore/build/format checks and CI on Linux and Windows.
-2. **Generator prototype:** polygon validation/containment, deterministic sampling,
-   two weighted species, density and minimum spacing on synthetic terrain.
-   Test concave boundaries, exclusion rules, reproducibility and bounded work.
-3. **Game spike:** official template loads; place and clear a small owned batch;
-   verify core assembly loading and save/reload before building a large UI.
-4. **First playable version:** editable polygon, settings, set-first editing, on-demand/auto generation, ungenerate/bake/delete,
-   regeneration and persistence. Protect manual trees and obstacles.
-5. **Natural woodland:** patches, clearings, edge thinning, per-species terrain
-   preferences, shrubs, age variation, and profiling at larger scales.
+1. **Portable foundation — implemented:** C# library, legacy terrain rules and
+   Linux/Windows tests; settings schemas and data-driven placeholder catalog.
+2. **UX scaffold — implemented locally:** set-first editor, city inheritance,
+   nested asset/age controls, draw/select/redraw/delete preview, custom set saving,
+   import/export, native UI entry and command contract. No game host yet.
+3. **Windows integration — next:** official template build, real district tool,
+   host bindings, asset enumeration, stable climate, save/load and input verification.
+   No generation is needed to validate this stage.
+4. **Dedicated profile research:** estimate real asset/age footprints and responses;
+   replace clearly marked fixtures with researched data and provenance.
+5. **Generator:** implement the agreed simplified reference pipeline, deterministic
+   sampling, terrain/obstacle validation, owned entities, bounded jobs and generation
+   lifecycle. No water-specific exclusion or overlap resolution in v1.
 
-Unresolved integration details must be checked against the installed game: area
-editing APIs, prefab enumeration, terrain sampling, obstacle queries, persistence
-hooks and compatibility with forestry-industry areas. No API names are assumed
-from screenshots or older CS1/BepInEx examples.
+Future generation should snapshot world/settings inputs, plan bounded candidates,
+revalidate and apply owned entities in batches. Only the newest district revision
+may commit. Preserve unrelated plants and last valid generation during failure.
+No simulation or placement logic has been added as part of the UX milestone.

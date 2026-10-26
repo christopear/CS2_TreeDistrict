@@ -35,10 +35,10 @@ Do this on Windows, where the game is already installed.
    the mod. Keep the adapter outside the portable solution; use a separate game
    solution if needed. Do not add global Directory.Build.props overrides that
    interfere with the toolchain.
-6. First prove that the generated mod loads, logs, and survives save/load on a
-   disposable test city. Then implement a small placement/removal experiment.
-   Track generated plants explicitly and verify manual trees survive removal.
-7. When a custom panel is needed, run `npx create-csii-ui-mod` inside the adapter
+6. First prove that the generated mod loads and logs on a disposable test city.
+   Implement the [settings/district host contract](ui-scaffold.md), then verify
+   drawing, selection, editing and save/load. Do not add tree generation yet.
+7. To integrate the existing shared editor and native entry, run `npx create-csii-ui-mod` inside the adapter
    directory using the toolchain's Node environment. Match its mod ID to the C#
    assembly name, commit its lockfile, and use `npm ci` for subsequent installs.
    Verify deploy order: the C# deployment can clear the shared mod output folder.
@@ -52,7 +52,8 @@ for account details, and provide a sanitised example if documentation needs it.
 - Record the actual game version and toolchain versions used.
 - Build through the official post-processor and restart the game.
 - Check the game log for loader errors and unwanted bundled game assemblies.
-- Verify spawning, cancellation, clearing, and save/reload on a test city.
+- Verify district drawing, selection, cancellation, settings and save/reload on a
+  test city. Generation actions must remain unavailable in this phase.
 - Check ordinary vegetation tools and construction still behave normally.
 
 The Linux core CI proves none of these game behaviours. Publishing to Paradox

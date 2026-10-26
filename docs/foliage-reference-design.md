@@ -244,8 +244,9 @@ flowchart LR
 ```
 
 1. Validate the simple polygon and profile references. Capture immutable settings
-   and a world snapshot/version. Overlapping area policy remains a separate UX
-   decision; do not silently double-fill their intersection.
+   and a world snapshot/version. Overlapping districts are allowed in v1 and are
+   the user's responsibility; cross-district conflict resolution is deferred to v2.
+   Each future instance still belongs exclusively to its creating district.
 2. Generate bounded candidate opportunities for each selected species over the
    whole domain. Use metres and candidate density, with deterministic stochastic
    rounding of counts. Sample a shared spatial patch field plus optional
@@ -352,7 +353,7 @@ owned batch of real game assets on Windows.
 - Calibrate footprint/canopy estimates for actual CS2 assets and growth states.
 - Select the spatial patch field and exact density normalization.
 - Validate height-ordered placement versus a bounded competition pass.
-- Decide overlapping-area priority versus rejecting overlaps for the first release.
+- Revisit cross-district overlap handling in v2; v1 allows overlap.
 - Define undo retention limits and verify bake/save/load behaviour.
 
 The references are selected now; these implementation choices are not falsely

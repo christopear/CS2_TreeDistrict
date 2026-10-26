@@ -1,0 +1,207 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    background: #15252b;
+    color: #e4ece9;
+    font-family: Arial, sans-serif;
+}
+button,
+input,
+select {
+    font: inherit;
+}
+button {
+    cursor: pointer;
+}
+button:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+.preview-toolbar {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: #111c23;
+    border-bottom: 1px solid #3a5054;
+}
+.preview-toolbar strong {
+    font-size: 20px;
+    letter-spacing: -0.5px;
+}
+.preview-toolbar span {
+    font-size: 12px;
+    color: #9db1b5;
+    margin-left: 16px;
+}
+.preview-toolbar button,
+.import-label,
+.drawing-controls button,
+.district-list button,
+.recovery button {
+    border: 1px solid #587075;
+    border-radius: 4px;
+    padding: 8px 12px;
+    background: #21363d;
+    color: #dce9e6;
+    margin-left: 6px;
+    font-size: 12px;
+}
+.import-label {
+    display: inline-block;
+    cursor: pointer;
+}
+.import-label input {
+    display: none;
+}
+.td-preview > .td-editor {
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    border-right: 1px solid #3d5458;
+}
+.preview-map {
+    position: absolute;
+    left: 430px;
+    top: 64px;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    background: radial-gradient(
+        ellipse at 40% 65%,
+        #304b3d 0%,
+        #1e3634 60%,
+        #15272d 100%
+    );
+}
+.preview-map > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.preview-map > svg.drawing {
+    cursor: crosshair;
+}
+.map-caption {
+    position: absolute;
+    top: 32px;
+    left: 36px;
+    z-index: 1;
+    pointer-events: none;
+}
+.map-caption h1 {
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: -0.7px;
+    margin: 10px 0;
+}
+.map-caption p {
+    font-size: 13px;
+    color: #bbcfca;
+}
+.map-caption small {
+    color: #8da7a1;
+    font-size: 11px;
+}
+.map-contour {
+    stroke: #a1b99818;
+    stroke-width: 2;
+    fill: none;
+    pointer-events: none;
+}
+.district {
+    fill: #b9da8030;
+    stroke: #b0cb83;
+    stroke-width: 2;
+    cursor: pointer;
+}
+.district.selected {
+    fill: #c5e39b44;
+    stroke: #e0f8b9;
+    stroke-width: 3;
+}
+.district:focus {
+    outline: none;
+    stroke: white;
+}
+.draft {
+    stroke: #d9fba4;
+    stroke-width: 2;
+    fill: none;
+    stroke-dasharray: 6 4;
+}
+.preview-map text {
+    fill: #e6f4cd;
+    font-size: 13px;
+}
+.drawing-controls {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    padding: 16px;
+    background: #12252def;
+    border: 1px solid #718a7d;
+    border-radius: 6px;
+}
+.drawing-controls small {
+    display: block;
+    margin-top: 10px;
+    color: #b6c7c4;
+}
+.district-list {
+    position: absolute;
+    bottom: 110px;
+    right: 24px;
+    background: #15282ce8;
+    padding: 16px;
+    max-width: 240px;
+    border: 1px solid #405c57;
+    border-radius: 6px;
+}
+.district-list h3 {
+    margin: 0 0 12px;
+    font-size: 12px;
+}
+.district-list p {
+    font-size: 12px;
+    color: #91ada6;
+}
+.district-list button {
+    display: block;
+    margin: 6px 0;
+    max-width: 208px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.recovery {
+    position: absolute;
+    bottom: 0;
+    background: #522;
+    padding: 20px;
+}
+@media (max-width: 900px) {
+    .td-editor {
+        width: 360px;
+    }
+    .preview-map {
+        left: 360px;
+    }
+    .preview-toolbar span {
+        display: none;
+    }
+    .map-caption {
+        left: 20px;
+    }
+    .map-caption h1 {
+        font-size: 22px;
+    }
+    .district-list {
+        display: none;
+    }
+}
