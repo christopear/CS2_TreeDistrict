@@ -38,8 +38,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -270,7 +270,8 @@
             3.3123
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:AppleTree01"
     },
     {
       "id": "cs2:BirchTree01",
@@ -279,8 +280,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -530,7 +531,8 @@
             2.8092
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:BirchTree01"
     },
     {
       "id": "cs2:CoconutPalmTree01",
@@ -539,8 +541,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -771,7 +773,8 @@
             2.7809
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:CoconutPalmTree01"
     },
     {
       "id": "cs2:EU_AlderTree01",
@@ -780,8 +783,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -1012,7 +1015,8 @@
             5.929
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:EU_AlderTree01"
     },
     {
       "id": "cs2:EU_ChestnutTree01",
@@ -1021,8 +1025,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -1253,7 +1257,8 @@
             3.5697
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:EU_ChestnutTree01"
     },
     {
       "id": "cs2:EU_PoplarTree01",
@@ -1262,8 +1267,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -1513,7 +1518,8 @@
             1.7587
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:EU_PoplarTree01"
     },
     {
       "id": "cs2:EuropeanSpruceTree01",
@@ -1649,8 +1655,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -1881,7 +1887,8 @@
             2.6494
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:FloridaPalmTree01"
     },
     {
       "id": "cs2:FlowerBushCity01",
@@ -1890,8 +1897,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -1932,7 +1939,8 @@
             0.8694
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:FlowerBushCity01"
     },
     {
       "id": "cs2:FlowerBushCity02",
@@ -1941,8 +1949,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -1964,7 +1972,8 @@
             1.0942
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:FlowerBushCity02"
     },
     {
       "id": "cs2:FlowerBushCity03",
@@ -1973,8 +1982,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -1996,7 +2005,8 @@
             1.0052
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:FlowerBushCity03"
     },
     {
       "id": "cs2:FlowerBushWild01",
@@ -2005,8 +2015,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -2123,7 +2133,8 @@
             1.4739
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:FlowerBushWild01"
     },
     {
       "id": "cs2:FlowerBushWild02",
@@ -2132,8 +2143,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -2231,7 +2242,8 @@
             1.8871
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:FlowerBushWild02"
     },
     {
       "id": "cs2:GreenBushCity01",
@@ -2240,8 +2252,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -2263,7 +2275,8 @@
             0.6976
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:GreenBushCity01"
     },
     {
       "id": "cs2:GreenBushCity02",
@@ -2272,8 +2285,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -2295,7 +2308,8 @@
             0.6998
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:GreenBushCity02"
     },
     {
       "id": "cs2:GreenBushCity03",
@@ -2304,8 +2318,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -2327,7 +2341,8 @@
             0.9971
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:GreenBushCity03"
     },
     {
       "id": "cs2:GreenBushWild01",
@@ -2336,8 +2351,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -2435,7 +2450,8 @@
             1.4617
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:GreenBushWild01"
     },
     {
       "id": "cs2:GreenBushWild02",
@@ -2444,8 +2460,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "shrub",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -2543,7 +2559,8 @@
             2.2052
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:GreenBushWild02"
     },
     {
       "id": "cs2:NA_HickoryTree01",
@@ -2552,8 +2569,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -2784,7 +2801,8 @@
             4.337
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:NA_HickoryTree01"
     },
     {
       "id": "cs2:NA_LindenTree01",
@@ -2793,8 +2811,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -3025,7 +3043,8 @@
             2.6021
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:NA_LindenTree01"
     },
     {
       "id": "cs2:NA_LondonPlaneTree01",
@@ -3034,8 +3053,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": "london-plane.json",
-      "botanicalResearchStatus": "partial",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -3266,7 +3285,8 @@
             3.609
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:NA_LondonPlaneTree01"
     },
     {
       "id": "cs2:OakTree01",
@@ -3275,8 +3295,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -3507,7 +3527,8 @@
             6.6755
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:OakTree01"
     },
     {
       "id": "cs2:PineTree01",
@@ -3516,8 +3537,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -3767,7 +3788,8 @@
             2.4473
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:PineTree01"
     },
     {
       "id": "cs2:RoyalPalmTree01",
@@ -3776,8 +3798,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -4008,7 +4030,8 @@
             2.7938
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:RoyalPalmTree01"
     },
     {
       "id": "cs2:SpruceTree01",
@@ -4017,8 +4040,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -4249,7 +4272,8 @@
             4.031
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:SpruceTree01"
     },
     {
       "id": "cs2:SylvesterPalmTree01",
@@ -4258,8 +4282,8 @@
       "nameConfirmedInLocale": true,
       "runtimeMeshLinkVerified": false,
       "kind": "tree",
-      "botanicalProfileRef": null,
-      "botanicalResearchStatus": "notResearched",
+      "botanicalProfileRef": "real-world-vegetation.v1.json",
+      "botanicalResearchStatus": "sourcedReference",
       "placementDefaults": null,
       "baseGameMeasurements": [
         {
@@ -4490,7 +4514,8 @@
             3.4809
           ]
         }
-      ]
+      ],
+      "botanicalProfileId": "cs2:SylvesterPalmTree01"
     }
   ]
 }

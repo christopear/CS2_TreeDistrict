@@ -32,16 +32,27 @@ spacing or real-world dimensions. Duplicate mesh variants remain separate.
 Prefab candidates are matched to locale names, not verified live mesh references.
 The coverage report flags unmatched names and unconfirmed mesh groups.
 
-Every record has a botanical research status and a place for a botanical profile
-reference and placement defaults. Unknown defaults are null rather than invented.
-London Plane links to its existing researched profile. This catalogue prepares
-the remaining assets for authoring; it does not enable them in the generator yet.
+[Real-world reference profiles](data/real-world-vegetation.v1.json) cover the 15
+named trees and 10 shrubs, with 33 sources and per-field source references.
+They record published height/spread, foliage, light, soil/moisture, growth and
+cold hardiness where available. Original units and differing source ranges are
+retained alongside metre conversions. Generic names use explicitly labelled
+representative species/cultivars, chosen using approximate measured size and plant
+type; these are modelling choices, not verified game species identifications.
+The two similarly sized wild flowering bushes share a Vanhoutte spiraea reference.
+
+Inventory records link to these profiles by asset ID; measurement refreshes retain
+the links. The additional unconfirmed European spruce mesh group remains unresearched.
+Unknown values are null: cold hardiness is not a temperature optimum, and crown
+width is not required spacing. Numerical shade, opacity and suitability curves
+still need calibration. This research does not change runtime defaults or enable
+additional species in the generator.
 
 Refresh from your installed game with Python 3 (no additional packages):
 
 ```powershell
 py -3 scripts/measure-vegetation.py --content 'C:/Program Files (x86)/Steam/steamapps/common/Cities Skylines II/Cities2_Data/Content' --game-version 1.6.2f1
-py -3 -m unittest discover -s tests -p 'test_vegetation_measurements.py'
+py -3 -m unittest discover -s tests -p 'test_*.py'
 ```
 
 The extractor scans installed stock `Blob*.cok` archives read-only. It writes

@@ -1,5 +1,9 @@
 {
   "schemaVersion": 1,
+  "botanicalReference": {
+    "catalog": "real-world-vegetation.v1.json",
+    "assetId": "cs2:NA_LondonPlaneTree01"
+  },
   "baseGameMeasurements": {
     "catalog": "base-game-vegetation.v1.json",
     "assetId": "cs2:NA_LondonPlaneTree01"

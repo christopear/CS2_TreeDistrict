@@ -147,6 +147,18 @@ def collect(content, game_version):
             "assets": sorted(records.values(), key=lambda r: r["id"])}
 
 
+def link_botanical_references(inventory, catalogue):
+    """Join curated references by stable asset ID without changing measurements."""
+    profiles = {profile["id"]: profile for profile in catalogue["profiles"]}
+    if len(profiles) != len(catalogue["profiles"]):
+        raise ValueError("Duplicate botanical asset IDs")
+    for asset in inventory["assets"]:
+        if asset["id"] in profiles:
+            asset["botanicalProfileRef"] = "real-world-vegetation.v1.json"
+            asset["botanicalProfileId"] = asset["id"]
+            asset["botanicalResearchStatus"] = profiles[asset["id"]]["researchStatus"]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--content", type=Path, required=True)
@@ -158,6 +170,9 @@ def main():
     result = collect(args.content, args.game_version)
     if not result["assets"] or result["rejectedMeasurements"]:
         raise ValueError(f"Incomplete extraction: {result['rejectedMeasurements']}")
+    catalogue = Path(__file__).resolve().parents[1] / "data/real-world-vegetation.v1.json"
+    if catalogue.exists():
+        link_botanical_references(result, json.loads(catalogue.read_text(encoding="utf-8")))
     args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Measured {len(result['assets'])} asset groups / {sum(len(r['baseGameMeasurements']) for r in result['assets'])} meshes across {len(result['archivesScanned'])} archives")
 

@@ -1,0 +1,2691 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-10-26",
+  "purpose": "Real-world botanical references for discussion and later model calibration; not runtime generation settings.",
+  "mappingPolicy": "Specific common names retain their botanical referent. Generic names use plausible size/type representatives informed by measured game assets, as requested. No game species identity is claimed verified.",
+  "definitions": {
+    "sizeObservations": "Published mature/landscape size ranges with original units and context retained. An identical lower/upper pair denotes a single reported size, not a population distribution. Not minimum spacing.",
+    "coldHardiness": "USDA/RHS categories or reported cold tolerance. Not annual mean temperature or optimum growth temperature.",
+    "lightPreference": "Qualitative exposure preference; not a measured shade mortality curve.",
+    "crownDensity": "Qualitative source description when available; does not equal canopy opacity.",
+    "null": "Not established by the reviewed sources; not zero, unlimited tolerance, or an inferred default.",
+    "quantitativeModelInputs": "Deliberately unset until a defined model and suitable measurements exist. FAO ecological ranges are preserved separately, not coerced into game curves."
+  },
+  "sources": {
+    "malus-domestica": {
+      "url": "https://plants.ces.ncsu.edu/plants/malus-domestica/",
+      "title": "malus domestica",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "kpu-birch": {
+      "url": "https://plantdatabase.kpu.ca/PlantPrint/bepn",
+      "title": "Betula pendula",
+      "publisher": "Kwantlen Polytechnic University",
+      "accessed": "2026-10-26"
+    },
+    "rhs-birch": {
+      "url": "https://www.rhs.org.uk/plants/2261/betula-pendula/details",
+      "title": "Betula pendula",
+      "publisher": "Royal Horticultural Society",
+      "accessed": "2026-10-26"
+    },
+    "usfs-coconut": {
+      "url": "https://www.srs.fs.usda.gov/pubs/gtr/uncaptured/gtr_so027.pdf",
+      "title": "Landscape tree guide: Cocos nucifera, p. 48",
+      "publisher": "USDA Forest Service",
+      "accessed": "2026-10-26"
+    },
+    "fao-coconut": {
+      "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=744",
+      "title": "Ecocrop: Cocos nucifera",
+      "publisher": "FAO",
+      "accessed": "2026-10-26"
+    },
+    "vdb-alder": {
+      "url": "https://www.vdberk.co.uk/trees/alnus-glutinosa/",
+      "title": "Alnus glutinosa",
+      "publisher": "Van den Berk Nurseries",
+      "accessed": "2026-10-26"
+    },
+    "cornell-alder": {
+      "url": "https://woodyplants.cals.cornell.edu/plant/21",
+      "title": "Alnus glutinosa",
+      "publisher": "Cornell University",
+      "accessed": "2026-10-26"
+    },
+    "kew-alder": {
+      "url": "https://growwild.kew.org/plants/common-alder",
+      "title": "Common alder",
+      "publisher": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-26"
+    },
+    "aesculus-x-carnea": {
+      "url": "https://plants.ces.ncsu.edu/plants/aesculus-x-carnea/",
+      "title": "aesculus x carnea",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "rhs-aspen-erecta": {
+      "url": "https://www.rhs.org.uk/plants/94236/populus-tremula-erecta/details",
+      "title": "Populus tremula 'Erecta'",
+      "publisher": "Royal Horticultural Society",
+      "accessed": "2026-10-26"
+    },
+    "sabal-palmetto": {
+      "url": "https://plants.ces.ncsu.edu/plants/sabal-palmetto/",
+      "title": "sabal palmetto",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "carya-ovata": {
+      "url": "https://plants.ces.ncsu.edu/plants/carya-ovata/",
+      "title": "carya ovata",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "uf-hickory": {
+      "url": "https://hort.ifas.ufl.edu/database/documents/pdf/tree_fact_sheets/carovaa.pdf",
+      "title": "Carya ovata, ST-123",
+      "publisher": "University of Florida IFAS",
+      "accessed": "2026-10-26"
+    },
+    "vdb-linden-rancho": {
+      "url": "https://www.vdberk.co.uk/trees/tilia-cordata-rancho/",
+      "title": "Tilia cordata 'Rancho'",
+      "publisher": "Van den Berk Nurseries",
+      "accessed": "2026-10-26"
+    },
+    "tilia-cordata": {
+      "url": "https://plants.ces.ncsu.edu/plants/tilia-cordata/",
+      "title": "tilia cordata",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "sa-london-plane": {
+      "url": "https://plantselector.botanicgardens.sa.gov.au/Plants/Details/17914",
+      "title": "Platanus × acerifolia",
+      "publisher": "Botanic Gardens and State Herbarium of South Australia",
+      "accessed": "2026-10-26"
+    },
+    "rhs-london-plane": {
+      "url": "https://www.rhs.org.uk/plants/96764/platanus-%C3%97-hispanica/details",
+      "title": "Platanus × hispanica",
+      "publisher": "Royal Horticultural Society",
+      "accessed": "2026-10-26"
+    },
+    "quercus-robur": {
+      "url": "https://plants.ces.ncsu.edu/plants/quercus-robur/",
+      "title": "quercus robur",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "pinus-sylvestris": {
+      "url": "https://plants.ces.ncsu.edu/plants/pinus-sylvestris/",
+      "title": "pinus sylvestris",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "uf-royal": {
+      "url": "https://ask.ifas.ufl.edu/publication/ST574",
+      "title": "Roystonea regia: Royal Palm",
+      "publisher": "University of Florida IFAS",
+      "accessed": "2026-10-26"
+    },
+    "nparks-royal": {
+      "url": "https://www.nparks.gov.sg/florafaunaweb/flora/2/6/2682",
+      "title": "Roystonea regia",
+      "publisher": "Singapore National Parks Board",
+      "accessed": "2026-10-26"
+    },
+    "picea-abies": {
+      "url": "https://plants.ces.ncsu.edu/plants/picea-abies/",
+      "title": "picea abies",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "uf-sylvester": {
+      "url": "https://ask.ifas.ufl.edu/publication/FR308",
+      "title": "Phoenix sylvestris, Wild Date Palm",
+      "publisher": "University of Florida IFAS",
+      "accessed": "2026-10-26"
+    },
+    "uf-sylvester-size": {
+      "url": "https://sfyl.ifas.ufl.edu/media/sfylifasufledu/marion/docs/Palms-for-Central-Florida.pdf",
+      "title": "Palm Selections for Central Florida: Sylvester Palm",
+      "publisher": "University of Florida IFAS Extension",
+      "accessed": "2026-10-26"
+    },
+    "dasiphora-fruticosa": {
+      "url": "https://plants.ces.ncsu.edu/plants/dasiphora-fruticosa/",
+      "title": "dasiphora fruticosa",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "spiraea-japonica": {
+      "url": "https://plants.ces.ncsu.edu/plants/spiraea-japonica/",
+      "title": "spiraea japonica",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "hydrangea-macrophylla": {
+      "url": "https://plants.ces.ncsu.edu/plants/hydrangea-macrophylla/",
+      "title": "hydrangea macrophylla",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "spiraea-x-vanhouttei": {
+      "url": "https://plants.ces.ncsu.edu/plants/spiraea-x-vanhouttei/",
+      "title": "spiraea x vanhouttei",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "ilex-crenata-helleri": {
+      "url": "https://plants.ces.ncsu.edu/plants/ilex-crenata-helleri/",
+      "title": "ilex crenata helleri",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "buxus-microphylla": {
+      "url": "https://plants.ces.ncsu.edu/plants/buxus-microphylla/",
+      "title": "buxus microphylla",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "rhs-yew": {
+      "url": "https://www.rhs.org.uk/plants/385663/taxus-%C3%97-media-densiformis-m/details",
+      "title": "Taxus × media 'Densiformis'",
+      "publisher": "Royal Horticultural Society",
+      "accessed": "2026-10-26"
+    },
+    "cornus-sanguinea": {
+      "url": "https://plants.ces.ncsu.edu/plants/cornus-sanguinea/",
+      "title": "cornus sanguinea",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "corylus-avellana": {
+      "url": "https://plants.ces.ncsu.edu/plants/corylus-avellana/",
+      "title": "corylus avellana",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    }
+  },
+  "profiles": [
+    {
+      "id": "cs2:AppleTree01",
+      "gameName": "Apple Tree",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Malus domestica",
+        "commonName": "Domestic apple",
+        "mappingStatus": "commonNameMatch",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Published standard/seedling size encompasses the approximately 6.4 m tall, 8.5 m wide asset.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "AppleTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 6.3786,
+          "widthM": 8.4314,
+          "depthM": 8.4641
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            4.572,
+            9.144
+          ],
+          "crownSpreadM": [
+            4.572,
+            9.144
+          ],
+          "original": {
+            "height": [
+              15,
+              30
+            ],
+            "spread": [
+              15,
+              30
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "malus-domestica"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "malus-domestica"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to partial shade",
+        "sourceIds": [
+          "malus-domestica"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moist, well-drained soil; tolerates multiple soil textures.",
+        "sourceIds": [
+          "malus-domestica"
+        ]
+      },
+      "growthRate": {
+        "value": "medium",
+        "sourceIds": [
+          "malus-domestica"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 4a–9b",
+        "sourceIds": [
+          "malus-domestica"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Rootstock, cultivar and pruning strongly change size. Chilling requirements depend on cultivar; none assigned here."
+      ]
+    },
+    {
+      "id": "cs2:BirchTree01",
+      "gameName": "Birch",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Betula pendula",
+        "commonName": "Silver birch",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "European birch reference with a 7–10 m crown matching the narrow asset; published mature height exceeds the game adult mesh.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "BirchTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 15.9568,
+          "widthM": 7.9079,
+          "depthM": 6.8075
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            22,
+            30
+          ],
+          "crownSpreadM": [
+            7,
+            10
+          ],
+          "original": {
+            "height": [
+              22,
+              30
+            ],
+            "spread": [
+              7,
+              10
+            ],
+            "unit": "m"
+          },
+          "sourceIds": [
+            "kpu-birch"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "kpu-birch"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun, part sun/part shade, filtered shade",
+        "sourceIds": [
+          "kpu-birch"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Well-drained soil.",
+        "sourceIds": [
+          "kpu-birch"
+        ]
+      },
+      "growthRate": null,
+      "coldHardiness": {
+        "value": "Zone 2 (source labels -46 to -40 C)",
+        "sourceIds": [
+          "kpu-birch"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": {
+        "value": [
+          20,
+          50
+        ],
+        "sourceIds": [
+          "rhs-birch"
+        ]
+      },
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "RHS describes height up to 25 m and spread greater than 8 m; source ranges describe different growing contexts."
+      ]
+    },
+    {
+      "id": "cs2:CoconutPalmTree01",
+      "gameName": "Coconut Palm Tree",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Cocos nucifera",
+        "commonName": "Coconut palm",
+        "mappingStatus": "commonNameMatch",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Specific common name; published 9–18 m height and approximately 7.6 m crown fit the asset.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "CoconutPalmTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 13.9718,
+          "widthM": 6.6049,
+          "depthM": 7.4368
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            9.144,
+            18.288
+          ],
+          "crownSpreadM": [
+            7.62,
+            7.62
+          ],
+          "original": {
+            "height": [
+              30,
+              60
+            ],
+            "spread": [
+              25,
+              25
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "usfs-coconut"
+          ],
+          "context": "Guide gives 30–60 ft or more, and a single 25 ft crown diameter. Upper height is not a maximum."
+        }
+      ],
+      "foliage": {
+        "value": "evergreen palm",
+        "sourceIds": [
+          "fao-coconut"
+        ]
+      },
+      "lightPreference": {
+        "value": "Very bright light preferred; cloudy conditions included in the broader suitability description.",
+        "sourceIds": [
+          "fao-coconut"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Best in well-drained sandy soil; tolerates salt spray.",
+        "sourceIds": [
+          "usfs-coconut"
+        ]
+      },
+      "growthRate": {
+        "value": "moderate",
+        "sourceIds": [
+          "usfs-coconut"
+        ]
+      },
+      "coldHardiness": {
+        "value": {
+          "killingTemperatureDuringRestC": -1,
+          "killingTemperatureEarlyGrowthC": 0
+        },
+        "sourceIds": [
+          "fao-coconut"
+        ],
+        "note": "Ecocrop reported values, not guarantees for every cultivar or exposure duration."
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [
+        {
+          "value": {
+            "optimalTemperatureC": [
+              22,
+              34
+            ],
+            "absoluteTemperatureC": [
+              14,
+              38
+            ],
+            "optimalAnnualRainfallMm": [
+              1200,
+              2400
+            ],
+            "absoluteAnnualRainfallMm": [
+              650,
+              4000
+            ],
+            "optimalSoilPH": [
+              5,
+              8
+            ],
+            "absoluteSoilPH": [
+              4.3,
+              8.7
+            ]
+          },
+          "sourceIds": [
+            "fao-coconut"
+          ],
+          "note": "FAO crop suitability ranges, not instantaneous lethal thresholds or a triangular game curve."
+        }
+      ],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:EU_AlderTree01",
+      "gameName": "Alder",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Alnus glutinosa",
+        "commonName": "Common alder",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "European common alder is a plausible broad-crowned reference; asset crown is somewhat wider than this nursery range.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "EU_AlderTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 19.7829,
+          "widthM": 14.2207,
+          "depthM": 14.7074
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            10,
+            20
+          ],
+          "crownSpreadM": [
+            6,
+            12
+          ],
+          "original": {
+            "height": [
+              10,
+              20
+            ],
+            "spread": [
+              6,
+              12
+            ],
+            "unit": "m"
+          },
+          "sourceIds": [
+            "vdb-alder"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "vdb-alder"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to partial shade; tolerates light shade.",
+        "sourceIds": [
+          "cornell-alder"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moist to wet soil; tolerates flooding.",
+        "sourceIds": [
+          "vdb-alder"
+        ]
+      },
+      "growthRate": {
+        "value": "fast",
+        "sourceIds": [
+          "vdb-alder"
+        ]
+      },
+      "coldHardiness": {
+        "value": "Hardy to USDA zone 4a",
+        "sourceIds": [
+          "cornell-alder"
+        ]
+      },
+      "crownDensity": {
+        "value": "half-open",
+        "sourceIds": [
+          "vdb-alder"
+        ],
+        "note": "Qualitative crown description, not a light-transmission percentage."
+      },
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [
+        {
+          "value": {
+            "soilPH": [
+              5,
+              8
+            ],
+            "moisture": "Moist to periodically saturated; occasional dry periods tolerated."
+          },
+          "sourceIds": [
+            "cornell-alder"
+          ]
+        },
+        {
+          "value": {
+            "typicalHeightM": [
+              20,
+              28
+            ]
+          },
+          "sourceIds": [
+            "kew-alder"
+          ],
+          "note": "Separate Kew height range; not averaged into the nursery observation."
+        }
+      ],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:EU_ChestnutTree01",
+      "gameName": "Chestnut",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Aesculus × carnea",
+        "commonName": "Red horse chestnut",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Size-based chestnut analogue: published 9.1–12.2 m height and 7.6–10.7 m crown closely fit the 9.1 × 9.4 m mesh. Not an identification as Castanea.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "EU_ChestnutTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.1238,
+          "widthM": 9.3594,
+          "depthM": 8.8246
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            9.144,
+            12.192
+          ],
+          "crownSpreadM": [
+            7.62,
+            10.668
+          ],
+          "original": {
+            "height": [
+              30,
+              40
+            ],
+            "spread": [
+              25,
+              35
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "aesculus-x-carnea"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "aesculus-x-carnea"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to partial shade",
+        "sourceIds": [
+          "aesculus-x-carnea"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moist, fertile, acidic soil with good drainage.",
+        "sourceIds": [
+          "aesculus-x-carnea"
+        ]
+      },
+      "growthRate": {
+        "value": "slow",
+        "sourceIds": [
+          "aesculus-x-carnea"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 4a–9b",
+        "sourceIds": [
+          "aesculus-x-carnea"
+        ]
+      },
+      "crownDensity": {
+        "value": "dense, rounded",
+        "sourceIds": [
+          "aesculus-x-carnea"
+        ]
+      },
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Horse chestnut and sweet chestnut are different genera. This hybrid was deliberately selected for approximate size, not confirmed from game foliage. Dry conditions can cause leaf scorch."
+      ]
+    },
+    {
+      "id": "cs2:EU_PoplarTree01",
+      "gameName": "Poplar",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Populus tremula 'Erecta'",
+        "commonName": "Upright European aspen 'Erecta'",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "An upright Populus reference fits the approximately 9.8 × 4.4 m asset better than a broad mature black poplar. Cultivar choice is provisional.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "EU_PoplarTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.8092,
+          "widthM": 4.417,
+          "depthM": 4.2962
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            8,
+            12
+          ],
+          "crownSpreadM": [
+            2.5,
+            4
+          ],
+          "original": {
+            "height": [
+              8,
+              12
+            ],
+            "spread": [
+              2.5,
+              4
+            ],
+            "unit": "m"
+          },
+          "sourceIds": [
+            "rhs-aspen-erecta"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "rhs-aspen-erecta"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun",
+        "sourceIds": [
+          "rhs-aspen-erecta"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Wide soil texture/pH tolerance; moist, well-drained or poorly drained soil.",
+        "sourceIds": [
+          "rhs-aspen-erecta"
+        ]
+      },
+      "growthRate": null,
+      "coldHardiness": {
+        "value": "RHS H7",
+        "sourceIds": [
+          "rhs-aspen-erecta"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": {
+        "value": [
+          10,
+          20
+        ],
+        "sourceIds": [
+          "rhs-aspen-erecta"
+        ]
+      },
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:FloridaPalmTree01",
+      "gameName": "Florida Palm Tree",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Sabal palmetto",
+        "commonName": "Cabbage palm",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Florida-associated palm with a plausible height. Asset crown (~5.8 m) is wider than this published 3–4.6 m range; species remains unconfirmed.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "FloridaPalmTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.7541,
+          "widthM": 5.753,
+          "depthM": 5.7543
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            3.658,
+            10.668
+          ],
+          "crownSpreadM": [
+            3.048,
+            4.572
+          ],
+          "original": {
+            "height": [
+              12,
+              35
+            ],
+            "spread": [
+              10,
+              15
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "sabal-palmetto"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "evergreen palm",
+        "sourceIds": [
+          "sabal-palmetto"
+        ]
+      },
+      "lightPreference": {
+        "value": "Mostly full sun; juvenile plants tolerate some shade.",
+        "sourceIds": [
+          "sabal-palmetto"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Adaptable; established plants tolerate drought and flooding.",
+        "sourceIds": [
+          "sabal-palmetto"
+        ]
+      },
+      "growthRate": {
+        "value": "medium",
+        "sourceIds": [
+          "sabal-palmetto"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 7b–11b",
+        "sourceIds": [
+          "sabal-palmetto"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Juvenile shade response is recorded as ecology, not a separate editable age profile. Highly salt tolerant."
+      ]
+    },
+    {
+      "id": "cs2:FlowerBushCity01",
+      "gameName": "Cultivated Flower Bush 01",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Dasiphora fruticosa",
+        "commonName": "Shrubby cinquefoil",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Compact flowering shrub near the 1.3 × 1.7 m asset size. Published upper size is slightly smaller.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "FlowerBushCity01_Geom",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.2709,
+          "widthM": 1.6581,
+          "depthM": 1.7278
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            0.61,
+            1.219
+          ],
+          "crownSpreadM": [
+            0.914,
+            1.524
+          ],
+          "original": {
+            "height": [
+              2,
+              4
+            ],
+            "spread": [
+              3,
+              5
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "dasiphora-fruticosa"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "dasiphora-fruticosa"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun preferred for flowers; partial shade tolerated",
+        "sourceIds": [
+          "dasiphora-fruticosa"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Broad well-drained soil tolerance; drought tolerant.",
+        "sourceIds": [
+          "dasiphora-fruticosa"
+        ]
+      },
+      "growthRate": {
+        "value": "medium",
+        "sourceIds": [
+          "dasiphora-fruticosa"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 2a–7b",
+        "sourceIds": [
+          "dasiphora-fruticosa"
+        ]
+      },
+      "crownDensity": {
+        "value": "dense rounded form",
+        "sourceIds": [
+          "dasiphora-fruticosa"
+        ]
+      },
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Cool summers preferred; source narrative recommends zones 3–7 while metadata includes zone 2."
+      ]
+    },
+    {
+      "id": "cs2:FlowerBushCity02",
+      "gameName": "Cultivated Flower Bush 02",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Spiraea japonica",
+        "commonName": "Japanese spiraea",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Compact flowering shrub with published height/width close to the 1.4 × 2.2 m asset.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "FlowerBushCity02",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.3884,
+          "widthM": 2.1429,
+          "depthM": 2.2533
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            1.219,
+            1.829
+          ],
+          "crownSpreadM": [
+            1.219,
+            2.134
+          ],
+          "original": {
+            "height": [
+              4,
+              6
+            ],
+            "spread": [
+              4,
+              7
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "spiraea-japonica"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "spiraea-japonica"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to partial shade",
+        "sourceIds": [
+          "spiraea-japonica"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Well-drained soil.",
+        "sourceIds": [
+          "spiraea-japonica"
+        ]
+      },
+      "growthRate": {
+        "value": "rapid",
+        "sourceIds": [
+          "spiraea-japonica"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 3a–8b",
+        "sourceIds": [
+          "spiraea-japonica"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Can spread by self-seeding and suckers. Invasive in parts of its introduced range; this is an ecological analogue, not planting advice."
+      ]
+    },
+    {
+      "id": "cs2:FlowerBushCity03",
+      "gameName": "Cultivated Flower Bush 03",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Hydrangea macrophylla",
+        "commonName": "Bigleaf hydrangea",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Rounded flowering shrub near the asset height and width; cultivar affects eventual size.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "FlowerBushCity03",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.7493,
+          "widthM": 1.9903,
+          "depthM": 1.9411
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            0.914,
+            1.829
+          ],
+          "crownSpreadM": [
+            0.914,
+            1.829
+          ],
+          "original": {
+            "height": [
+              3,
+              6
+            ],
+            "spread": [
+              3,
+              6
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "hydrangea-macrophylla"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "hydrangea-macrophylla"
+        ]
+      },
+      "lightPreference": {
+        "value": "Dappled light or partial/deep shade; protect from afternoon sun",
+        "sourceIds": [
+          "hydrangea-macrophylla"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Well-drained soil; occasional wetness tolerated.",
+        "sourceIds": [
+          "hydrangea-macrophylla"
+        ]
+      },
+      "growthRate": {
+        "value": "rapid",
+        "sourceIds": [
+          "hydrangea-macrophylla"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 6a–11b",
+        "sourceIds": [
+          "hydrangea-macrophylla"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:FlowerBushWild01",
+      "gameName": "Wild Flower Bush 01",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Spiraea × vanhouttei",
+        "commonName": "Vanhoutte spiraea",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Broad, arching flowering-shrub analogue. Height fits; ~4 m mesh spread slightly exceeds the cited 3.66 m upper width. Both similarly sized game variants share this reference.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "FlowerBushWildAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.7771,
+          "widthM": 4.0018,
+          "depthM": 4.0197
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            1.524,
+            2.438
+          ],
+          "crownSpreadM": [
+            2.134,
+            3.658
+          ],
+          "original": {
+            "height": [
+              5,
+              8
+            ],
+            "spread": [
+              7,
+              12
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "spiraea-x-vanhouttei"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun preferred for flowers; light shade tolerated",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moist, well-drained soil; broad texture tolerance and some drought tolerance.",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "growthRate": {
+        "value": "rapid",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 3a–8b",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "An ornamental hybrid used as a naturalistic form reference; game label Wild does not establish a wild native species."
+      ]
+    },
+    {
+      "id": "cs2:FlowerBushWild02",
+      "gameName": "Wild Flower Bush 02",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Spiraea × vanhouttei",
+        "commonName": "Vanhoutte spiraea",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Broad, arching flowering-shrub analogue. Height fits; ~4 m mesh spread slightly exceeds the cited 3.66 m upper width. Both similarly sized game variants share this reference.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "FlowerBushWildAdult02",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.5981,
+          "widthM": 4.1822,
+          "depthM": 4.089
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            1.524,
+            2.438
+          ],
+          "crownSpreadM": [
+            2.134,
+            3.658
+          ],
+          "original": {
+            "height": [
+              5,
+              8
+            ],
+            "spread": [
+              7,
+              12
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "spiraea-x-vanhouttei"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun preferred for flowers; light shade tolerated",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moist, well-drained soil; broad texture tolerance and some drought tolerance.",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "growthRate": {
+        "value": "rapid",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 3a–8b",
+        "sourceIds": [
+          "spiraea-x-vanhouttei"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "An ornamental hybrid used as a naturalistic form reference; game label Wild does not establish a wild native species."
+      ]
+    },
+    {
+      "id": "cs2:GreenBushCity01",
+      "gameName": "Cultivated Green Bush 01",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Ilex crenata 'Helleri'",
+        "commonName": "Japanese holly 'Helleri'",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Dwarf rounded evergreen with published size enclosing the ~1 × 1.4 m asset.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "GreenBushCity01",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.9741,
+          "widthM": 1.3783,
+          "depthM": 1.3192
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            0.61,
+            1.219
+          ],
+          "crownSpreadM": [
+            0.914,
+            1.524
+          ],
+          "original": {
+            "height": [
+              2,
+              4
+            ],
+            "spread": [
+              3,
+              5
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "ilex-crenata-helleri"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "evergreen broadleaf",
+        "sourceIds": [
+          "ilex-crenata-helleri"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to partial shade",
+        "sourceIds": [
+          "ilex-crenata-helleri"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Acidic, moist, well-drained soil; alkaline soil unsuitable.",
+        "sourceIds": [
+          "ilex-crenata-helleri"
+        ]
+      },
+      "growthRate": {
+        "value": "slow",
+        "sourceIds": [
+          "ilex-crenata-helleri"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 5a–8b",
+        "sourceIds": [
+          "ilex-crenata-helleri"
+        ]
+      },
+      "crownDensity": {
+        "value": "dense compact foliage",
+        "sourceIds": [
+          "ilex-crenata-helleri"
+        ]
+      },
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:GreenBushCity02",
+      "gameName": "Cultivated Green Bush 02",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Buxus microphylla",
+        "commonName": "Littleleaf boxwood",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Compact evergreen hedge analogue. The ~1.4 m asset is slightly larger than this 0.9–1.2 m reference; cultivar/pruning vary.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "GreenBushCity02",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.4395,
+          "widthM": 1.3858,
+          "depthM": 1.3997
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            0.914,
+            1.219
+          ],
+          "crownSpreadM": [
+            0.61,
+            1.219
+          ],
+          "original": {
+            "height": [
+              3,
+              4
+            ],
+            "spread": [
+              2,
+              4
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "buxus-microphylla"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "evergreen broadleaf",
+        "sourceIds": [
+          "buxus-microphylla"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to light shade",
+        "sourceIds": [
+          "buxus-microphylla"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moist, cool, well-drained soil; drought tolerant after establishment.",
+        "sourceIds": [
+          "buxus-microphylla"
+        ]
+      },
+      "growthRate": {
+        "value": "slow",
+        "sourceIds": [
+          "buxus-microphylla"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 6a–9b",
+        "sourceIds": [
+          "buxus-microphylla"
+        ]
+      },
+      "crownDensity": {
+        "value": "densely packed foliage",
+        "sourceIds": [
+          "buxus-microphylla"
+        ]
+      },
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:GreenBushCity03",
+      "gameName": "Cultivated Green Bush 03",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Taxus × media 'Densiformis'",
+        "commonName": "Spreading yew 'Densiformis'",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Low, spreading evergreen whose published range fits the 1.2 × 2.1 m asset. Needle foliage is a representative choice, not verified from the mesh.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "GreenBushCity03",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.1624,
+          "widthM": 2.096,
+          "depthM": 2.0407
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            1,
+            1.5
+          ],
+          "crownSpreadM": [
+            1.5,
+            2.5
+          ],
+          "original": {
+            "height": [
+              1,
+              1.5
+            ],
+            "spread": [
+              1.5,
+              2.5
+            ],
+            "unit": "m"
+          },
+          "sourceIds": [
+            "rhs-yew"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "evergreen conifer",
+        "sourceIds": [
+          "rhs-yew"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun, partial shade or full shade",
+        "sourceIds": [
+          "rhs-yew"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Well-drained soil; broad texture/pH tolerance.",
+        "sourceIds": [
+          "rhs-yew"
+        ]
+      },
+      "growthRate": {
+        "value": "slow",
+        "sourceIds": [
+          "rhs-yew"
+        ]
+      },
+      "coldHardiness": {
+        "value": "RHS H7",
+        "sourceIds": [
+          "rhs-yew"
+        ]
+      },
+      "crownDensity": {
+        "value": "dense spreading mound",
+        "sourceIds": [
+          "rhs-yew"
+        ]
+      },
+      "timeToMatureSizeYears": {
+        "value": [
+          5,
+          10
+        ],
+        "sourceIds": [
+          "rhs-yew"
+        ]
+      },
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:GreenBushWild01",
+      "gameName": "Wild Green Bush 01",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Cornus sanguinea",
+        "commonName": "Common dogwood",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Multi-stemmed thicket shrub with published size encompassing the ~2.7 × 3.6 m asset.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "GreenBushWildAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 2.6933,
+          "widthM": 3.621,
+          "depthM": 3.626
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            1.524,
+            4.572
+          ],
+          "crownSpreadM": [
+            1.524,
+            4.572
+          ],
+          "original": {
+            "height": [
+              5,
+              15
+            ],
+            "spread": [
+              5,
+              15
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "cornus-sanguinea"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "cornus-sanguinea"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to partial shade",
+        "sourceIds": [
+          "cornus-sanguinea"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moist, well-drained soil; broad texture/pH tolerance.",
+        "sourceIds": [
+          "cornus-sanguinea"
+        ]
+      },
+      "growthRate": {
+        "value": "medium",
+        "sourceIds": [
+          "cornus-sanguinea"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 5a–7b",
+        "sourceIds": [
+          "cornus-sanguinea"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Forms thickets by suckering. Coppicing changes dimensions substantially."
+      ]
+    },
+    {
+      "id": "cs2:GreenBushWild02",
+      "gameName": "Wild Green Bush 02",
+      "kind": "shrub",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Corylus avellana",
+        "commonName": "Common hazel",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Large multi-stemmed shrub matching the ~4.5 m height; mesh width (~5.5 m) exceeds this source range (~4.6 m).",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "GreenBushWildAdult02",
+          "archive": "Game/Blob.cok",
+          "heightM": 4.4476,
+          "widthM": 5.4679,
+          "depthM": 5.4163
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            3.658,
+            6.096
+          ],
+          "crownSpreadM": [
+            2.438,
+            4.572
+          ],
+          "original": {
+            "height": [
+              12,
+              20
+            ],
+            "spread": [
+              8,
+              15
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "corylus-avellana"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "corylus-avellana"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to partial shade",
+        "sourceIds": [
+          "corylus-avellana"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moist, well-drained, organic-rich soil.",
+        "sourceIds": [
+          "corylus-avellana"
+        ]
+      },
+      "growthRate": null,
+      "coldHardiness": {
+        "value": "USDA 4a–8b",
+        "sourceIds": [
+          "corylus-avellana"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Suckers can form a wider thicket. Thicket area is not the crown of a single plant."
+      ]
+    },
+    {
+      "id": "cs2:NA_HickoryTree01",
+      "gameName": "Hickory",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Carya ovata",
+        "commonName": "Shagbark hickory",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "North American hickory reference; the game adult is smaller than this source range. Other hickory species remain possible.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "NA_HickoryTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 18.8107,
+          "widthM": 12.8065,
+          "depthM": 11.8362
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            21.336,
+            27.432
+          ],
+          "crownSpreadM": [
+            15.24,
+            21.336
+          ],
+          "original": {
+            "height": [
+              70,
+              90
+            ],
+            "spread": [
+              50,
+              70
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "carya-ovata"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        },
+        {
+          "heightM": [
+            18.288,
+            24.384
+          ],
+          "crownSpreadM": [
+            7.62,
+            10.668
+          ],
+          "original": {
+            "height": [
+              60,
+              80
+            ],
+            "spread": [
+              25,
+              35
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "uf-hickory"
+          ],
+          "context": "Older UF landscape guidance gives a substantially narrower crown than NC State; both observations retained."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "carya-ovata"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to partial shade in the source narrative.",
+        "sourceIds": [
+          "carya-ovata"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Fertile, deep, well-drained sandy or clay loam; drought tolerant after establishment.",
+        "sourceIds": [
+          "carya-ovata"
+        ]
+      },
+      "growthRate": {
+        "value": "slow",
+        "sourceIds": [
+          "carya-ovata"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 4a–8b",
+        "sourceIds": [
+          "carya-ovata"
+        ]
+      },
+      "crownDensity": {
+        "value": "moderate",
+        "sourceIds": [
+          "uf-hickory"
+        ]
+      },
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "NC State narrative specifies sun/part shade; its metadata additionally lists deep shade. No quantitative shade threshold inferred."
+      ]
+    },
+    {
+      "id": "cs2:NA_LindenTree01",
+      "gameName": "Linden",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Tilia cordata 'Rancho'",
+        "commonName": "Small-leaved lime 'Rancho'",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Compact American-selected linden cultivar; crown width matches the ~6.4 m asset more closely than typical Tilia americana. Height still somewhat greater.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "NA_LindenTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 8.138,
+          "widthM": 6.4056,
+          "depthM": 6.3082
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            10,
+            15
+          ],
+          "crownSpreadM": [
+            6,
+            9
+          ],
+          "original": {
+            "height": [
+              10,
+              15
+            ],
+            "spread": [
+              6,
+              9
+            ],
+            "unit": "m"
+          },
+          "sourceIds": [
+            "vdb-linden-rancho"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "vdb-linden-rancho"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun to partial shade",
+        "sourceIds": [
+          "tilia-cordata"
+        ],
+        "note": "Species-level guidance, not a cultivar-specific trial."
+      },
+      "soilAndMoisture": {
+        "value": "Broad soil tolerance; cultivar described as tolerating dry conditions.",
+        "sourceIds": [
+          "vdb-linden-rancho"
+        ]
+      },
+      "growthRate": {
+        "value": "average",
+        "sourceIds": [
+          "vdb-linden-rancho"
+        ]
+      },
+      "coldHardiness": {
+        "value": "Winter hardiness zone 4",
+        "sourceIds": [
+          "vdb-linden-rancho"
+        ]
+      },
+      "crownDensity": {
+        "value": "half-open",
+        "sourceIds": [
+          "vdb-linden-rancho"
+        ]
+      },
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Cultivar source describes dry-soil tolerance; species-level NC State guidance warns against severe drought and wet soils. Do not treat either as a numeric survival limit."
+      ]
+    },
+    {
+      "id": "cs2:NA_LondonPlaneTree01",
+      "gameName": "London Plane",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Platanus × hispanica",
+        "commonName": "London plane",
+        "mappingStatus": "commonNameMatch",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Specific common name retained despite the much smaller game model; real-world dimensions are not rescaled.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "NA_LondonPlaneTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 7.7058,
+          "widthM": 8.2802,
+          "depthM": 8.1722
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            20,
+            25
+          ],
+          "crownSpreadM": [
+            18,
+            20
+          ],
+          "original": {
+            "height": [
+              20,
+              25
+            ],
+            "spread": [
+              18,
+              20
+            ],
+            "unit": "m"
+          },
+          "sourceIds": [
+            "sa-london-plane"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "sa-london-plane"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun",
+        "sourceIds": [
+          "sa-london-plane"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Well-drained soil; broad texture/pH tolerance; drought and pollution tolerant.",
+        "sourceIds": [
+          "sa-london-plane"
+        ]
+      },
+      "growthRate": null,
+      "coldHardiness": {
+        "value": "RHS H6 (-20 to -15 C category)",
+        "sourceIds": [
+          "rhs-london-plane"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": {
+        "value": [
+          20,
+          50
+        ],
+        "sourceIds": [
+          "rhs-london-plane"
+        ]
+      },
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:OakTree01",
+      "gameName": "Oak",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Quercus robur",
+        "commonName": "English oak",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Broad-crowned oak with a published landscape size range encompassing the approximately 15 × 16 m mesh; not a confirmed game species.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "OakTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 14.7289,
+          "widthM": 16.2251,
+          "depthM": 15.236
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            12.192,
+            21.336
+          ],
+          "crownSpreadM": [
+            12.192,
+            21.336
+          ],
+          "original": {
+            "height": [
+              40,
+              70
+            ],
+            "spread": [
+              40,
+              70
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "quercus-robur"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "deciduous",
+        "sourceIds": [
+          "quercus-robur"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun",
+        "sourceIds": [
+          "quercus-robur"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moist, well-drained loam preferred; broad soil tolerance.",
+        "sourceIds": [
+          "quercus-robur"
+        ]
+      },
+      "growthRate": {
+        "value": "medium",
+        "sourceIds": [
+          "quercus-robur"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 5a–8b",
+        "sourceIds": [
+          "quercus-robur"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:PineTree01",
+      "gameName": "Pine",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Pinus sylvestris",
+        "commonName": "Scots pine",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Broad-crowned mature pine reference, with crown range matching the asset. This landscape height range is smaller than the game adult; it is not a maximum.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "PineTreeAdult01_Geom",
+          "archive": "Game/Blob.cok",
+          "heightM": 21.3319,
+          "widthM": 10.4455,
+          "depthM": 11.6372
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            9.144,
+            18.288
+          ],
+          "crownSpreadM": [
+            9.144,
+            12.192
+          ],
+          "original": {
+            "height": [
+              30,
+              60
+            ],
+            "spread": [
+              30,
+              40
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "pinus-sylvestris"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "evergreen conifer",
+        "sourceIds": [
+          "pinus-sylvestris"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun",
+        "sourceIds": [
+          "pinus-sylvestris"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Well-drained acidic soil; tolerates poor and dry sites.",
+        "sourceIds": [
+          "pinus-sylvestris"
+        ]
+      },
+      "growthRate": {
+        "value": "rapid",
+        "sourceIds": [
+          "pinus-sylvestris"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 2a–7b",
+        "sourceIds": [
+          "pinus-sylvestris"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Prefers cool summers; heat/humidity of the southeastern USA can be unsuitable. Mature crown becomes open and irregular."
+      ]
+    },
+    {
+      "id": "cs2:RoyalPalmTree01",
+      "gameName": "Royal Palm Tree",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Roystonea regia",
+        "commonName": "Royal palm",
+        "mappingStatus": "commonNameMatch",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Common-name reference; game dimensions are somewhat smaller than the cited landscape range.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "RoyalPalmTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 12.8813,
+          "widthM": 5.6588,
+          "depthM": 5.7223
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            15.24,
+            21.336
+          ],
+          "crownSpreadM": [
+            6.096,
+            7.62
+          ],
+          "original": {
+            "height": [
+              50,
+              70
+            ],
+            "spread": [
+              20,
+              25
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "uf-royal"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "palm; perennial",
+        "sourceIds": [
+          "nparks-royal"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun",
+        "sourceIds": [
+          "nparks-royal"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Tolerates wet soil and established drought; moderate salt-spray tolerance but sensitive to root-zone salinity.",
+        "sourceIds": [
+          "uf-royal"
+        ]
+      },
+      "growthRate": {
+        "value": "fast",
+        "sourceIds": [
+          "uf-royal"
+        ]
+      },
+      "coldHardiness": {
+        "value": "About USDA 10a / 28 F (-2.2 C)",
+        "sourceIds": [
+          "uf-royal"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    },
+    {
+      "id": "cs2:SpruceTree01",
+      "gameName": "Spruce",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Picea abies",
+        "commonName": "Norway spruce",
+        "mappingStatus": "representative",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "European spruce reference with a similar crown width; published landscape height is smaller than the game adult and is not a species maximum.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "SpruceTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 21.5699,
+          "widthM": 9.3701,
+          "depthM": 8.1425
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            12.192,
+            18.288
+          ],
+          "crownSpreadM": [
+            7.62,
+            9.144
+          ],
+          "original": {
+            "height": [
+              40,
+              60
+            ],
+            "spread": [
+              25,
+              30
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "picea-abies"
+          ],
+          "context": "Published landscape size range; not a biological maximum."
+        }
+      ],
+      "foliage": {
+        "value": "evergreen conifer",
+        "sourceIds": [
+          "picea-abies"
+        ]
+      },
+      "lightPreference": {
+        "value": "Full sun preferred",
+        "sourceIds": [
+          "picea-abies"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Moderately moist, well-drained acidic sandy soil; avoids waterlogging.",
+        "sourceIds": [
+          "picea-abies"
+        ]
+      },
+      "growthRate": {
+        "value": "rapid",
+        "sourceIds": [
+          "picea-abies"
+        ]
+      },
+      "coldHardiness": {
+        "value": "USDA 2a–7b",
+        "sourceIds": [
+          "picea-abies"
+        ]
+      },
+      "crownDensity": null,
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": [
+        "Cool summers preferred; unsuitable hot, dry summers are noted by the source. Cultivars differ greatly."
+      ]
+    },
+    {
+      "id": "cs2:SylvesterPalmTree01",
+      "gameName": "Sylvester Palm Tree",
+      "kind": "tree",
+      "researchStatus": "sourcedReference",
+      "identity": {
+        "scientificName": "Phoenix sylvestris",
+        "commonName": "Wild date / Sylvester palm",
+        "mappingStatus": "commonNameMatch",
+        "gameSpeciesConfirmed": false,
+        "selectionRationale": "Specific common name retained; height and crown are comparable to a large wild date palm.",
+        "selectionMeasurement": {
+          "catalog": "base-game-vegetation.v1.json",
+          "meshName": "SylvesterPalmTreeAdult01",
+          "archive": "Game/Blob.cok",
+          "heightM": 11.0059,
+          "widthM": 8.7431,
+          "depthM": 8.4991
+        },
+        "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
+      },
+      "sizeObservations": [
+        {
+          "heightM": [
+            12.192,
+            12.192
+          ],
+          "crownSpreadM": [
+            7.62,
+            7.62
+          ],
+          "original": {
+            "height": [
+              40,
+              40
+            ],
+            "spread": [
+              25,
+              25
+            ],
+            "unit": "ft"
+          },
+          "sourceIds": [
+            "uf-sylvester-size"
+          ],
+          "context": "Single listed landscape dimensions, not a measured range or maximum. UF FR308 separately reports height up to 50 ft."
+        }
+      ],
+      "foliage": {
+        "value": "evergreen palm",
+        "sourceIds": [
+          "uf-sylvester"
+        ]
+      },
+      "lightPreference": {
+        "value": "Direct sun preferred",
+        "sourceIds": [
+          "uf-sylvester"
+        ]
+      },
+      "soilAndMoisture": {
+        "value": "Well-drained sandy soil; drought tolerant but grows better with regular water.",
+        "sourceIds": [
+          "uf-sylvester"
+        ]
+      },
+      "growthRate": {
+        "value": "slow",
+        "sourceIds": [
+          "uf-sylvester"
+        ]
+      },
+      "coldHardiness": {
+        "value": "Reported to grow where minima stay above 15 F (-9.4 C)",
+        "sourceIds": [
+          "uf-sylvester"
+        ]
+      },
+      "crownDensity": {
+        "value": "dense rounded crown providing light shade",
+        "sourceIds": [
+          "uf-sylvester"
+        ],
+        "note": "Crown density and light attenuation are different quantities."
+      },
+      "timeToMatureSizeYears": null,
+      "lifespanYears": null,
+      "environmentalObservations": [],
+      "quantitativeModelInputs": {
+        "canopyOpacityPercent": null,
+        "shadeTolerancePercent": null,
+        "temperatureSuitabilityCurveC": null,
+        "slopeSuitabilityCurveDegrees": null,
+        "elevationSurvivalLimitsM": null,
+        "minimumTrunkSpacingM": null
+      },
+      "notes": []
+    }
+  ]
+}
