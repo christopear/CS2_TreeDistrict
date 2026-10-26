@@ -4,14 +4,14 @@ Updated 2026-10-26 after reference review. The direction below incorporates the
 user's scope corrections; remaining recommendations are labelled. It describes
 intended behaviour, not implemented functionality.
 
-See the [UX design](ux-design.md) for panels, profile saving and UI dependencies.
+See the [UX design](ux-design.md) for the agreed set-first workflow, set saving and UI dependencies.
 
 Use the [reference design report](foliage-reference-design.md) for the selected
 Unreal Procedural Foliage and EcoBrush references, research and proposed pipeline.
 
 ## Goal
 
-Draw a district, select a reusable vegetation community, and generate its plants
+Select a reusable vegetation community, draw a district, and generate its plants
 according to terrain, configured climate, occupied space and neighbouring plants.
 The user chooses the community and boundary; the mod automates placement inside it.
 Trees and shrubs belong to the same community, with species-specific preferences.
@@ -36,20 +36,23 @@ cannot be obtained, use manual input. Recommendation: annual mean, with profiles
 calibrated accordingly. Capture the effective value with the city and update it
 explicitly rather than rerolling vegetation when weather changes.
 
+Vegetation sets inherit each city climate field by default and can override each
+independently. Save override flags, not accidentally copied resolved city values.
+Recommendation: inheritance remains live; a city default change marks affected
+on-demand districts stale and queues affected auto districts. Override values win.
+Inherited city changes do not mark the reusable set modified.
+
 The map supplies terrain heights/normals, occupied geometry and existing vegetation.
 Exact game APIs, units and coordinates still require verification. Geometric
 height is sampled from terrain, not from the water surface or tops of buildings.
 
 ## 2. Vegetation profiles and age states
 
-Each vegetation asset and age has a default profile. Selecting it pre-populates
-reasonable values. Users can create a named custom profile, make it their default
-for that asset/age, or apply a one-off override to the current set/district.
-Built-in defaults remain recoverable. Changes to personal defaults only affect
-future selections, never silently rewrite existing set/district snapshots.
-One-off overrides persist with their owner in a saved city but do not change the
-personal library. Profile precedence: local override, selected named profile,
-personal default, built-in default. The editor shows which source is active.
+Each vegetation asset and age has a built-in default profile that pre-populates
+reasonable values. Edit it inline within the working vegetation set. Only whole
+sets can be saved; no standalone custom asset-profile library or personal per-asset
+defaults are exposed in this version. Reset to built-in remains available. Nested
+asset/age edits persist with the district and are included when saving a set.
 
 The editable properties are:
 
@@ -87,6 +90,7 @@ A set contains the selected assets and their effective profile settings, plus:
 | Age selection/mixture | Allowed age states and relative weights within each species |
 | Clumping strength and patch size | Shared spatial variation controls |
 | Optional set-wide hard limits | Additional bounds applying to every selected plant |
+| Climate overrides | Per-field override of city reference temperature, elevation or cooling |
 
 **Density percentages do not sum to 100%.** Recommendation: show 100% as the
 profile default, 50% as half its candidate density, and 0% as disabled. A selected
@@ -109,14 +113,18 @@ Set-wide hard limits intersect species limits, so the more restrictive condition
 wins. They do not override physical collision constraints. Prefer leaving these
 advanced controls unset by default; the district already defines spatial extent.
 
-Save, duplicate, rename and delete sets in a library available across cities on
+Provide built-in real-world-inspired sets, new custom sets and editable copies.
+Save, duplicate, rename and delete user sets in a library available across cities on
 this machine. Support a favourite/default set. Export/import is useful for sharing
 and dual-boot use; cloud sync is out of scope. Presets contain settings and asset
 references, never asset files. Missing assets remain visibly unresolved.
 
 Each district stores a snapshot. Editing or deleting a library preset must not
-silently alter existing districts. Updating a district from a set is explicit and
-previewed. Local density overrides should be savable as a new set if desired.
+silently alter existing districts. The same panel edits new and existing districts,
+including replacing their set. Valid settings edits immediately belong to the
+district. A `*` marks differences from the library set, not missing city persistence.
+Save set / Save as makes those edits reusable. Only vegetation-set fields affect
+the star; generation freshness is shown separately.
 
 ## 4. District geometry and exclusions
 
@@ -150,6 +158,8 @@ All plants created by a district belong to it, regardless of their age or type.
 This ownership survives save/load. Merely drawing around existing plants does not
 claim them.
 
+- **Ungenerate:** remove owned plants but retain the district and its settings.
+  Recommendation: switch to On demand to prevent immediate automatic refill.
 - **Delete district:** remove the district and its owned plants.
 - **Bake to ordinary vegetation:** keep its plants, detach procedural ownership,
   and remove the district. Existing ordinary game tools can edit those plants.
@@ -164,15 +174,22 @@ Deleting a preset from the library is unrelated to deleting a district.
 
 ## 6. Everyday workflow
 
-1. Accept the map climate reference or configure it manually once.
-2. Pick a vegetation set, or create one by selecting plants and accepting defaults.
-3. Draw a district.
-4. Preview; optionally adjust local overall density and clumping.
-5. Apply. Save set changes explicitly when they should be reusable.
+1. Pick a vegetation set and start drawing immediately; no mandatory settings step.
+2. Expand settings only when needed: set controls, then asset rows, then age-specific
+   response/footprint controls. Add/remove assets in the same panel.
+3. Default On demand: click Generate when ready. Optional Auto-generate updates
+   owned plants on committed nodes/settings changes, or on finishing the district
+   if valid intermediate boundaries cannot be exposed.
+4. Select any district to edit its set or parameters in that same panel.
+5. Save the modified working set only if it should be reusable.
 
-Keep detailed profile/age parameters in an advanced editor. Preview/apply is
-explicit; settings changes do not silently regenerate the city. A saved seed
-repeats a layout for the same inputs/version, while New variation changes it.
+No Apply settings step. Parameter edits persist in district data immediately;
+on-demand vegetation stays unchanged until Generate/Regenerate. In auto mode,
+debounce rapid input and cancel outdated jobs. Invalid intermediate boundaries
+must not destroy the last valid layout. Drawing cancellation rolls back draft
+plants. Mode, boundary and seed are district data, not saved-set settings.
+A saved seed repeats a layout for the same inputs/version; ordinary regenerate
+retains it. A separate New variation control is optional.
 
 Lower density targets fewer generated instances, not a precise VRAM budget. No
 promise is made that reducing density by half halves GPU memory: asset variety,
@@ -180,7 +197,8 @@ rendering and other game behaviour matter. Preview plant counts and enforce a
 visible instance/candidate cap rather than inventing a VRAM estimate.
 
 Generation must be bounded, cancellable and applied in batches. No periodic
-refilling after manual bulldozing. Newly occupied infrastructure must not leave
+refilling after manual bulldozing alone. Auto regeneration after a later district
+edit may restore those plants; bake or use On demand for manually detailed areas. Newly occupied infrastructure must not leave
 conflicting owned plants; prefer native game removal where sufficient, otherwise
 perform local cleanup. This never triggers automatic replacement planting.
 
@@ -197,9 +215,14 @@ perform local cleanup. This never triggers automatic replacement planting.
   opportunities before environmental rejection, subject to deterministic rounding.
 - Set-wide limits cannot widen tighter species restrictions.
 - Delete removes only owned plants; Bake preserves them and removes the district.
+- Ungenerate keeps the district empty until another requested generation.
+- On-demand edits change district data and set `*` without changing planted entities.
+- Auto updates coalesce rapid edits; outdated jobs never commit after delete/bake.
+- Saving a modified set includes nested age settings but not district mode/boundary.
+- City defaults feed inherited fields while set overrides remain unchanged.
 - Undo and reload preserve or restore ownership correctly; no reroll on reload.
 - Changing a saved set does not mutate existing districts without explicit update.
-- Occupied infrastructure blocks placement, including a last recheck before Apply.
+- Occupied infrastructure blocks placement, including a last recheck before committing generation.
 
 ## 8. Next decisions and implementation gaps
 

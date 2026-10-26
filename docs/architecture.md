@@ -20,8 +20,8 @@ sampling, entity creation, undo/removal, save/load and UI bindings. Its official
 toolchain must remain authoritative over game builds. The core is intentionally
 small today: only terrain eligibility has been implemented.
 
-Vegetation areas should be independent of administrative districts. Start with
-explicit preview/apply/regenerate actions; automatic maintenance is later work.
+Vegetation areas should be independent of administrative districts. Use default on-demand generation and opt-in automatic updates on district edits,
+as specified in the agreed UX. Settings edits apply immediately to district data.
 Existing manually placed vegetation must never be implicitly adopted or removed.
 
 ## Planned data and generation
@@ -51,8 +51,8 @@ each frame. Ordinary game trees still have ordinary rendering/simulation costs.
    Test concave boundaries, exclusion rules, reproducibility and bounded work.
 3. **Game spike:** official template loads; place and clear a small owned batch;
    verify core assembly loading and save/reload before building a large UI.
-4. **First playable version:** editable polygon, settings, preview, apply, clear,
-   explicit regeneration and persistence. Protect manual trees and obstacles.
+4. **First playable version:** editable polygon, settings, set-first editing, on-demand/auto generation, ungenerate/bake/delete,
+   regeneration and persistence. Protect manual trees and obstacles.
 5. **Natural woodland:** patches, clearings, edge thinning, per-species terrain
    preferences, shrubs, age variation, and profiling at larger scales.
 

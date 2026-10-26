@@ -1,140 +1,159 @@
-# TreeDistrict UX and UI technology decision
+# TreeDistrict UX and UI decision
 
-Reviewed 2026-10-26. Design proposal; no UI is implemented or tested in the game yet.
+Status: agreed workflow, 2026-10-26. Implementation details and recommendations
+are labelled below. No in-game UI has been implemented yet.
 
-## Decision
+## Agreed technology
 
-Use the official CS2 UI template and the game's native `cs2/ui` components with
-React/TypeScript. Use native buttons, panels, dialogs, tooltips and focus behaviour
-where exposed. Match the game rather than adding a separate visual language.
+Use the official CS2 React/TypeScript UI template, native `cs2/ui` components and
+**Unified Icon Library**. Declare UIL as a dependency when integrating the UI.
+Native controls supply panels, buttons, dialogs, tooltips and focus behaviour;
+UIL supplies matching icons. No additional general-purpose UI framework is planned.
+Verify exact APIs, theme support and registration points against the installed
+Windows toolchain. Earlier research considered Gooee and UrbanDevKit; neither is
+selected. The source list below preserves the basis for that comparison.
 
-Use base-game icons where available. **Unified Icon Library (UIL)** is our chosen
-supplement if a needed tool/action icon is missing; it must be declared as a mod
-dependency if used. It provides icons, not widgets or settings persistence.
-Do not install a general-purpose UI framework for the initial implementation.
+## Set first, then draw
 
-The exact components, registration points and theme interfaces must be checked
-against the installed toolchain on Windows. Use the versions it supplies; don't
-independently upgrade React or assume browser CSS behaves identically in-game.
+Open Vegetation Districts, choose a set, and immediately draw. No mandatory library
+window or settings wizard sits between selecting a set and starting a district.
+Use a sensible last-used/default set on opening the tool.
 
-## Options reviewed
+Recommended picker: a searchable dropdown with thumbnail/icon **and name**, grouped
+into Built-in and My sets. It scales better than an icon-only strip for similarly
+named or numerous sets. Optional favourite tiles can come later. New set and
+Duplicate are available from the same picker/menu.
 
-| Option | Evidence | Decision |
-|---|---|---|
-| Native `cs2/ui` and official UI template | Mirrored stock types expose panels, buttons, dialogs and input/focus support [1] | Primary UI layer; verify against installed types |
-| Native mod menu registration | Stock `cs2/modding` declarations include `UniversalModMenu` [2] | Supported entry-point candidate; verify its actual button contract in-game |
-| Unified Icon Library | Author supplies icons designed to match the game; Tree Controller declares it [3,4] | Supplemental icons only |
-| Gooee | Inspected repository describes an early-alpha framework requiring BepInEx and HookUI [5] | Do not adopt that documented stack for our official-toolchain mod; this is not a claim about every fork |
-| UrbanDevKit | Author offers bundled .NET/TypeScript helpers, including UI type packaging [6] | No current requirement justifies adding it; not a replacement design system |
-| UnifiedUI/UUI from CS1 | TM:PE's documentation explicitly concerns the first game's toolbar [7] | Do not confuse it with CS2's native mod menu or UIL |
+Ship curated real-world-inspired sets. Candidate themes include temperate mixed
+woodland, conifer woodland, Mediterranean scrub and urban mixed planting; these
+are starting content ideas, not validated botanical species lists. Select actual
+assets after surveying the installed game. Built-ins are recoverable/read-only;
+editing one creates a working copy that can be saved as a user set. Missing assets
+are visibly flagged, never silently substituted.
 
-The official wiki page was inaccessible during this review. Public stock-template
-mirrors and authors' repositories were inspected; they do not prove compatibility
-with the user's exact game build. No blanket claim is made that every mod uses
-one UI standard. Other libraries can be reconsidered for a concrete missing need.
+## One window, progressively expanded
 
-## Entry and everyday district panel
+Selecting an existing district populates **the same panel** with its current
+settings. The district name and a clear New district/Selected district indicator
+prevent edits being applied to the wrong target. Choosing a different set replaces
+that district's working set; it does not affect other districts.
 
-Proposed entry: **Vegetation Districts** alongside landscaping/vegetation tools if
-that integration is practical. Otherwise use the native mod menu and a rebindable
-shortcut. Avoid an always-floating custom launcher. This is a proposed placement,
-not a confirmed existing extension point.
-
-Opening it shows a compact tool panel with the map still usable:
-
-- Set picker with name and small vegetation preview.
-- Overall density slider plus editable percentage; tooltip: 100% uses set defaults.
-- Draw / Select / Edit boundary modes.
-- Preview count, Apply and Cancel while an operation is pending.
-- A secondary Manage sets action; advanced settings stay collapsed.
-
-Selecting an existing district shows its name, set snapshot, density and generated
-count. Provide Regenerate and New variation as distinct actions. Editing settings
-marks the district as having unapplied changes; it does not silently replace trees.
-
-Delete opens a native-style choice with explicit labels:
-
-- **Delete district and vegetation**
-- **Bake vegetation and delete district**
-- **Cancel**
-
-Include the affected plant count and make Cancel the safe dismissal path. Bake
-preserves ordinary plants and removes procedural ownership. Both outcomes support
-undo. Do not hide the difference behind an unexplained icon or persistent checkbox.
-
-## Set editor
-
-Use one library window, opened only when needed. List searchable saved sets on the
-left and the selected set on the right. Provide New, Duplicate, Save and Delete.
-Separate Save changes from Use in district so selecting a set doesn't overwrite it.
-
-The set contains a searchable asset picker with thumbnails and rows for selected
-vegetation. Each row exposes enabled state, age selection and density percentage.
-An Edit profile action opens the profile editor. Overall density is near the top;
-clumping and hard limits are advanced options. Relative age weights belong to the
-selected species, not a second forest-wide percentage budget.
-
-The district copies effective set settings. Changes to the library never silently
-change an existing district; offer an explicit Update from saved set action with
-preview when relevant.
-
-## Profile editor: one vegetation asset, one age
-
-Show asset thumbnail/name, age and a Profile selector. Example title:
-**London Plane / Young**. Profiles have a visible origin: Built-in, My default,
-Named custom or Override. Start with reasonable values; editing is optional.
-
-Use collapsible groups for:
-
-1. Placement: default density and physical clearance.
-2. Environment: temperature/slope curves and optional hard limits.
-3. Canopy: approximate dimensions, opacity and shade response.
-
-Use small curve previews and ordinary numeric fields before attempting a custom
-curve-drawing widget. Always display units. Distinguish canopy opacity/coverage
-from density: a generic label such as Coverage 50% would be ambiguous.
-
-Saving choices:
-
-| Action | Scope |
+| Depth | Visible content |
 |---|---|
-| Use for this set/district | Override in the current editing context only; saved with that context |
-| Save as new profile | Named reusable profile for this asset/age |
-| Set as my default | Make the named profile the default for future selections of this asset/age |
-| Reset to built-in | Restore the shipped baseline in the editor; apply explicitly |
+| Top level | Set picker/name and `*`, overall density, drawing/selection modes, generation mode/status, district actions, Save set / Save as |
+| Expand set settings | Climate inheritance/overrides, clumping, optional hard limits; vegetation asset list with density %, age choices, Add/Remove |
+| Expand an asset | Age-specific footprint, height/canopy, slope and temperature responses, shade settings and hard limits |
 
-Do not mutate shipped defaults. Save custom profiles in the user library, with
-stable IDs/versions. Existing set/district snapshots stay unchanged when a personal
-default changes. The editor must identify whether the current context is a set
-library entry or a live district; avoid an ambiguous Save button spanning both.
+Use an age selector within the asset's expanded section. Defaults populate every
+asset/age; users can edit the values here. Use small curve previews and numeric
+fields with units. Avoid unexplained Coverage percentages: distinguish density,
+canopy extent and canopy opacity.
 
-## Climate and application settings
+**Only whole vegetation sets are saved.** No separate asset-profile library,
+Save profile or Set asset default actions in this version. Per-asset and per-age
+edits travel inside the saved set. Reset an asset/age to its built-in values remains
+useful, but is an edit to the current working set until Save set is used.
 
-A compact City climate section in the tool/library offers **Use map climate** or
-**Manual**, showing reference temperature, reference elevation and cooling rate.
-Auto mode uses a stable climate statistic, not current weather. When no compatible
-value is available, explain that manual input is needed. Never silently use 0°C.
-Record the effective source/value with the city; applying a climate change marks
-existing districts for explicit regeneration rather than triggering it.
+## Settings, library saving and generation are distinct
 
-Use the game's ordinary mod Options integration for application-wide preferences,
-such as hotkeys and default panel behaviour. City climate belongs to the city;
-profiles and sets belong to the reusable user library. Keep those scopes distinct.
+A valid parameter edit immediately updates the selected district's settings and
+is retained when the city is saved. There is no Apply settings step. Invalid or
+incomplete numeric input stays in the field with an error until valid.
 
-## Interaction and validation requirements
+The `*` means **the working set differs from its reusable library version**, not
+that district data will be lost or that vegetation needs regeneration. Tooltip:
+“Modified set — saved with this district; save to reuse elsewhere.” Reverting to
+the saved values clears the star. A new unnamed set stays marked until saved.
 
-- Clicking or scrolling over panels must not draw on or zoom the map underneath.
-- Escape cancels the current interaction or closes the top dialog; it never applies.
-- Pending edits get Apply/Discard/Cancel when closing would lose them.
-- Sliders also allow numeric entry and show units; validation errors appear inline.
-- Disabled actions explain why. Generation progress offers cancellation.
-- Preserve focus, selected-state cues, game UI scale and localized labels.
-- Test small supported resolutions, large UI scale, long translated names and
-  missing thumbnails. Do not rely solely on colour for profile origin or validity.
-- Test coexistence with Tree Controller and other tool panels; activating a tool
-  should not leave two competing world-input handlers active.
-- A browser mock is useful for layout/state checks, but only an in-game test can
-  establish bindings, input capture, focus behaviour and rendering compatibility.
+- Save set updates an existing user library entry; Save as creates a new one.
+- Editing a built-in offers Save as. Never overwrite shipped content.
+- Saving includes nested asset/age edits and climate override flags/values.
+- Other districts retain their snapshots when a library set is changed.
+- Boundary, district name, seed, generation mode and ownership are district data,
+  not vegetation-set data. They do not mark the set with `*`.
+- Generated-state freshness is a separate label: Not generated / Up to date /
+  Needs generation / Generating / Failed.
+
+Changing the set on an edited district should offer Save as / Replace / Cancel
+when replacement would discard a modified working set. Closing a selected district
+panel needs no save prompt: its settings already belong to the district. Retain the
+new-district working set while switching tools; only prompt if actually discarding it.
+
+## City climate with set overrides
+
+The city defines default reference temperature, reference elevation and cooling
+rate. Temperature may use compatible stable game climate or manual input.
+
+Each set field defaults to **Use city default**, displaying the resolved value
+and source. It may be overridden independently. Reset returns the field to
+inheritance. Applying a set to another city resolves inherited fields in that city;
+explicit overrides remain unchanged. Do not accidentally save resolved city values
+as overrides when saving a set.
+
+Recommended semantics: inherited fields remain linked to city defaults. Editing a
+city default changes effective inputs only for inheriting districts; auto districts
+regenerate and on-demand districts become Needs generation. A new effective value
+must not mark a set `*` when its inheritance flags have not changed. Show reference
+temperature and reference elevation together, since they describe a paired baseline.
+Never update from momentary weather. Exact game climate extraction needs verification.
+
+## Generation mode
+
+Default for each new district: **On demand**. Settings and boundary edits immediately
+change district data, but vegetation changes only on Generate/Regenerate. Existing
+plants remain until then; show Needs generation. Removal actions still work immediately.
+
+**Auto-generate** updates the district's owned vegetation after each committed node
+or settings change when a valid temporary polygon is available. Otherwise generate
+when drawing finishes. Do not generate for every mouse movement. A generation may
+re-evaluate every owned plant without deleting/recreating unchanged entities.
+
+Recommended safeguards:
+
+- Briefly debounce rapid edits/slider drags; only the newest revision may commit.
+- At most one generation job per district. Cancel/coalesce outdated work.
+- Wait for at least three usable nodes and a valid non-self-intersecting polygon.
+- Keep the last valid vegetation when the intermediate boundary is invalid; show why.
+- Cancel drawing removes draft-generated plants and the draft district. Cancelling
+  an existing boundary edit restores its prior state, including owned plants.
+- Switching auto on generates if needed; switching off cancels pending auto work
+  without erasing the last committed layout.
+- Auto is event-driven, not continuous regrowth after individual trees are bulldozed.
+  A later settings/boundary regeneration can recreate them; users can use on-demand
+  mode or bake when manual detailing should be preserved.
+
+## District actions
+
+| Action | Result |
+|---|---|
+| Generate / Regenerate | Populate or recompute owned vegetation from current settings; preserve unrelated plants |
+| Ungenerate | Remove owned plants, retain district, boundary and settings |
+| Bake + delete | Keep plants as ordinary vegetation; remove ownership and district |
+| Delete | Remove owned vegetation and district |
+
+Recommendation: Ungenerate also switches the district to On demand, with that
+consequence stated in its tooltip, so auto mode cannot immediately fill it again.
+Bake works on the currently placed plants, including a stale on-demand layout;
+it does not secretly regenerate first. Show that fact when settings have changed.
+Stop pending jobs before Ungenerate/Bake/Delete so late results cannot resurrect
+removed plants. These operations need undo. Delete/Bake dialogs name the action
+and affected count; avoid an ambiguous persistent “keep trees” checkbox.
+
+## Input, performance and recovery
+
+- UI clicks/scrolling never leak into drawing or map camera controls.
+- Escape cancels drawing or closes the top dialog; it does not generate or delete.
+- Native focus/scale/localisation conventions; readable labels alongside icons.
+- Visible counts, progress/cancel and bounded candidate/instance limits. No VRAM
+  promise based only on density percentage.
+- Save/load retains working settings, set comparison baseline, generated entities,
+  freshness, mode and ownership. Reload does not regenerate a completed district.
+- A generation interrupted by save/load remains explicitly incomplete/needs
+  generation unless a safe resume mechanism is implemented; never duplicate entities.
+- Recover from missing assets and generation failure without losing the last valid
+  district configuration. Failures explain what needs fixing.
+- Test tree tools, small resolutions, high UI scale, long names and repeated rapid
+  edits in the real game; browser mocks cannot establish integration compatibility.
 
 ## Sources
 

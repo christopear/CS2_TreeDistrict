@@ -1,9 +1,11 @@
 # Procedural foliage references and TreeDistrict design
 
-Version: 0.2 — researched 2026-10-26; scope revised after user review.
+Version: 0.3 — researched 2026-10-26; scope revised after user review.
 
 Revision: one concave district boundary, no interior-hole editor or water checks;
-game-climate or manual city reference; age-specific profiles; delete-owned/bake lifecycle.
+city climate defaults with set overrides; age-specific values saved only in sets;
+set-first shared editor; default on-demand plus opt-in auto generation; ungenerate.
+The [agreed UX](ux-design.md) controls interaction semantics.
 Sections 2–3 describe the original references and retain their water-related facts.
 
 **Decision:** Unreal Engine Procedural Foliage is our primary behavioural reference.
@@ -125,7 +127,7 @@ about what either reference implements.
 | D05 | Generate a static layout with bounded work | Avoids reproduction, mortality and years of ecosystem simulation |
 | D06 | One overall density multiplier; per-species candidate density underneath | Gives comparable controls without forcing shrubs and trees into a fixed percentage quota |
 | D07 | Use clumping strength and patch size | Avoid exposing propagation steps, seed counts and simulated age just to adjust appearance |
-| D08 | Explicit preview/apply and saved seed | Predictable editing and reproducible investigation |
+| D08 | Immediate district settings; on-demand default or opt-in auto generation; saved seed | Separate editing, library saving and generated state |
 | D09 | Do not replace missing or unsuitable species to meet a total count | Bare ground is valid; suitable shrubs can still occupy available space |
 | D10 | Keep moisture and terrain-sun exposure out of the initial model | Player-defined communities handle shorelines; canopy shade is only a local proxy |
 
@@ -171,6 +173,10 @@ Example under that chosen default: 20°C at reference elevation becomes 13.5°C
 thermal score there, holding all other inputs equal. This is a model consistency
 test, not a claim that the locations have identical real-world ecosystems.
 
+Each set inherits these city values unless it stores an explicit per-field override.
+Inherited values resolve for the current city. Effective changes queue auto-mode
+updates or mark on-demand districts stale. Save flags and values separately.
+
 ### 5.2 Per-asset vegetation profile
 
 | Input | Meaning | Source / validation |
@@ -186,7 +192,8 @@ test, not a claim that the locations have identical real-world ecosystems.
 | Density default | Candidate opportunities per hectare in suitable conditions | Profile; finite and ≥0 |
 | Appearance choices | Allowed game-supported ages/variants, age weights and rotations | Choose age before placement tests; use that age's estimated physical and canopy properties |
 
-Shrubs use the same fields. A shrub can have a different slope or shade response
+These profiles are internal defaults and inline set values, not independently
+savable user presets. Only whole sets are saved. Shrubs use the same fields. A shrub can have a different slope or shade response
 without receiving a universal "shrubs survive anything" exemption. No roots,
 reproduction rates, lifespan, or arbitrary biological growth simulation are needed.
 
@@ -204,8 +211,8 @@ Changing age weights must not multiply the species' candidate density.
 
 | Scope | Stored inputs | Normal UI |
 |---|---|---|
-| Reusable set | ID/version/name, asset list, per-species density multipliers, profile overrides, density/clumping defaults | Set picker; advanced species editor |
-| Area | Simple polygon, set snapshot, overrides, seed, generator version | Boundary editing, density, clumping, preview/apply |
+| Reusable set | ID/version/name, asset list, per-species density multipliers, inline age/profile values, climate overrides, density/clumping defaults | Set picker; advanced species editor |
+| Area | Simple polygon, set snapshot, overrides, seed, generator version, generation mode/revision | Same panel for creation and editing |
 | Spatial variation | Clumping strength [0,1], patch scale >0 m | Two controls; default to preset values |
 | Execution | Placement and candidate caps, cancellation, chunk budget | Internal limits; show count/cap warnings |
 | Persistence | Ownership records, actual placed entities, saved climate inputs and profile snapshots | Save/load; explicit preset updates |
@@ -259,9 +266,11 @@ flowchart LR
    (initial proposal: their minimum), and accept using deterministic random values.
    Do not repeatedly retry failures until a species quota is met. This permits
    thinning while allowing selected shade-tolerant plants underneath canopy.
-7. Preview counts by species and rejection reason. Apply after rechecking occupied
+7. Report counts by species and rejection reason. Commit after rechecking occupied
    geometry; a changed world requires an updated plan or clearly disclosed skipped
    placements. Creation is batched/cancellable and records area ownership.
+   Trigger via Generate or a debounced auto event; only the latest district revision
+   may commit. Settings changes themselves need no Apply action.
 
 **Known approximation:** ordering by height favours tall candidates for occupied
 space. It does not reproduce bidirectional competition or succession. Test mixed
@@ -276,8 +285,12 @@ must not invalidate promised obstacle clearance unnoticed.
 
 ## 7. UX and operational requirements
 
-The default flow is **choose a community → draw → adjust density/clumping → preview
-→ apply**. Climate is accepted from compatible game climate data or explicitly configured once per city using the three reference inputs. Most players should never edit a response curve.
+The default flow is **choose set → draw → Generate**. Auto mode replaces the last
+step with automatic updates on valid nodes/settings changes (or completed drawing
+where necessary). Select an existing district to edit it in the same window.
+The set name's `*` means unsaved to the library; generation freshness is separate.
+City climate supplies defaults and sets can override each field. Only sets are
+saved; nested asset/age edits are part of them. See [UX](ux-design.md).
 
 The advanced species editor shows a small graph and descriptive values. A preview
 inspection at a point should explain, for example, "too cold", "slope unsuitable",
@@ -294,10 +307,12 @@ All generated plants belong to their district; existing manually placed plants
 are never implicitly adopted. Delete district removes its owned plants. A separate
 **Bake to ordinary vegetation** operation detaches ownership and removes the district
 while preserving the plants. Baked plants retain no procedural edit relationship.
-Both operations need undo and save/load validation. Baking is not a rendering or
+Ungenerate removes owned plants but keeps the district; recommendation: it also
+switches to On demand. These operations need undo and save/load validation. Baking is not a rendering or
 memory optimization; it changes ownership only.
 
-No continuous filling of gaps after bulldozing. Construction-conflict cleanup may
+No continuous filling of gaps after bulldozing alone. A later auto regeneration
+after a district edit may recreate those plants. Construction-conflict cleanup may
 remove owned plants, but must not plant replacements. Undo, save/load, cancellation
 and missing-asset recovery are product requirements beyond these references.
 
@@ -315,7 +330,7 @@ and representations differ from CS2. Establish our own budgets with profiling.
 | Empty habitat | All-zero suitability yields no plants and no retry loop |
 | District edges | Concave cutouts stay empty; outside plants still affect edge clearance/shade |
 | Determinism | Same normalized inputs/seed/version yields the same plan regardless of task scheduling |
-| Safety | Every supported infrastructure category rejects intersections, including changed geometry before Apply; no water-specific rejection |
+| Safety | Every supported infrastructure category rejects intersections, including changed geometry before generation commit; no water-specific rejection |
 | Save/undo | Manual plants survive clear/undo; reloading neither rerolls nor refills deliberate removals |
 | Scale | Candidate cap, cancellation latency, memory and generation time measured for small/large areas |
 
