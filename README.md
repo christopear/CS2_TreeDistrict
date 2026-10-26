@@ -47,9 +47,12 @@ bash scripts/dotnet.sh test TreeDistrict.sln
 
 ## Develop on Windows
 
-Install the .NET SDK specified by `global.json`, then run from the repository root:
+Install the pinned SDK locally and load the Windows environment, then run from
+the repository root:
 
 ```powershell
+& .\scripts\bootstrap.ps1 # First setup only
+. .\scripts\env.ps1      # Each new terminal
 dotnet restore TreeDistrict.sln --locked-mode
 dotnet build TreeDistrict.sln -c Release --no-restore
 dotnet test TreeDistrict.sln -c Release --no-build --no-restore

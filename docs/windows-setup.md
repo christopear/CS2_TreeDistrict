@@ -4,6 +4,32 @@ The portable core is ready to develop on Ubuntu. Creating the game adapter is th
 next integration step and requires access to an installed CS2 modding toolchain.
 Do this on Windows, where the game is already installed.
 
+## Prepare a repository terminal
+
+Run once to install the portable SDK pinned by `global.json` into ignored
+`.tools/dotnet` (leaves the system/game SDK installed):
+
+```powershell
+& .\scripts\bootstrap.ps1
+```
+
+In each new repository terminal, load the environment before building:
+
+```powershell
+. .\scripts\env.ps1
+dotnet --version
+npm.cmd --prefix ui ci
+```
+
+The helper refreshes saved Windows PATH entries and `CSII_*` variables and
+selects the repository-local SDK. It changes only the current terminal. Restart
+your IDE after installing tools to refresh its inherited environment too.
+Use `npm.cmd` if PowerShell execution policy prevents the npm PowerShell shim.
+The installed game template can be inspected with the system .NET executable
+from outside this checkout, avoiding the portable `global.json` pin.
+
+## Integrate the game adapter
+
 1. Start CS2 and install/update the official toolchain in **Options → Modding**.
    Let it select Unity, Burst/Entities, SDK and Node dependencies. Do not substitute
    the latest Unity release or an old BepInEx tutorial.
