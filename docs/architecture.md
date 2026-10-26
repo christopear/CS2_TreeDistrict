@@ -1,5 +1,11 @@
 # Architecture and first milestones
 
+The [product requirements draft](requirements.md) is the current design discussion.
+Use the [foliage reference design](foliage-reference-design.md) for selected source
+models, input contracts and the proposed generator pipeline.
+The milestones below predate that draft and will be revised once its decisions
+are agreed; they are not a complete statement of first-release scope.
+
 ## Boundaries
 
 `src/TreeDistrict.Core` owns game-independent planning and validation. It must not

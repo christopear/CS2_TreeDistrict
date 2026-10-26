@@ -3,6 +3,12 @@
 Consulted on 2026-10-26. These are design/build references, not dependencies or
 vendored code. Verify details against the installed game before using them.
 
+Our selected algorithmic references are **Unreal Procedural Foliage** (primary)
+and **EcoBrush, 2017** (environmental model). Their input inventories, source
+locators and proposed adaptations are in the
+[foliage reference research and design report](foliage-reference-design.md).
+The CS2 repositories below are integration references, not extra generation models.
+
 - [Official code-modding overview](https://www.paradoxinteractive.com/games/cities-skylines-ii/modding/dev-diary-3-code-modding):
   official project template, post-processing, ECS systems and publishing.
 - [Modding toolchain wiki](https://cs2.paradoxwikis.com/Modding_Toolchain):

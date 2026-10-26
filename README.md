@@ -57,6 +57,8 @@ mod, follow [the Windows handoff](docs/windows-setup.md).
 No game assemblies, Unity installation, generated mod, or third-party source code
 are bundled here. The default solution deliberately builds without them.
 
-See [architecture and milestones](docs/architecture.md) and
+See the [draft product requirements](docs/requirements.md),
+[foliage reference research and design](docs/foliage-reference-design.md),
+[architecture and milestones](docs/architecture.md) and
 [reference sources](docs/references.md). An open-source licence has not yet been
 chosen; public repository visibility alone does not grant reuse permissions.
