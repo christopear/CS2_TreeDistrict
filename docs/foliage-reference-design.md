@@ -3,7 +3,7 @@
 Version: 0.2 — researched 2026-10-26; scope revised after user review.
 
 Revision: one concave district boundary, no interior-hole editor or water checks;
-manual city climate reference; age-specific profiles; delete-owned/bake lifecycle.
+game-climate or manual city reference; age-specific profiles; delete-owned/bake lifecycle.
 Sections 2–3 describe the original references and retain their water-related facts.
 
 **Decision:** Unreal Engine Procedural Foliage is our primary behavioural reference.
@@ -147,7 +147,7 @@ classes. Reject NaN/infinity and out-of-range values explicitly.
 | Terrain height and normal | CS2 adapter, API unverified | Internal; convert to one declared coordinate convention; unavailable samples reject placement |
 | Occupied geometry / clearance query | CS2 adapter, API unverified | Must cover roads, railways, buildings and ploppables; account for vertical separation |
 | Existing plants: position, footprint, height, canopy | Game entities plus profile catalogue | Preserve them; include relevant neighbours even outside the area |
-| `ReferenceTemperatureC` | User-defined stable reference | City-level, editable; authoritative over map weather |
+| `ReferenceTemperatureC` | Stable game climate or manual override | Show statistic, elevation and source; never current weather |
 | `ReferenceElevationM` | Explicit elevation for that temperature | City-level; not an unlabelled assumption that world zero is sea level |
 | `CoolingCPerKm` | Editable project default | City-level, finite and nonnegative; zero supports constant climate |
 | Climate statistic/version | Declared by our profile schema | Prevent mixing annual-mean profiles with seasonal-maximum inputs |
@@ -156,7 +156,8 @@ classes. Reject NaN/infinity and out-of-range values explicitly.
 with profiles authored for that statistic. **Proposed starting cooling default:**
 6.5°C/km, editable and subject to visual tuning. This is our reduced model, not
 EcoBrush's full temperature calculation. User-provided reference values are
-authoritative. No additional live climate input is needed by the first generator.
+authoritative when overridden. Compatible stable map climate may otherwise supply
+the reference value; current weather is never a generator input.
 
 Do not apply an elevation correction to data already corrected for that location.
 For reference height `h0` and candidate height `h`:
@@ -276,7 +277,7 @@ must not invalidate promised obstacle clearance unnoticed.
 ## 7. UX and operational requirements
 
 The default flow is **choose a community → draw → adjust density/clumping → preview
-→ apply**. Climate is explicitly configured once per city using the three reference inputs. Most players should never edit a response curve.
+→ apply**. Climate is accepted from compatible game climate data or explicitly configured once per city using the three reference inputs. Most players should never edit a response curve.
 
 The advanced species editor shows a small graph and descriptive values. A preview
 inspection at a point should explain, for example, "too cold", "slope unsuitable",
@@ -322,7 +323,7 @@ and representations differ from CS2. Establish our own budgets with profiling.
 obstacle, prefab and age-state data. Record game version, units, coordinate axes and
 sample outputs. No method names have been assumed in this report. In particular,
 an unavailable obstacle query is a release blocker, not permission to ignore that
-obstacle category. Climate is supplied explicitly by the user; automatic climate inference is not required.
+obstacle category. Reference temperature can use compatible stable game climate data; manual input is the fallback.
 
 **Prototype next:** a game-independent synthetic hillside with three fictional
 plant profiles. Vary map temperature, slope and canopy settings; inspect predicted

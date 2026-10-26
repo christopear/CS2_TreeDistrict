@@ -4,6 +4,8 @@ Updated 2026-10-26 after reference review. The direction below incorporates the
 user's scope corrections; remaining recommendations are labelled. It describes
 intended behaviour, not implemented functionality.
 
+See the [UX design](ux-design.md) for panels, profile saving and UI dependencies.
+
 Use the [reference design report](foliage-reference-design.md) for the selected
 Unreal Procedural Foliage and EcoBrush references, research and proposed pipeline.
 
@@ -16,7 +18,7 @@ Trees and shrubs belong to the same community, with species-specific preferences
 
 ## 1. City setup
 
-The user defines three stable climate inputs, saved with the city:
+Three stable climate inputs are saved with the city:
 
 - Reference temperature in °C.
 - Reference elevation in metres, in the same height convention as terrain samples.
@@ -27,10 +29,12 @@ For terrain height h:
     localTemperature = referenceTemperature
         - coolingCPerKm × (h - referenceElevation) / 1000
 
-These user values are authoritative. No live weather input or additional climate
-inference is required. Recommendation: label the temperature as annual mean and
-calibrate defaults accordingly. A future automatic suggestion must explain its
-source and must not overwrite the user's settings.
+Reference temperature may come from the game's stable climate data, with a manual
+override. Show the source, statistic and reference elevation; do not substitute
+current weather or apply elevation cooling twice. If a compatible climate value
+cannot be obtained, use manual input. Recommendation: annual mean, with profiles
+calibrated accordingly. Capture the effective value with the city and update it
+explicitly rather than rerolling vegetation when weather changes.
 
 The map supplies terrain heights/normals, occupied geometry and existing vegetation.
 Exact game APIs, units and coordinates still require verification. Geometric
@@ -38,7 +42,16 @@ height is sampled from terrain, not from the water surface or tops of buildings.
 
 ## 2. Vegetation profiles and age states
 
-Selecting an asset pre-populates an editable profile:
+Each vegetation asset and age has a default profile. Selecting it pre-populates
+reasonable values. Users can create a named custom profile, make it their default
+for that asset/age, or apply a one-off override to the current set/district.
+Built-in defaults remain recoverable. Changes to personal defaults only affect
+future selections, never silently rewrite existing set/district snapshots.
+One-off overrides persist with their owner in a saved city but do not change the
+personal library. Profile precedence: local override, selected named profile,
+personal default, built-in default. The editor shows which source is active.
+
+The editable properties are:
 
 - Temperature and slope response curves.
 - Optional hard placement limits.
@@ -151,7 +164,7 @@ Deleting a preset from the library is unrelated to deleting a district.
 
 ## 6. Everyday workflow
 
-1. Configure city climate once.
+1. Accept the map climate reference or configure it manually once.
 2. Pick a vegetation set, or create one by selecting plants and accepting defaults.
 3. Draw a district.
 4. Preview; optionally adjust local overall density and clumping.

@@ -59,6 +59,7 @@ are bundled here. The default solution deliberately builds without them.
 
 See the [draft product requirements](docs/requirements.md),
 [foliage reference research and design](docs/foliage-reference-design.md),
+[UX and UI technology decision](docs/ux-design.md),
 [architecture and milestones](docs/architecture.md) and
 [reference sources](docs/references.md). An open-source licence has not yet been
 chosen; public repository visibility alone does not grant reuse permissions.
