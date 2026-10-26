@@ -36,6 +36,9 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await page
         .getByRole("button", { name: "Remove Example understorey — fictional" })
         .click();
+    await page
+        .getByRole("button", { name: "Add vegetation…", exact: true })
+        .click();
     await expect(
         page.getByRole("button", {
             name: "Add Example understorey — fictional",
@@ -152,4 +155,42 @@ test("redraw cancellation and undo restore the existing district", async ({
     await expect(
         page.getByLabel("Overall density (%)", { exact: true }),
     ).toHaveValue("75");
+});
+
+test("add vegetation remains discoverable when all placeholder assets are included", async ({
+    page,
+}) => {
+    await page.goto("/");
+    await page
+        .getByRole("button", { name: "Set settings · 2 vegetation assets" })
+        .click();
+    await page
+        .getByRole("button", { name: "Add vegetation…", exact: true })
+        .click();
+    const picker = page.getByRole("dialog", {
+        name: "Add vegetation",
+        exact: true,
+    });
+    await expect(
+        picker.getByText(
+            "All available placeholder vegetation is already in this set.",
+        ),
+    ).toBeVisible();
+    await expect(
+        picker.getByRole("button", {
+            name: "Add Example canopy — fictional",
+            exact: true,
+        }),
+    ).toBeDisabled();
+    await picker.getByLabel("Search vegetation").fill("nonexistent");
+    await expect(
+        picker.getByRole("status").filter({ hasText: "No vegetation matches" }),
+    ).toBeVisible();
+    await picker.getByRole("button", { name: "Cancel", exact: true }).click();
+    await expect(
+        page.getByRole("heading", {
+            name: "Example mixed vegetation",
+            exact: true,
+        }),
+    ).toBeVisible();
 });

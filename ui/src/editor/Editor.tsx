@@ -181,9 +181,10 @@ export function Editor({
     const resolved = resolveClimate(state, set);
     const entry = state.library.find((s) => s.id === target.libraryId);
     const [query, setQuery] = useState("");
-    const [dialog, setDialog] = useState<"save" | "replace" | "delete" | null>(
-        null,
-    );
+    const [assetQuery, setAssetQuery] = useState("");
+    const [dialog, setDialog] = useState<
+        "save" | "replace" | "delete" | "addVegetation" | null
+    >(null);
     const [pending, setPending] = useState<string | null>(null);
     const [saveName, setSaveName] = useState("");
     const [saveError, setSaveError] = useState("");
@@ -410,6 +411,14 @@ export function Editor({
                         />
                     </Foldout>
                     <h3>Vegetation</h3>
+                    <Button
+                        onSelect={() => {
+                            setAssetQuery("");
+                            setDialog("addVegetation");
+                        }}
+                    >
+                        Add vegetation…
+                    </Button>
                     <p className="td-help">
                         Fictional assets and values for testing the editor.
                         Research and actual game asset selection come later.
@@ -506,21 +515,6 @@ export function Editor({
                             </Button>
                         </div>
                     ))}
-                    {catalog.assets
-                        .filter((a) => !set.assets.some((x) => x.id === a.id))
-                        .map((a) => (
-                            <Button
-                                key={a.id}
-                                onSelect={() =>
-                                    edit({
-                                        ...set,
-                                        assets: [...set.assets, clone(a)],
-                                    })
-                                }
-                            >
-                                Add {a.name}
-                            </Button>
-                        ))}
                     {!set.assets.length && (
                         <p role="status">
                             No vegetation selected. Add an asset to configure
@@ -635,13 +629,101 @@ export function Editor({
                                 ? "Save vegetation set"
                                 : dialog === "replace"
                                   ? "Replace modified set"
-                                  : "Delete district"
+                                  : dialog === "addVegetation"
+                                    ? "Add vegetation"
+                                    : "Delete district"
                         }
                         onClose={() => {
                             setDialog(null);
                             setPending(null);
                         }}
                     >
+                        {dialog === "addVegetation" && (
+                            <>
+                                <h3>Add vegetation</h3>
+                                <p className="td-help">
+                                    Only two fictional assets are available in
+                                    this preview. Game assets will be connected
+                                    later.
+                                </p>
+                                <label className="td-field">
+                                    <span>Search vegetation</span>
+                                    <input
+                                        value={assetQuery}
+                                        onChange={(e) =>
+                                            setAssetQuery(e.target.value)
+                                        }
+                                        placeholder="Search available assets"
+                                    />
+                                </label>
+                                {catalog.assets
+                                    .filter((a) =>
+                                        a.name
+                                            .toLowerCase()
+                                            .includes(
+                                                assetQuery.trim().toLowerCase(),
+                                            ),
+                                    )
+                                    .map((asset) => {
+                                        const included = set.assets.some(
+                                            (a) => a.id === asset.id,
+                                        );
+                                        return (
+                                            <div
+                                                key={asset.id}
+                                                className="td-asset"
+                                            >
+                                                <strong>{asset.name}</strong>
+                                                {included ? (
+                                                    <p className="td-help">
+                                                        Already in this set
+                                                    </p>
+                                                ) : (
+                                                    <p className="td-help">
+                                                        {asset.ages.length} age
+                                                        profile(s) · supplied
+                                                        settings included
+                                                    </p>
+                                                )}
+                                                <Button
+                                                    disabled={included}
+                                                    onSelect={() => {
+                                                        edit({
+                                                            ...set,
+                                                            assets: [
+                                                                ...set.assets,
+                                                                clone(asset),
+                                                            ],
+                                                        });
+                                                        setDialog(null);
+                                                    }}
+                                                >
+                                                    Add {asset.name}
+                                                </Button>
+                                            </div>
+                                        );
+                                    })}
+                                {!catalog.assets.some((a) =>
+                                    a.name
+                                        .toLowerCase()
+                                        .includes(
+                                            assetQuery.trim().toLowerCase(),
+                                        ),
+                                ) && (
+                                    <p role="status">
+                                        No vegetation matches your search.
+                                    </p>
+                                )}
+                                {catalog.assets.every((a) =>
+                                    set.assets.some((x) => x.id === a.id),
+                                ) && (
+                                    <p role="status">
+                                        All available placeholder vegetation is
+                                        already in this set.
+                                    </p>
+                                )}
+                            </>
+                        )}
                         {dialog === "replace" && (
                             <>
                                 <h3>Replace modified set?</h3>
