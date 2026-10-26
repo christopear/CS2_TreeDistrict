@@ -1,0 +1,4496 @@
+{
+  "schemaVersion": 1,
+  "gameVersion": "1.6.2f1",
+  "measurementMethod": "Union of highest-detail geometry submesh axis-aligned bounds, in model-space metres; includes trunk and foliage.",
+  "limitations": [
+    "Stock installed content only; ownership or availability of a DLC is not inferred from installed files.",
+    "Groups use mesh naming conventions and English asset labels; active prefab-to-mesh references are not verified.",
+    "All matching mesh variants are retained, including older and environment-pack versions. No active variant is guessed.",
+    "Bounds exclude runtime scaling, rotation, wind and seasonal changes. Width/depth are not measured foliage cover or opacity.",
+    "Placement, shade and botanical defaults are not derived automatically from bounding boxes."
+  ],
+  "archivesScanned": [
+    "BridgesAndPorts/Blob.cok",
+    "CityStations/Blob.cok",
+    "Game/Blob.cok",
+    "Game/Blob_Anniversary.cok",
+    "Game/Blob_Bikes.cok",
+    "Game/Blob_BridgesAndPorts.cok",
+    "Game/Blob_Didimo.cok",
+    "Game/Blob_Environment.cok",
+    "Game/Blob_FreeUpdate02.cok",
+    "Game/Blob_OldTown.cok",
+    "SupplyChains/Blob.cok"
+  ],
+  "coverage": {
+    "namedVegetationAssets": 25,
+    "namedAssetsWithoutMeasurements": [],
+    "unconfirmedMeshGroups": [
+      "cs2:EuropeanSpruceTree01"
+    ]
+  },
+  "rejectedMeasurements": [],
+  "assets": [
+    {
+      "id": "cs2:AppleTree01",
+      "name": "Apple Tree",
+      "prefabNameCandidate": "AppleTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "AppleTreeAdult01",
+          "geometryId": "66e6e75c3189f2c5deaff9a680edbde7",
+          "archive": "Game/Blob.cok",
+          "heightM": 6.3786,
+          "widthM": 8.4314,
+          "depthM": 8.4641,
+          "boundsMinM": [
+            -4.5133,
+            -0.0011,
+            -4.2245
+          ],
+          "boundsMaxM": [
+            3.9181,
+            6.3775,
+            4.2397
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "AppleTreeChild01",
+          "geometryId": "2e7b19b9ad4d90a8f7b3513b5fd49071",
+          "archive": "Game/Blob.cok",
+          "heightM": 3.7676,
+          "widthM": 4.9542,
+          "depthM": 4.8346,
+          "boundsMinM": [
+            -2.6715,
+            0.0027,
+            -2.2031
+          ],
+          "boundsMaxM": [
+            2.2827,
+            3.7704,
+            2.6316
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "AppleTreeDead01",
+          "geometryId": "eaca1633def1eec45d8a3e3d8eaa8364",
+          "archive": "Game/Blob.cok",
+          "heightM": 5.0599,
+          "widthM": 5.0004,
+          "depthM": 4.7538,
+          "boundsMinM": [
+            -2.4337,
+            0.0013,
+            -2.1088
+          ],
+          "boundsMaxM": [
+            2.5668,
+            5.0612,
+            2.645
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "AppleTreeElderly01",
+          "geometryId": "696c482e08678d58a253e022143102a0",
+          "archive": "Game/Blob.cok",
+          "heightM": 5.5464,
+          "widthM": 6.9799,
+          "depthM": 6.9217,
+          "boundsMinM": [
+            -3.3234,
+            -0.003,
+            -3.5575
+          ],
+          "boundsMaxM": [
+            3.6566,
+            5.5434,
+            3.3642
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "AppleTreeStump01",
+          "geometryId": "3b5c685b6d9f0d4d8f60683825fc32e5",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.2244,
+          "widthM": 0.4198,
+          "depthM": 0.4229,
+          "boundsMinM": [
+            -0.2142,
+            -0.0026,
+            -0.2408
+          ],
+          "boundsMaxM": [
+            0.2055,
+            0.2218,
+            0.1821
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "AppleTreeTeen01",
+          "geometryId": "343cb185dc201999a3cd23b29eefbf62",
+          "archive": "Game/Blob.cok",
+          "heightM": 5.2552,
+          "widthM": 6.0728,
+          "depthM": 6.2575,
+          "boundsMinM": [
+            -3.296,
+            -0.0015,
+            -2.9452
+          ],
+          "boundsMaxM": [
+            2.7768,
+            5.2536,
+            3.3123
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "AppleTreeAdult01",
+          "geometryId": "66e6e75c3189f2c5deaff9a680edbde7",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 6.3786,
+          "widthM": 8.4314,
+          "depthM": 8.4641,
+          "boundsMinM": [
+            -4.5133,
+            -0.0011,
+            -4.2245
+          ],
+          "boundsMaxM": [
+            3.9181,
+            6.3775,
+            4.2397
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "AppleTreeChild01",
+          "geometryId": "2e7b19b9ad4d90a8f7b3513b5fd49071",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 3.7676,
+          "widthM": 4.9542,
+          "depthM": 4.8346,
+          "boundsMinM": [
+            -2.6715,
+            0.0027,
+            -2.2031
+          ],
+          "boundsMaxM": [
+            2.2827,
+            3.7704,
+            2.6316
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "AppleTreeDead01",
+          "geometryId": "eaca1633def1eec45d8a3e3d8eaa8364",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 5.0599,
+          "widthM": 5.0004,
+          "depthM": 4.7538,
+          "boundsMinM": [
+            -2.4337,
+            0.0013,
+            -2.1088
+          ],
+          "boundsMaxM": [
+            2.5668,
+            5.0612,
+            2.645
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "AppleTreeElderly01",
+          "geometryId": "696c482e08678d58a253e022143102a0",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 5.5464,
+          "widthM": 6.9799,
+          "depthM": 6.9217,
+          "boundsMinM": [
+            -3.3234,
+            -0.003,
+            -3.5575
+          ],
+          "boundsMaxM": [
+            3.6566,
+            5.5434,
+            3.3642
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "AppleTreeStump01",
+          "geometryId": "3b5c685b6d9f0d4d8f60683825fc32e5",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.2244,
+          "widthM": 0.4198,
+          "depthM": 0.4229,
+          "boundsMinM": [
+            -0.2142,
+            -0.0026,
+            -0.2408
+          ],
+          "boundsMaxM": [
+            0.2055,
+            0.2218,
+            0.1821
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "AppleTreeTeen01",
+          "geometryId": "343cb185dc201999a3cd23b29eefbf62",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 5.2552,
+          "widthM": 6.0728,
+          "depthM": 6.2575,
+          "boundsMinM": [
+            -3.296,
+            -0.0015,
+            -2.9452
+          ],
+          "boundsMaxM": [
+            2.7768,
+            5.2536,
+            3.3123
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:BirchTree01",
+      "name": "Birch",
+      "prefabNameCandidate": "BirchTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "BirchTreeAdult01",
+          "geometryId": "0342099903b5736d9dec0dfbedec44b1",
+          "archive": "Game/Blob.cok",
+          "heightM": 15.9568,
+          "widthM": 7.9079,
+          "depthM": 6.8075,
+          "boundsMinM": [
+            -3.9219,
+            -0.0014,
+            -3.1203
+          ],
+          "boundsMaxM": [
+            3.986,
+            15.9554,
+            3.6872
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "BirchTreeAdult01_Geom",
+          "geometryId": "8f7aba6bbd11dd847986071a4b427933",
+          "archive": "Game/Blob.cok",
+          "heightM": 16.2691,
+          "widthM": 9.0851,
+          "depthM": 8.1868,
+          "boundsMinM": [
+            -4.8058,
+            -0.0355,
+            -4.0964
+          ],
+          "boundsMaxM": [
+            4.2793,
+            16.2336,
+            4.0904
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "BirchTreeChild01",
+          "geometryId": "72c488037b378c59bef8643bb707c986",
+          "archive": "Game/Blob.cok",
+          "heightM": 6.7864,
+          "widthM": 3.3444,
+          "depthM": 3.773,
+          "boundsMinM": [
+            -1.6152,
+            -0.0008,
+            -1.9212
+          ],
+          "boundsMaxM": [
+            1.7293,
+            6.7857,
+            1.8518
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "BirchTreeDead01",
+          "geometryId": "8768740e0f3ccff6ec14e0b23807c6e8",
+          "archive": "Game/Blob.cok",
+          "heightM": 15.2745,
+          "widthM": 8.7577,
+          "depthM": 8.3569,
+          "boundsMinM": [
+            -4.5713,
+            -0.0049,
+            -4.2568
+          ],
+          "boundsMaxM": [
+            4.1864,
+            15.2696,
+            4.1002
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "BirchTreeElderly01",
+          "geometryId": "110f5d15ef0cd86d749ef229ab193745",
+          "archive": "Game/Blob.cok",
+          "heightM": 17.2095,
+          "widthM": 10.9326,
+          "depthM": 10.2023,
+          "boundsMinM": [
+            -5.3349,
+            -0.0042,
+            -4.7825
+          ],
+          "boundsMaxM": [
+            5.5977,
+            17.2053,
+            5.4198
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "BirchTreeStump01",
+          "geometryId": "f804dd206b7b4ffeb75df257816115ae",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1641,
+          "widthM": 0.2949,
+          "depthM": 0.2926,
+          "boundsMinM": [
+            -0.147,
+            0.0,
+            -0.1419
+          ],
+          "boundsMaxM": [
+            0.1479,
+            0.1641,
+            0.1508
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "BirchTreeTeen01",
+          "geometryId": "c559107de37986a4d669de1e5ac070f8",
+          "archive": "Game/Blob.cok",
+          "heightM": 10.8967,
+          "widthM": 5.8208,
+          "depthM": 5.8934,
+          "boundsMinM": [
+            -3.1056,
+            -0.0024,
+            -3.0842
+          ],
+          "boundsMaxM": [
+            2.7152,
+            10.8944,
+            2.8092
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "BirchTreeAdult01",
+          "geometryId": "0342099903b5736d9dec0dfbedec44b1",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 15.9568,
+          "widthM": 7.9079,
+          "depthM": 6.8075,
+          "boundsMinM": [
+            -3.9219,
+            -0.0014,
+            -3.1203
+          ],
+          "boundsMaxM": [
+            3.986,
+            15.9554,
+            3.6872
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "BirchTreeChild01",
+          "geometryId": "72c488037b378c59bef8643bb707c986",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 6.7864,
+          "widthM": 3.3444,
+          "depthM": 3.773,
+          "boundsMinM": [
+            -1.6152,
+            -0.0008,
+            -1.9212
+          ],
+          "boundsMaxM": [
+            1.7293,
+            6.7857,
+            1.8518
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "BirchTreeDead01",
+          "geometryId": "8768740e0f3ccff6ec14e0b23807c6e8",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 15.2745,
+          "widthM": 8.7577,
+          "depthM": 8.3569,
+          "boundsMinM": [
+            -4.5713,
+            -0.0049,
+            -4.2568
+          ],
+          "boundsMaxM": [
+            4.1864,
+            15.2696,
+            4.1002
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "BirchTreeElderly01",
+          "geometryId": "110f5d15ef0cd86d749ef229ab193745",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 17.2095,
+          "widthM": 10.9326,
+          "depthM": 10.2023,
+          "boundsMinM": [
+            -5.3349,
+            -0.0042,
+            -4.7825
+          ],
+          "boundsMaxM": [
+            5.5977,
+            17.2053,
+            5.4198
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "BirchTreeStump01",
+          "geometryId": "f804dd206b7b4ffeb75df257816115ae",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1641,
+          "widthM": 0.2949,
+          "depthM": 0.2926,
+          "boundsMinM": [
+            -0.147,
+            0.0,
+            -0.1419
+          ],
+          "boundsMaxM": [
+            0.1479,
+            0.1641,
+            0.1508
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "BirchTreeTeen01",
+          "geometryId": "c559107de37986a4d669de1e5ac070f8",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 10.8967,
+          "widthM": 5.8208,
+          "depthM": 5.8934,
+          "boundsMinM": [
+            -3.1056,
+            -0.0024,
+            -3.0842
+          ],
+          "boundsMaxM": [
+            2.7152,
+            10.8944,
+            2.8092
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:CoconutPalmTree01",
+      "name": "Coconut Palm Tree",
+      "prefabNameCandidate": "CoconutPalmTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "CoconutPalmTreeAdult01",
+          "geometryId": "d884259aabac0c3bbb5b392196f5ecc4",
+          "archive": "Game/Blob.cok",
+          "heightM": 13.9718,
+          "widthM": 6.6049,
+          "depthM": 7.4368,
+          "boundsMinM": [
+            -3.4149,
+            0.018,
+            -3.6734
+          ],
+          "boundsMaxM": [
+            3.19,
+            13.9898,
+            3.7635
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "CoconutPalmTreeChild01",
+          "geometryId": "b1a48feaed6ecc0beae5a18d1b388be1",
+          "archive": "Game/Blob.cok",
+          "heightM": 4.6515,
+          "widthM": 4.948,
+          "depthM": 4.9156,
+          "boundsMinM": [
+            -2.5309,
+            -0.0001,
+            -2.4261
+          ],
+          "boundsMaxM": [
+            2.4171,
+            4.6514,
+            2.4895
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "CoconutPalmTreeDead01",
+          "geometryId": "a84af8ce8993904820e1c746fddf4239",
+          "archive": "Game/Blob.cok",
+          "heightM": 12.4438,
+          "widthM": 1.7863,
+          "depthM": 1.8795,
+          "boundsMinM": [
+            -0.9763,
+            -0.0006,
+            -0.9499
+          ],
+          "boundsMaxM": [
+            0.81,
+            12.4432,
+            0.9297
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "CoconutPalmTreeElderly01",
+          "geometryId": "e0da050a5292208a289c66cdc8da25f0",
+          "archive": "Game/Blob.cok",
+          "heightM": 20.5552,
+          "widthM": 7.5198,
+          "depthM": 7.6009,
+          "boundsMinM": [
+            -3.6255,
+            -0.0188,
+            -3.8291
+          ],
+          "boundsMaxM": [
+            3.8943,
+            20.5364,
+            3.7718
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "CoconutPalmTreeStump01",
+          "geometryId": "ce3d9f2ab0166ed021fe062de8e58a8c",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.2235,
+          "widthM": 0.4568,
+          "depthM": 0.4898,
+          "boundsMinM": [
+            -0.2284,
+            -0.0066,
+            -0.2564
+          ],
+          "boundsMaxM": [
+            0.2284,
+            0.2169,
+            0.2333
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "CoconutPalmTreeTeen01",
+          "geometryId": "5eaffafb104aa22c46b3b7be5c02401f",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.0649,
+          "widthM": 5.677,
+          "depthM": 5.823,
+          "boundsMinM": [
+            -3.0451,
+            -0.0003,
+            -3.0422
+          ],
+          "boundsMaxM": [
+            2.6319,
+            9.0646,
+            2.7809
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "CoconutPalmTreeAdult01",
+          "geometryId": "d884259aabac0c3bbb5b392196f5ecc4",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 13.9718,
+          "widthM": 6.6049,
+          "depthM": 7.4368,
+          "boundsMinM": [
+            -3.4149,
+            0.018,
+            -3.6734
+          ],
+          "boundsMaxM": [
+            3.19,
+            13.9898,
+            3.7635
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "CoconutPalmTreeChild01",
+          "geometryId": "b1a48feaed6ecc0beae5a18d1b388be1",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 4.6515,
+          "widthM": 4.948,
+          "depthM": 4.9156,
+          "boundsMinM": [
+            -2.5309,
+            -0.0001,
+            -2.4261
+          ],
+          "boundsMaxM": [
+            2.4171,
+            4.6514,
+            2.4895
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "CoconutPalmTreeDead01",
+          "geometryId": "a84af8ce8993904820e1c746fddf4239",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 12.4438,
+          "widthM": 1.7863,
+          "depthM": 1.8795,
+          "boundsMinM": [
+            -0.9763,
+            -0.0006,
+            -0.9499
+          ],
+          "boundsMaxM": [
+            0.81,
+            12.4432,
+            0.9297
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "CoconutPalmTreeElderly01",
+          "geometryId": "e0da050a5292208a289c66cdc8da25f0",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 20.5552,
+          "widthM": 7.5198,
+          "depthM": 7.6009,
+          "boundsMinM": [
+            -3.6255,
+            -0.0188,
+            -3.8291
+          ],
+          "boundsMaxM": [
+            3.8943,
+            20.5364,
+            3.7718
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "CoconutPalmTreeStump01",
+          "geometryId": "ce3d9f2ab0166ed021fe062de8e58a8c",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.2235,
+          "widthM": 0.4568,
+          "depthM": 0.4898,
+          "boundsMinM": [
+            -0.2284,
+            -0.0066,
+            -0.2564
+          ],
+          "boundsMaxM": [
+            0.2284,
+            0.2169,
+            0.2333
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "CoconutPalmTreeTeen01",
+          "geometryId": "5eaffafb104aa22c46b3b7be5c02401f",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 9.0649,
+          "widthM": 5.677,
+          "depthM": 5.823,
+          "boundsMinM": [
+            -3.0451,
+            -0.0003,
+            -3.0422
+          ],
+          "boundsMaxM": [
+            2.6319,
+            9.0646,
+            2.7809
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:EU_AlderTree01",
+      "name": "Alder",
+      "prefabNameCandidate": "EU_AlderTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "EU_AlderTreeAdult01",
+          "geometryId": "022e8667120ddf5273c2e298ce49b3f5",
+          "archive": "Game/Blob.cok",
+          "heightM": 19.7829,
+          "widthM": 14.2207,
+          "depthM": 14.7074,
+          "boundsMinM": [
+            -6.8957,
+            0.0,
+            -6.8851
+          ],
+          "boundsMaxM": [
+            7.325,
+            19.7829,
+            7.8223
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "EU_AlderTreeChild01",
+          "geometryId": "0f155bc43e8738ed860146274add5ecc",
+          "archive": "Game/Blob.cok",
+          "heightM": 5.8614,
+          "widthM": 6.5181,
+          "depthM": 6.8163,
+          "boundsMinM": [
+            -3.2363,
+            -0.0038,
+            -3.686
+          ],
+          "boundsMaxM": [
+            3.2817,
+            5.8576,
+            3.1303
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "EU_AlderTreeDead01",
+          "geometryId": "6981d11f793b5844569e3f48ccfd300d",
+          "archive": "Game/Blob.cok",
+          "heightM": 19.5601,
+          "widthM": 12.6598,
+          "depthM": 13.7254,
+          "boundsMinM": [
+            -6.2473,
+            -0.0071,
+            -6.4418
+          ],
+          "boundsMaxM": [
+            6.4125,
+            19.553,
+            7.2836
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "EU_AlderTreeElderly01",
+          "geometryId": "acc0b72ad5ce59ec4bc47c4462e7b83f",
+          "archive": "Game/Blob.cok",
+          "heightM": 20.3645,
+          "widthM": 16.2886,
+          "depthM": 15.6328,
+          "boundsMinM": [
+            -7.5934,
+            -0.0074,
+            -7.7984
+          ],
+          "boundsMaxM": [
+            8.6952,
+            20.3571,
+            7.8344
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "EU_AlderTreeStump01",
+          "geometryId": "b71e16f523cd06f7a60338e43860ea46",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.3008,
+          "widthM": 0.7546,
+          "depthM": 0.7614,
+          "boundsMinM": [
+            -0.3798,
+            -0.002,
+            -0.3451
+          ],
+          "boundsMaxM": [
+            0.3748,
+            0.2988,
+            0.4163
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "EU_AlderTreeTeen01",
+          "geometryId": "b2838e938930aba1d5e0be2e1b0a3ec8",
+          "archive": "Game/Blob.cok",
+          "heightM": 12.223,
+          "widthM": 11.5878,
+          "depthM": 11.8169,
+          "boundsMinM": [
+            -5.239,
+            -0.001,
+            -5.8879
+          ],
+          "boundsMaxM": [
+            6.3488,
+            12.222,
+            5.929
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "EU_AlderTreeAdult01",
+          "geometryId": "022e8667120ddf5273c2e298ce49b3f5",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 19.7829,
+          "widthM": 14.2207,
+          "depthM": 14.7074,
+          "boundsMinM": [
+            -6.8957,
+            0.0,
+            -6.8851
+          ],
+          "boundsMaxM": [
+            7.325,
+            19.7829,
+            7.8223
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "EU_AlderTreeChild01",
+          "geometryId": "0f155bc43e8738ed860146274add5ecc",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 5.8614,
+          "widthM": 6.5181,
+          "depthM": 6.8163,
+          "boundsMinM": [
+            -3.2363,
+            -0.0038,
+            -3.686
+          ],
+          "boundsMaxM": [
+            3.2817,
+            5.8576,
+            3.1303
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "EU_AlderTreeDead01",
+          "geometryId": "6981d11f793b5844569e3f48ccfd300d",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 19.5601,
+          "widthM": 12.6598,
+          "depthM": 13.7254,
+          "boundsMinM": [
+            -6.2473,
+            -0.0071,
+            -6.4418
+          ],
+          "boundsMaxM": [
+            6.4125,
+            19.553,
+            7.2836
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "EU_AlderTreeElderly01",
+          "geometryId": "acc0b72ad5ce59ec4bc47c4462e7b83f",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 20.3645,
+          "widthM": 16.2886,
+          "depthM": 15.6328,
+          "boundsMinM": [
+            -7.5934,
+            -0.0074,
+            -7.7984
+          ],
+          "boundsMaxM": [
+            8.6952,
+            20.3571,
+            7.8344
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "EU_AlderTreeStump01",
+          "geometryId": "b71e16f523cd06f7a60338e43860ea46",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.3008,
+          "widthM": 0.7546,
+          "depthM": 0.7614,
+          "boundsMinM": [
+            -0.3798,
+            -0.002,
+            -0.3451
+          ],
+          "boundsMaxM": [
+            0.3748,
+            0.2988,
+            0.4163
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "EU_AlderTreeTeen01",
+          "geometryId": "b2838e938930aba1d5e0be2e1b0a3ec8",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 12.223,
+          "widthM": 11.5878,
+          "depthM": 11.8169,
+          "boundsMinM": [
+            -5.239,
+            -0.001,
+            -5.8879
+          ],
+          "boundsMaxM": [
+            6.3488,
+            12.222,
+            5.929
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:EU_ChestnutTree01",
+      "name": "Chestnut",
+      "prefabNameCandidate": "EU_ChestnutTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "EU_ChestnutTreeAdult01",
+          "geometryId": "eb4f6e12cc49e164298e10d30070edb7",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.1238,
+          "widthM": 9.3594,
+          "depthM": 8.8246,
+          "boundsMinM": [
+            -4.8358,
+            0.0,
+            -4.0585
+          ],
+          "boundsMaxM": [
+            4.5236,
+            9.1238,
+            4.7661
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "EU_ChestnutTreeChild01",
+          "geometryId": "3b85aef71d3d831d9ce314d56cc26cd4",
+          "archive": "Game/Blob.cok",
+          "heightM": 4.0995,
+          "widthM": 4.3357,
+          "depthM": 4.1837,
+          "boundsMinM": [
+            -2.2394,
+            -0.0007,
+            -2.1323
+          ],
+          "boundsMaxM": [
+            2.0963,
+            4.0987,
+            2.0514
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "EU_ChestnutTreeDead01",
+          "geometryId": "1298d79aab50bcab592d483ca22a92a7",
+          "archive": "Game/Blob.cok",
+          "heightM": 8.8911,
+          "widthM": 7.9648,
+          "depthM": 8.3998,
+          "boundsMinM": [
+            -4.1455,
+            -0.0303,
+            -4.3996
+          ],
+          "boundsMaxM": [
+            3.8193,
+            8.8608,
+            4.0002
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "EU_ChestnutTreeElderly01",
+          "geometryId": "dafc687d1136eb6f3b7a70879c6117db",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.5263,
+          "widthM": 10.2177,
+          "depthM": 10.1264,
+          "boundsMinM": [
+            -4.9676,
+            -0.0012,
+            -5.015
+          ],
+          "boundsMaxM": [
+            5.2501,
+            9.5252,
+            5.1114
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "EU_ChestnutTreeStump01",
+          "geometryId": "e2d2d8255244e05268d80a8c9c48be0a",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1625,
+          "widthM": 0.4228,
+          "depthM": 0.4245,
+          "boundsMinM": [
+            -0.2114,
+            0.0,
+            -0.2123
+          ],
+          "boundsMaxM": [
+            0.2114,
+            0.1625,
+            0.2123
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "EU_ChestnutTreeTeen01",
+          "geometryId": "00bd08d994bd64eecb69f4639aab9258",
+          "archive": "Game/Blob.cok",
+          "heightM": 6.7224,
+          "widthM": 6.5433,
+          "depthM": 6.9088,
+          "boundsMinM": [
+            -3.5005,
+            -0.0021,
+            -3.3391
+          ],
+          "boundsMaxM": [
+            3.0428,
+            6.7203,
+            3.5697
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "EU_ChestnutTreeAdult01",
+          "geometryId": "eb4f6e12cc49e164298e10d30070edb7",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 9.1238,
+          "widthM": 9.3594,
+          "depthM": 8.8246,
+          "boundsMinM": [
+            -4.8358,
+            0.0,
+            -4.0585
+          ],
+          "boundsMaxM": [
+            4.5236,
+            9.1238,
+            4.7661
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "EU_ChestnutTreeChild01",
+          "geometryId": "3b85aef71d3d831d9ce314d56cc26cd4",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 4.0995,
+          "widthM": 4.3357,
+          "depthM": 4.1837,
+          "boundsMinM": [
+            -2.2394,
+            -0.0007,
+            -2.1323
+          ],
+          "boundsMaxM": [
+            2.0963,
+            4.0987,
+            2.0514
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "EU_ChestnutTreeDead01",
+          "geometryId": "1298d79aab50bcab592d483ca22a92a7",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 8.8911,
+          "widthM": 7.9648,
+          "depthM": 8.3998,
+          "boundsMinM": [
+            -4.1455,
+            -0.0303,
+            -4.3996
+          ],
+          "boundsMaxM": [
+            3.8193,
+            8.8608,
+            4.0002
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "EU_ChestnutTreeElderly01",
+          "geometryId": "dafc687d1136eb6f3b7a70879c6117db",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 9.5263,
+          "widthM": 10.2177,
+          "depthM": 10.1264,
+          "boundsMinM": [
+            -4.9676,
+            -0.0012,
+            -5.015
+          ],
+          "boundsMaxM": [
+            5.2501,
+            9.5252,
+            5.1114
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "EU_ChestnutTreeStump01",
+          "geometryId": "e2d2d8255244e05268d80a8c9c48be0a",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1625,
+          "widthM": 0.4228,
+          "depthM": 0.4245,
+          "boundsMinM": [
+            -0.2114,
+            0.0,
+            -0.2123
+          ],
+          "boundsMaxM": [
+            0.2114,
+            0.1625,
+            0.2123
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "EU_ChestnutTreeTeen01",
+          "geometryId": "00bd08d994bd64eecb69f4639aab9258",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 6.7224,
+          "widthM": 6.5433,
+          "depthM": 6.9088,
+          "boundsMinM": [
+            -3.5005,
+            -0.0021,
+            -3.3391
+          ],
+          "boundsMaxM": [
+            3.0428,
+            6.7203,
+            3.5697
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:EU_PoplarTree01",
+      "name": "Poplar",
+      "prefabNameCandidate": "EU_PoplarTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "EU_PoplarTreeAdult01",
+          "geometryId": "32539c652cba43fe3c0ca058ff4f23c5",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.8092,
+          "widthM": 4.417,
+          "depthM": 4.2962,
+          "boundsMinM": [
+            -2.2287,
+            0.0007,
+            -2.1888
+          ],
+          "boundsMaxM": [
+            2.1884,
+            9.8099,
+            2.1074
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "EU_PoplarTreeAdult01_Geom",
+          "geometryId": "e5b1f405facf022448e3800cdd23eef3",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.1042,
+          "widthM": 4.0773,
+          "depthM": 4.1308,
+          "boundsMinM": [
+            -1.9425,
+            -0.0029,
+            -2.1718
+          ],
+          "boundsMaxM": [
+            2.1347,
+            9.1014,
+            1.959
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "EU_PoplarTreeChild01",
+          "geometryId": "ac72aa0834582ad5156d630e12c7255e",
+          "archive": "Game/Blob.cok",
+          "heightM": 4.4254,
+          "widthM": 3.2691,
+          "depthM": 2.837,
+          "boundsMinM": [
+            -1.7048,
+            -0.0033,
+            -1.4524
+          ],
+          "boundsMaxM": [
+            1.5643,
+            4.4221,
+            1.3846
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "EU_PoplarTreeDead01",
+          "geometryId": "6ea9f2750063804a517308a1a595b4ed",
+          "archive": "Game/Blob.cok",
+          "heightM": 8.977,
+          "widthM": 3.3059,
+          "depthM": 3.2643,
+          "boundsMinM": [
+            -1.632,
+            0.0,
+            -1.6906
+          ],
+          "boundsMaxM": [
+            1.674,
+            8.977,
+            1.5737
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "EU_PoplarTreeElderly01",
+          "geometryId": "c5eb0f3e482367fe41e4470fd84b5db9",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.8211,
+          "widthM": 4.6855,
+          "depthM": 3.766,
+          "boundsMinM": [
+            -2.3763,
+            -0.0003,
+            -1.9967
+          ],
+          "boundsMaxM": [
+            2.3093,
+            9.8207,
+            1.7693
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "EU_PoplarTreeStump01",
+          "geometryId": "061f9f53ca08023da93444bfeefcbacd",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.2597,
+          "widthM": 0.2174,
+          "depthM": 0.2132,
+          "boundsMinM": [
+            -0.105,
+            0.0006,
+            -0.1066
+          ],
+          "boundsMaxM": [
+            0.1124,
+            0.2603,
+            0.1066
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "EU_PoplarTreeTeen01",
+          "geometryId": "b6823345198c85f06890efe7dec842ae",
+          "archive": "Game/Blob.cok",
+          "heightM": 6.5928,
+          "widthM": 3.8608,
+          "depthM": 3.6128,
+          "boundsMinM": [
+            -1.8307,
+            0.0,
+            -1.8541
+          ],
+          "boundsMaxM": [
+            2.0301,
+            6.5928,
+            1.7587
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "EU_PoplarTreeAdult01",
+          "geometryId": "32539c652cba43fe3c0ca058ff4f23c5",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 9.8092,
+          "widthM": 4.417,
+          "depthM": 4.2962,
+          "boundsMinM": [
+            -2.2287,
+            0.0007,
+            -2.1888
+          ],
+          "boundsMaxM": [
+            2.1884,
+            9.8099,
+            2.1074
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "EU_PoplarTreeChild01",
+          "geometryId": "ac72aa0834582ad5156d630e12c7255e",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 4.4254,
+          "widthM": 3.2691,
+          "depthM": 2.837,
+          "boundsMinM": [
+            -1.7048,
+            -0.0033,
+            -1.4524
+          ],
+          "boundsMaxM": [
+            1.5643,
+            4.4221,
+            1.3846
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "EU_PoplarTreeDead01",
+          "geometryId": "6ea9f2750063804a517308a1a595b4ed",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 8.977,
+          "widthM": 3.3059,
+          "depthM": 3.2643,
+          "boundsMinM": [
+            -1.632,
+            0.0,
+            -1.6906
+          ],
+          "boundsMaxM": [
+            1.674,
+            8.977,
+            1.5737
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "EU_PoplarTreeElderly01",
+          "geometryId": "c5eb0f3e482367fe41e4470fd84b5db9",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 9.8211,
+          "widthM": 4.6855,
+          "depthM": 3.766,
+          "boundsMinM": [
+            -2.3763,
+            -0.0003,
+            -1.9967
+          ],
+          "boundsMaxM": [
+            2.3093,
+            9.8207,
+            1.7693
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "EU_PoplarTreeStump01",
+          "geometryId": "061f9f53ca08023da93444bfeefcbacd",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.2597,
+          "widthM": 0.2174,
+          "depthM": 0.2132,
+          "boundsMinM": [
+            -0.105,
+            0.0006,
+            -0.1066
+          ],
+          "boundsMaxM": [
+            0.1124,
+            0.2603,
+            0.1066
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "EU_PoplarTreeTeen01",
+          "geometryId": "b6823345198c85f06890efe7dec842ae",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 6.5928,
+          "widthM": 3.8608,
+          "depthM": 3.6128,
+          "boundsMinM": [
+            -1.8307,
+            0.0,
+            -1.8541
+          ],
+          "boundsMaxM": [
+            2.0301,
+            6.5928,
+            1.7587
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:EuropeanSpruceTree01",
+      "name": "EuropeanSpruceTree01",
+      "prefabNameCandidate": "EuropeanSpruceTree01",
+      "nameConfirmedInLocale": false,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "EuropeanSpruceTreeAdult01",
+          "geometryId": "b76021a6614a6f98cedf1982adcbaaa5",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 27.7852,
+          "widthM": 13.7657,
+          "depthM": 12.1771,
+          "boundsMinM": [
+            -6.8763,
+            -0.1633,
+            -5.7296
+          ],
+          "boundsMaxM": [
+            6.8894,
+            27.6219,
+            6.4474
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "EuropeanSpruceTreeChild01",
+          "geometryId": "c78d40cb26e566141e7f1dd8a819f8b9",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 19.1228,
+          "widthM": 8.1161,
+          "depthM": 9.1227,
+          "boundsMinM": [
+            -3.9611,
+            -0.123,
+            -4.5493
+          ],
+          "boundsMaxM": [
+            4.155,
+            18.9998,
+            4.5735
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "EuropeanSpruceTreeDead01",
+          "geometryId": "b38d310bd8db0535fe6c03d2151b09e8",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 27.7852,
+          "widthM": 13.1584,
+          "depthM": 12.1771,
+          "boundsMinM": [
+            -6.269,
+            -0.1633,
+            -5.7296
+          ],
+          "boundsMaxM": [
+            6.8894,
+            27.6219,
+            6.4474
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "EuropeanSpruceTreeElderly01",
+          "geometryId": "510f483dc770f5ad949e63b1fbd2c67b",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 31.6123,
+          "widthM": 16.3315,
+          "depthM": 16.1899,
+          "boundsMinM": [
+            -7.9422,
+            -0.2766,
+            -7.987
+          ],
+          "boundsMaxM": [
+            8.3892,
+            31.3357,
+            8.2029
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "EuropeanSpruceTreeStump01",
+          "geometryId": "a5f714a586220b214d2975664e493247",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.756,
+          "widthM": 0.8754,
+          "depthM": 0.88,
+          "boundsMinM": [
+            -0.4286,
+            -0.2278,
+            -0.4259
+          ],
+          "boundsMaxM": [
+            0.4468,
+            0.5282,
+            0.454
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "EuropeanSpruceTreeTeen01",
+          "geometryId": "b1814be2560777db4fc30088303c11ef",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 23.1118,
+          "widthM": 11.2016,
+          "depthM": 10.7874,
+          "boundsMinM": [
+            -5.6996,
+            -0.1846,
+            -5.6045
+          ],
+          "boundsMaxM": [
+            5.502,
+            22.9272,
+            5.1829
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:FloridaPalmTree01",
+      "name": "Florida Palm Tree",
+      "prefabNameCandidate": "FloridaPalmTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "FloridaPalmTreeAdult01",
+          "geometryId": "b181b07232976de51f14be4536484996",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.7541,
+          "widthM": 5.753,
+          "depthM": 5.7543,
+          "boundsMinM": [
+            -2.8926,
+            0.0004,
+            -2.8008
+          ],
+          "boundsMaxM": [
+            2.8604,
+            9.7544,
+            2.9535
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "FloridaPalmTreeChild01",
+          "geometryId": "119e99eeb8b3b426cfc48ab52e913488",
+          "archive": "Game/Blob.cok",
+          "heightM": 2.7879,
+          "widthM": 3.6011,
+          "depthM": 3.8313,
+          "boundsMinM": [
+            -1.8294,
+            -0.0001,
+            -1.8668
+          ],
+          "boundsMaxM": [
+            1.7717,
+            2.7878,
+            1.9645
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "FloridaPalmTreeDead01",
+          "geometryId": "3194f70c01e4b43dd104a8b3d5e9fc10",
+          "archive": "Game/Blob.cok",
+          "heightM": 8.9212,
+          "widthM": 2.7752,
+          "depthM": 2.8164,
+          "boundsMinM": [
+            -1.6059,
+            -0.0001,
+            -1.3529
+          ],
+          "boundsMaxM": [
+            1.1693,
+            8.9211,
+            1.4635
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "FloridaPalmTreeElderly01",
+          "geometryId": "1adf296988d22bed3d6b112047493ecb",
+          "archive": "Game/Blob.cok",
+          "heightM": 11.8303,
+          "widthM": 5.5307,
+          "depthM": 5.7154,
+          "boundsMinM": [
+            -2.7103,
+            0.0016,
+            -2.7879
+          ],
+          "boundsMaxM": [
+            2.8204,
+            11.8319,
+            2.9275
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "FloridaPalmTreeStump01",
+          "geometryId": "3fd072ef6564ca9c4d72edbf8f8f9ab1",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1695,
+          "widthM": 0.4533,
+          "depthM": 0.4668,
+          "boundsMinM": [
+            -0.2261,
+            -0.0006,
+            -0.2397
+          ],
+          "boundsMaxM": [
+            0.2272,
+            0.1689,
+            0.2271
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "FloridaPalmTreeTeen01",
+          "geometryId": "9af0cf9932d51a9f2855c2122eb8b152",
+          "archive": "Game/Blob.cok",
+          "heightM": 6.3076,
+          "widthM": 4.8694,
+          "depthM": 5.0752,
+          "boundsMinM": [
+            -2.3335,
+            -0.0078,
+            -2.4258
+          ],
+          "boundsMaxM": [
+            2.5359,
+            6.2998,
+            2.6494
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "FloridaPalmTreeAdult01",
+          "geometryId": "b181b07232976de51f14be4536484996",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 9.7541,
+          "widthM": 5.753,
+          "depthM": 5.7543,
+          "boundsMinM": [
+            -2.8926,
+            0.0004,
+            -2.8008
+          ],
+          "boundsMaxM": [
+            2.8604,
+            9.7544,
+            2.9535
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "FloridaPalmTreeChild01",
+          "geometryId": "119e99eeb8b3b426cfc48ab52e913488",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 2.7879,
+          "widthM": 3.6011,
+          "depthM": 3.8313,
+          "boundsMinM": [
+            -1.8294,
+            -0.0001,
+            -1.8668
+          ],
+          "boundsMaxM": [
+            1.7717,
+            2.7878,
+            1.9645
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "FloridaPalmTreeDead01",
+          "geometryId": "3194f70c01e4b43dd104a8b3d5e9fc10",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 8.9212,
+          "widthM": 2.7752,
+          "depthM": 2.8164,
+          "boundsMinM": [
+            -1.6059,
+            -0.0001,
+            -1.3529
+          ],
+          "boundsMaxM": [
+            1.1693,
+            8.9211,
+            1.4635
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "FloridaPalmTreeElderly01",
+          "geometryId": "1adf296988d22bed3d6b112047493ecb",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 11.8303,
+          "widthM": 5.5307,
+          "depthM": 5.7154,
+          "boundsMinM": [
+            -2.7103,
+            0.0016,
+            -2.7879
+          ],
+          "boundsMaxM": [
+            2.8204,
+            11.8319,
+            2.9275
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "FloridaPalmTreeStump01",
+          "geometryId": "3fd072ef6564ca9c4d72edbf8f8f9ab1",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1695,
+          "widthM": 0.4533,
+          "depthM": 0.4668,
+          "boundsMinM": [
+            -0.2261,
+            -0.0006,
+            -0.2397
+          ],
+          "boundsMaxM": [
+            0.2272,
+            0.1689,
+            0.2271
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "FloridaPalmTreeTeen01",
+          "geometryId": "9af0cf9932d51a9f2855c2122eb8b152",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 6.3076,
+          "widthM": 4.8694,
+          "depthM": 5.0752,
+          "boundsMinM": [
+            -2.3335,
+            -0.0078,
+            -2.4258
+          ],
+          "boundsMaxM": [
+            2.5359,
+            6.2998,
+            2.6494
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:FlowerBushCity01",
+      "name": "Cultivated Flower Bush 01",
+      "prefabNameCandidate": "FlowerBushCity01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "static",
+          "meshName": "FlowerBushCity01_Geom",
+          "geometryId": "08185269d39f40e4db96f4097487a76b",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.2709,
+          "widthM": 1.6581,
+          "depthM": 1.7278,
+          "boundsMinM": [
+            -0.8293,
+            -0.0099,
+            -0.8542
+          ],
+          "boundsMaxM": [
+            0.8288,
+            1.261,
+            0.8736
+          ]
+        },
+        {
+          "stage": "static",
+          "meshName": "FlowerBushCity01",
+          "geometryId": "e244a9ead3eaba5bc31e8605115d2fcb",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.3046,
+          "widthM": 1.686,
+          "depthM": 1.7164,
+          "boundsMinM": [
+            -0.8664,
+            0.0,
+            -0.847
+          ],
+          "boundsMaxM": [
+            0.8196,
+            1.3046,
+            0.8694
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:FlowerBushCity02",
+      "name": "Cultivated Flower Bush 02",
+      "prefabNameCandidate": "FlowerBushCity02",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "static",
+          "meshName": "FlowerBushCity02",
+          "geometryId": "c0172aaeafadf7dccc1189af7579dd32",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.3884,
+          "widthM": 2.1429,
+          "depthM": 2.2533,
+          "boundsMinM": [
+            -1.0855,
+            -0.0003,
+            -1.1591
+          ],
+          "boundsMaxM": [
+            1.0575,
+            1.388,
+            1.0942
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:FlowerBushCity03",
+      "name": "Cultivated Flower Bush 03",
+      "prefabNameCandidate": "FlowerBushCity03",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "static",
+          "meshName": "FlowerBushCity03",
+          "geometryId": "6998193ca3dda8c551a6fedd8050f349",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.7493,
+          "widthM": 1.9903,
+          "depthM": 1.9411,
+          "boundsMinM": [
+            -0.9634,
+            -0.0027,
+            -0.9359
+          ],
+          "boundsMaxM": [
+            1.0269,
+            1.7465,
+            1.0052
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:FlowerBushWild01",
+      "name": "Wild Flower Bush 01",
+      "prefabNameCandidate": "FlowerBushWild01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "FlowerBushWildAdult01",
+          "geometryId": "93a62d6634982efe5ab3ad2251b8b7b0",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.7771,
+          "widthM": 4.0018,
+          "depthM": 4.0197,
+          "boundsMinM": [
+            -1.9966,
+            0.0,
+            -2.0055
+          ],
+          "boundsMaxM": [
+            2.0052,
+            1.7771,
+            2.0142
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "FlowerBushWildAdult01_Geom",
+          "geometryId": "0a55d521d26532c49bab81158187de2b",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.1058,
+          "widthM": 3.9999,
+          "depthM": 4.0197,
+          "boundsMinM": [
+            -1.9948,
+            0.0051,
+            -2.0055
+          ],
+          "boundsMaxM": [
+            2.0052,
+            1.1109,
+            2.0142
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "FlowerBushWildChild01",
+          "geometryId": "9cbcfb9aaffde74e4f0d5f2737cfdb71",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.2881,
+          "widthM": 3.1515,
+          "depthM": 3.1308,
+          "boundsMinM": [
+            -1.6122,
+            0.0,
+            -1.5807
+          ],
+          "boundsMaxM": [
+            1.5392,
+            1.2881,
+            1.5501
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "FlowerBushWildElderly01",
+          "geometryId": "b3f619b3ede827795a0a0fd4efebaaa5",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.6588,
+          "widthM": 3.9644,
+          "depthM": 3.8938,
+          "boundsMinM": [
+            -1.9894,
+            -0.0001,
+            -1.9308
+          ],
+          "boundsMaxM": [
+            1.975,
+            1.6587,
+            1.963
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "FlowerBushWildTeen01",
+          "geometryId": "454448eee3e159fe08da36a99adfc1c6",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.4898,
+          "widthM": 3.5566,
+          "depthM": 3.6791,
+          "boundsMinM": [
+            -1.7885,
+            -0.0076,
+            -1.8359
+          ],
+          "boundsMaxM": [
+            1.7681,
+            1.4822,
+            1.8432
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "FlowerbushWildDead01",
+          "geometryId": "b491f38d778a8971b684c9fa35918370",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.5296,
+          "widthM": 3.1977,
+          "depthM": 3.057,
+          "boundsMinM": [
+            -1.6096,
+            0.0,
+            -1.583
+          ],
+          "boundsMaxM": [
+            1.5881,
+            1.5296,
+            1.4739
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:FlowerBushWild02",
+      "name": "Wild Flower Bush 02",
+      "prefabNameCandidate": "FlowerBushWild02",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "FlowerBushWildAdult02",
+          "geometryId": "972cfe66a76775d171cc268a9dd76d71",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.5981,
+          "widthM": 4.1822,
+          "depthM": 4.089,
+          "boundsMinM": [
+            -2.0744,
+            0.0,
+            -1.9816
+          ],
+          "boundsMaxM": [
+            2.1079,
+            1.5981,
+            2.1075
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "FlowerBushWildChild02",
+          "geometryId": "a201740bd5a60bcf0a0a36670ee77b2d",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.2582,
+          "widthM": 3.236,
+          "depthM": 3.0689,
+          "boundsMinM": [
+            -1.5896,
+            0.0,
+            -1.5318
+          ],
+          "boundsMaxM": [
+            1.6464,
+            1.2582,
+            1.5371
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "FlowerBushWildDead02",
+          "geometryId": "6e5f4e50fa48ea519f8293f58a8b44d5",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.4829,
+          "widthM": 3.6448,
+          "depthM": 3.6448,
+          "boundsMinM": [
+            -1.8226,
+            0.0,
+            -1.8181
+          ],
+          "boundsMaxM": [
+            1.8222,
+            1.4829,
+            1.8267
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "FlowerBushWildElderly02",
+          "geometryId": "929c7e4fa20dad598319d83cddb4af7b",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.6343,
+          "widthM": 4.0497,
+          "depthM": 4.0497,
+          "boundsMinM": [
+            -2.0251,
+            0.0,
+            -2.0206
+          ],
+          "boundsMaxM": [
+            2.0247,
+            1.6343,
+            2.0292
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "FlowerBushWildTeen02",
+          "geometryId": "c06ec44107ccbed424a70b76c8f97315",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.4992,
+          "widthM": 3.8431,
+          "depthM": 3.5465,
+          "boundsMinM": [
+            -1.9268,
+            -0.0069,
+            -1.6594
+          ],
+          "boundsMaxM": [
+            1.9162,
+            1.4923,
+            1.8871
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:GreenBushCity01",
+      "name": "Cultivated Green Bush 01",
+      "prefabNameCandidate": "GreenBushCity01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "static",
+          "meshName": "GreenBushCity01",
+          "geometryId": "8d11811bb7e07dea1410a3dc964c9712",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.9741,
+          "widthM": 1.3783,
+          "depthM": 1.3192,
+          "boundsMinM": [
+            -0.6981,
+            -0.001,
+            -0.6215
+          ],
+          "boundsMaxM": [
+            0.6803,
+            0.9731,
+            0.6976
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:GreenBushCity02",
+      "name": "Cultivated Green Bush 02",
+      "prefabNameCandidate": "GreenBushCity02",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "static",
+          "meshName": "GreenBushCity02",
+          "geometryId": "cccdef621678731e2ddda2be5fafb4e3",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.4395,
+          "widthM": 1.3858,
+          "depthM": 1.3997,
+          "boundsMinM": [
+            -0.6929,
+            -0.003,
+            -0.6998
+          ],
+          "boundsMaxM": [
+            0.6929,
+            1.4365,
+            0.6998
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:GreenBushCity03",
+      "name": "Cultivated Green Bush 03",
+      "prefabNameCandidate": "GreenBushCity03",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "static",
+          "meshName": "GreenBushCity03",
+          "geometryId": "6f1bca1dc878ad6bde1931e50fa04360",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.1624,
+          "widthM": 2.096,
+          "depthM": 2.0407,
+          "boundsMinM": [
+            -1.067,
+            0.0,
+            -1.0437
+          ],
+          "boundsMaxM": [
+            1.029,
+            1.1624,
+            0.9971
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:GreenBushWild01",
+      "name": "Wild Green Bush 01",
+      "prefabNameCandidate": "GreenBushWild01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "GreenBushWildAdult01",
+          "geometryId": "1f252e35a299cad8495274331dbd1d60",
+          "archive": "Game/Blob.cok",
+          "heightM": 2.6933,
+          "widthM": 3.621,
+          "depthM": 3.626,
+          "boundsMinM": [
+            -1.8115,
+            -0.0029,
+            -1.813
+          ],
+          "boundsMaxM": [
+            1.8095,
+            2.6904,
+            1.813
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "GreenBushWildChild01",
+          "geometryId": "e015b395e583cddf70e04ed7baed71e7",
+          "archive": "Game/Blob.cok",
+          "heightM": 1.7221,
+          "widthM": 2.5049,
+          "depthM": 2.5314,
+          "boundsMinM": [
+            -1.2289,
+            -0.0,
+            -1.3134
+          ],
+          "boundsMaxM": [
+            1.276,
+            1.7221,
+            1.218
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "GreenBushWildDead01",
+          "geometryId": "ec89903ea4083eefe64a656d08cfe933",
+          "archive": "Game/Blob.cok",
+          "heightM": 2.4138,
+          "widthM": 2.5901,
+          "depthM": 2.7328,
+          "boundsMinM": [
+            -1.3254,
+            -0.0003,
+            -1.3422
+          ],
+          "boundsMaxM": [
+            1.2647,
+            2.4134,
+            1.3906
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "GreenBushWildElderly01",
+          "geometryId": "0f733ba8e4a0f070e6070848ab938028",
+          "archive": "Game/Blob.cok",
+          "heightM": 2.7258,
+          "widthM": 3.4658,
+          "depthM": 3.2256,
+          "boundsMinM": [
+            -1.7274,
+            -0.0016,
+            -1.6128
+          ],
+          "boundsMaxM": [
+            1.7384,
+            2.7243,
+            1.6128
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "GreenBushWildTeen01",
+          "geometryId": "9874338b7ecfc4d645375a8dd1afb756",
+          "archive": "Game/Blob.cok",
+          "heightM": 2.0153,
+          "widthM": 2.9695,
+          "depthM": 2.9234,
+          "boundsMinM": [
+            -1.4848,
+            0.0,
+            -1.4617
+          ],
+          "boundsMaxM": [
+            1.4848,
+            2.0153,
+            1.4617
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:GreenBushWild02",
+      "name": "Wild Green Bush 02",
+      "prefabNameCandidate": "GreenBushWild02",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "shrub",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "GreenBushWildAdult02",
+          "geometryId": "668cd2c3ffd3ea59d3453f18c88f228e",
+          "archive": "Game/Blob.cok",
+          "heightM": 4.4476,
+          "widthM": 5.4679,
+          "depthM": 5.4163,
+          "boundsMinM": [
+            -2.8463,
+            0.0002,
+            -2.7765
+          ],
+          "boundsMaxM": [
+            2.6215,
+            4.4478,
+            2.6398
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "GreenBushWildChild02",
+          "geometryId": "28047081289b27d9910411b3babead65",
+          "archive": "Game/Blob.cok",
+          "heightM": 3.4498,
+          "widthM": 3.4543,
+          "depthM": 4.0625,
+          "boundsMinM": [
+            -1.6168,
+            0.0,
+            -1.8499
+          ],
+          "boundsMaxM": [
+            1.8375,
+            3.4498,
+            2.2126
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "GreenBushWildDead02",
+          "geometryId": "9ce6d5c142dcf89f0d63e8f23e4b40dd",
+          "archive": "Game/Blob.cok",
+          "heightM": 3.2908,
+          "widthM": 4.4764,
+          "depthM": 3.8787,
+          "boundsMinM": [
+            -2.1864,
+            0.0001,
+            -1.9117
+          ],
+          "boundsMaxM": [
+            2.2901,
+            3.2909,
+            1.9671
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "GreenBushWildElderly02",
+          "geometryId": "0f99b9b7996125b78106ca291b51cb49",
+          "archive": "Game/Blob.cok",
+          "heightM": 4.3539,
+          "widthM": 5.1503,
+          "depthM": 5.4654,
+          "boundsMinM": [
+            -2.7287,
+            -0.0351,
+            -2.8118
+          ],
+          "boundsMaxM": [
+            2.4216,
+            4.3188,
+            2.6537
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "GreenBushWildTeen02",
+          "geometryId": "a5151a310e4e7124abace5eac824fc6d",
+          "archive": "Game/Blob.cok",
+          "heightM": 4.0033,
+          "widthM": 4.5634,
+          "depthM": 4.5178,
+          "boundsMinM": [
+            -2.4558,
+            -0.0442,
+            -2.3126
+          ],
+          "boundsMaxM": [
+            2.1076,
+            3.9591,
+            2.2052
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:NA_HickoryTree01",
+      "name": "Hickory",
+      "prefabNameCandidate": "NA_HickoryTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "NA_HickoryTreeAdult01",
+          "geometryId": "7a26f2361abc6346350ac9d64d1568ed",
+          "archive": "Game/Blob.cok",
+          "heightM": 18.8107,
+          "widthM": 12.8065,
+          "depthM": 11.8362,
+          "boundsMinM": [
+            -5.8278,
+            0.0,
+            -6.5048
+          ],
+          "boundsMaxM": [
+            6.9787,
+            18.8107,
+            5.3314
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "NA_HickoryTreeChild01",
+          "geometryId": "3f111255cc622a604d9f76b6ef2e893c",
+          "archive": "Game/Blob.cok",
+          "heightM": 5.6642,
+          "widthM": 6.4464,
+          "depthM": 6.3905,
+          "boundsMinM": [
+            -3.183,
+            -0.0046,
+            -3.1928
+          ],
+          "boundsMaxM": [
+            3.2634,
+            5.6596,
+            3.1977
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "NA_HickoryTreeDead01",
+          "geometryId": "d97eadf85eec23121d3ec35b8f032fbc",
+          "archive": "Game/Blob.cok",
+          "heightM": 18.9193,
+          "widthM": 12.0386,
+          "depthM": 11.3636,
+          "boundsMinM": [
+            -5.5836,
+            -0.0056,
+            -5.2735
+          ],
+          "boundsMaxM": [
+            6.455,
+            18.9137,
+            6.0902
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "NA_HickoryTreeElderly01",
+          "geometryId": "0a86be9f2f4308f3667832f7268fa2cd",
+          "archive": "Game/Blob.cok",
+          "heightM": 19.6464,
+          "widthM": 11.7753,
+          "depthM": 11.3636,
+          "boundsMinM": [
+            -5.941,
+            -0.0056,
+            -5.2735
+          ],
+          "boundsMaxM": [
+            5.8343,
+            19.6408,
+            6.0902
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "NA_HickoryTreeStump01",
+          "geometryId": "772ffc71371044cdfc1433de1b322d35",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1571,
+          "widthM": 0.5617,
+          "depthM": 0.5595,
+          "boundsMinM": [
+            -0.2808,
+            0.0,
+            -0.2823
+          ],
+          "boundsMaxM": [
+            0.2808,
+            0.1571,
+            0.2773
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "NA_HickoryTreeTeen01",
+          "geometryId": "bbef1d46baceed8d779d017618fde5d6",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.5865,
+          "widthM": 8.0746,
+          "depthM": 8.9818,
+          "boundsMinM": [
+            -3.8551,
+            -0.0129,
+            -4.6448
+          ],
+          "boundsMaxM": [
+            4.2195,
+            9.5736,
+            4.337
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "NA_HickoryTreeAdult01",
+          "geometryId": "7a26f2361abc6346350ac9d64d1568ed",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 18.8107,
+          "widthM": 12.8065,
+          "depthM": 11.8362,
+          "boundsMinM": [
+            -5.8278,
+            0.0,
+            -6.5048
+          ],
+          "boundsMaxM": [
+            6.9787,
+            18.8107,
+            5.3314
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "NA_HickoryTreeChild01",
+          "geometryId": "3f111255cc622a604d9f76b6ef2e893c",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 5.6642,
+          "widthM": 6.4464,
+          "depthM": 6.3905,
+          "boundsMinM": [
+            -3.183,
+            -0.0046,
+            -3.1928
+          ],
+          "boundsMaxM": [
+            3.2634,
+            5.6596,
+            3.1977
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "NA_HickoryTreeDead01",
+          "geometryId": "d97eadf85eec23121d3ec35b8f032fbc",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 18.9193,
+          "widthM": 12.0386,
+          "depthM": 11.3636,
+          "boundsMinM": [
+            -5.5836,
+            -0.0056,
+            -5.2735
+          ],
+          "boundsMaxM": [
+            6.455,
+            18.9137,
+            6.0902
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "NA_HickoryTreeElderly01",
+          "geometryId": "0a86be9f2f4308f3667832f7268fa2cd",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 19.6464,
+          "widthM": 11.7753,
+          "depthM": 11.3636,
+          "boundsMinM": [
+            -5.941,
+            -0.0056,
+            -5.2735
+          ],
+          "boundsMaxM": [
+            5.8343,
+            19.6408,
+            6.0902
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "NA_HickoryTreeStump01",
+          "geometryId": "772ffc71371044cdfc1433de1b322d35",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1571,
+          "widthM": 0.5617,
+          "depthM": 0.5595,
+          "boundsMinM": [
+            -0.2808,
+            0.0,
+            -0.2823
+          ],
+          "boundsMaxM": [
+            0.2808,
+            0.1571,
+            0.2773
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "NA_HickoryTreeTeen01",
+          "geometryId": "bbef1d46baceed8d779d017618fde5d6",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 9.5865,
+          "widthM": 8.0746,
+          "depthM": 8.9818,
+          "boundsMinM": [
+            -3.8551,
+            -0.0129,
+            -4.6448
+          ],
+          "boundsMaxM": [
+            4.2195,
+            9.5736,
+            4.337
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:NA_LindenTree01",
+      "name": "Linden",
+      "prefabNameCandidate": "NA_LindenTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "NA_LindenTreeAdult01",
+          "geometryId": "f7d25561e491acc1a78ae730308fb946",
+          "archive": "Game/Blob.cok",
+          "heightM": 8.138,
+          "widthM": 6.4056,
+          "depthM": 6.3082,
+          "boundsMinM": [
+            -3.2444,
+            0.0,
+            -3.2014
+          ],
+          "boundsMaxM": [
+            3.1612,
+            8.138,
+            3.1068
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "NA_LindenTreeChild01",
+          "geometryId": "d9ccc9f0c6067e83d7d002949eee84a8",
+          "archive": "Game/Blob.cok",
+          "heightM": 4.0574,
+          "widthM": 3.7458,
+          "depthM": 3.9847,
+          "boundsMinM": [
+            -1.9866,
+            -0.0027,
+            -2.0164
+          ],
+          "boundsMaxM": [
+            1.7592,
+            4.0546,
+            1.9683
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "NA_LindenTreeDead01",
+          "geometryId": "d5fd71497da8b203e3cfaf82d43062ca",
+          "archive": "Game/Blob.cok",
+          "heightM": 7.7368,
+          "widthM": 6.1006,
+          "depthM": 6.1933,
+          "boundsMinM": [
+            -3.3898,
+            -0.0012,
+            -3.1611
+          ],
+          "boundsMaxM": [
+            2.7107,
+            7.7356,
+            3.0322
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "NA_LindenTreeElderly01",
+          "geometryId": "f3c4e43c4d61b771889e7846f953d434",
+          "archive": "Game/Blob.cok",
+          "heightM": 8.1011,
+          "widthM": 8.1429,
+          "depthM": 7.4307,
+          "boundsMinM": [
+            -4.0734,
+            -0.0034,
+            -3.8622
+          ],
+          "boundsMaxM": [
+            4.0695,
+            8.0977,
+            3.5686
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "NA_LindenTreeStump01",
+          "geometryId": "76023e9f80096142973cb31428412045",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1409,
+          "widthM": 0.2709,
+          "depthM": 0.2742,
+          "boundsMinM": [
+            -0.1355,
+            0.0,
+            -0.1371
+          ],
+          "boundsMaxM": [
+            0.1355,
+            0.1409,
+            0.1371
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "NA_LindenTreeTeen01",
+          "geometryId": "6a43d690a778929db0b6d1027231e462",
+          "archive": "Game/Blob.cok",
+          "heightM": 6.0569,
+          "widthM": 5.236,
+          "depthM": 4.782,
+          "boundsMinM": [
+            -2.6478,
+            0.0,
+            -2.1799
+          ],
+          "boundsMaxM": [
+            2.5882,
+            6.0569,
+            2.6021
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "NA_LindenTreeAdult01",
+          "geometryId": "f7d25561e491acc1a78ae730308fb946",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 8.138,
+          "widthM": 6.4056,
+          "depthM": 6.3082,
+          "boundsMinM": [
+            -3.2444,
+            0.0,
+            -3.2014
+          ],
+          "boundsMaxM": [
+            3.1612,
+            8.138,
+            3.1068
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "NA_LindenTreeChild01",
+          "geometryId": "d9ccc9f0c6067e83d7d002949eee84a8",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 4.0574,
+          "widthM": 3.7458,
+          "depthM": 3.9847,
+          "boundsMinM": [
+            -1.9866,
+            -0.0027,
+            -2.0164
+          ],
+          "boundsMaxM": [
+            1.7592,
+            4.0546,
+            1.9683
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "NA_LindenTreeDead01",
+          "geometryId": "d5fd71497da8b203e3cfaf82d43062ca",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 7.7368,
+          "widthM": 6.1006,
+          "depthM": 6.1933,
+          "boundsMinM": [
+            -3.3898,
+            -0.0012,
+            -3.1611
+          ],
+          "boundsMaxM": [
+            2.7107,
+            7.7356,
+            3.0322
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "NA_LindenTreeElderly01",
+          "geometryId": "f3c4e43c4d61b771889e7846f953d434",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 8.1011,
+          "widthM": 8.1429,
+          "depthM": 7.4307,
+          "boundsMinM": [
+            -4.0734,
+            -0.0034,
+            -3.8622
+          ],
+          "boundsMaxM": [
+            4.0695,
+            8.0977,
+            3.5686
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "NA_LindenTreeStump01",
+          "geometryId": "76023e9f80096142973cb31428412045",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1409,
+          "widthM": 0.2709,
+          "depthM": 0.2742,
+          "boundsMinM": [
+            -0.1355,
+            0.0,
+            -0.1371
+          ],
+          "boundsMaxM": [
+            0.1355,
+            0.1409,
+            0.1371
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "NA_LindenTreeTeen01",
+          "geometryId": "6a43d690a778929db0b6d1027231e462",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 6.0569,
+          "widthM": 5.236,
+          "depthM": 4.782,
+          "boundsMinM": [
+            -2.6478,
+            0.0,
+            -2.1799
+          ],
+          "boundsMaxM": [
+            2.5882,
+            6.0569,
+            2.6021
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:NA_LondonPlaneTree01",
+      "name": "London Plane",
+      "prefabNameCandidate": "NA_LondonPlaneTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": "london-plane.json",
+      "botanicalResearchStatus": "partial",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "NA_LondonPlaneTreeAdult01",
+          "geometryId": "4ef248b6fb7f8a9ee91e303b5d722bd0",
+          "archive": "Game/Blob.cok",
+          "heightM": 7.7058,
+          "widthM": 8.2802,
+          "depthM": 8.1722,
+          "boundsMinM": [
+            -4.011,
+            -0.007,
+            -4.1338
+          ],
+          "boundsMaxM": [
+            4.2692,
+            7.6988,
+            4.0384
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "NA_LondonPlaneTreeChild01",
+          "geometryId": "357dba417d31456ba753c5c22e639849",
+          "archive": "Game/Blob.cok",
+          "heightM": 3.8703,
+          "widthM": 4.5064,
+          "depthM": 4.4062,
+          "boundsMinM": [
+            -2.2744,
+            -0.0045,
+            -1.8898
+          ],
+          "boundsMaxM": [
+            2.232,
+            3.8658,
+            2.5163
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "NA_LondonPlaneTreeDead01",
+          "geometryId": "6ba47aeaffd4bc274f89d4710b20611c",
+          "archive": "Game/Blob.cok",
+          "heightM": 7.5317,
+          "widthM": 6.9822,
+          "depthM": 7.1398,
+          "boundsMinM": [
+            -3.7361,
+            -0.0006,
+            -3.6639
+          ],
+          "boundsMaxM": [
+            3.2461,
+            7.5311,
+            3.4759
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "NA_LondonPlaneTreeElderly01",
+          "geometryId": "cf4ae863e5f4faeef826b13bf9076999",
+          "archive": "Game/Blob.cok",
+          "heightM": 7.8694,
+          "widthM": 8.9798,
+          "depthM": 9.0237,
+          "boundsMinM": [
+            -4.5123,
+            -0.0006,
+            -4.5951
+          ],
+          "boundsMaxM": [
+            4.4675,
+            7.8689,
+            4.4286
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "NA_LondonPlaneTreeStump01",
+          "geometryId": "42ad0bac8950b712fd04dfef689ac256",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1281,
+          "widthM": 0.4075,
+          "depthM": 0.4058,
+          "boundsMinM": [
+            -0.2037,
+            -0.007,
+            -0.2019
+          ],
+          "boundsMaxM": [
+            0.2038,
+            0.1211,
+            0.2039
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "NA_LondonPlaneTreeTeen01",
+          "geometryId": "d171c164c37e1ba75b19438d05f53fdb",
+          "archive": "Game/Blob.cok",
+          "heightM": 5.7473,
+          "widthM": 6.4307,
+          "depthM": 6.462,
+          "boundsMinM": [
+            -3.2208,
+            -0.0053,
+            -2.853
+          ],
+          "boundsMaxM": [
+            3.2099,
+            5.742,
+            3.609
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "NA_LondonPlaneTreeAdult01",
+          "geometryId": "4ef248b6fb7f8a9ee91e303b5d722bd0",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 7.7058,
+          "widthM": 8.2802,
+          "depthM": 8.1722,
+          "boundsMinM": [
+            -4.011,
+            -0.007,
+            -4.1338
+          ],
+          "boundsMaxM": [
+            4.2692,
+            7.6988,
+            4.0384
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "NA_LondonPlaneTreeChild01",
+          "geometryId": "357dba417d31456ba753c5c22e639849",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 3.8703,
+          "widthM": 4.5064,
+          "depthM": 4.4062,
+          "boundsMinM": [
+            -2.2744,
+            -0.0045,
+            -1.8898
+          ],
+          "boundsMaxM": [
+            2.232,
+            3.8658,
+            2.5163
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "NA_LondonPlaneTreeDead01",
+          "geometryId": "6ba47aeaffd4bc274f89d4710b20611c",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 7.5317,
+          "widthM": 6.9822,
+          "depthM": 7.1398,
+          "boundsMinM": [
+            -3.7361,
+            -0.0006,
+            -3.6639
+          ],
+          "boundsMaxM": [
+            3.2461,
+            7.5311,
+            3.4759
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "NA_LondonPlaneTreeElderly01",
+          "geometryId": "cf4ae863e5f4faeef826b13bf9076999",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 7.8694,
+          "widthM": 8.9798,
+          "depthM": 9.0237,
+          "boundsMinM": [
+            -4.5123,
+            -0.0006,
+            -4.5951
+          ],
+          "boundsMaxM": [
+            4.4675,
+            7.8689,
+            4.4286
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "NA_LondonPlaneTreeStump01",
+          "geometryId": "42ad0bac8950b712fd04dfef689ac256",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1281,
+          "widthM": 0.4075,
+          "depthM": 0.4058,
+          "boundsMinM": [
+            -0.2037,
+            -0.007,
+            -0.2019
+          ],
+          "boundsMaxM": [
+            0.2038,
+            0.1211,
+            0.2039
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "NA_LondonPlaneTreeTeen01",
+          "geometryId": "d171c164c37e1ba75b19438d05f53fdb",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 5.7473,
+          "widthM": 6.4307,
+          "depthM": 6.462,
+          "boundsMinM": [
+            -3.2208,
+            -0.0053,
+            -2.853
+          ],
+          "boundsMaxM": [
+            3.2099,
+            5.742,
+            3.609
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:OakTree01",
+      "name": "Oak",
+      "prefabNameCandidate": "OakTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "OakTreeAdult01",
+          "geometryId": "194b0294d7bc23014ca9efe1681cae92",
+          "archive": "Game/Blob.cok",
+          "heightM": 14.7289,
+          "widthM": 16.2251,
+          "depthM": 15.236,
+          "boundsMinM": [
+            -8.0406,
+            -0.0128,
+            -8.4489
+          ],
+          "boundsMaxM": [
+            8.1845,
+            14.7161,
+            6.7871
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "OakTreeChild01",
+          "geometryId": "655e82aa7516c0e009d4e94ff0a55338",
+          "archive": "Game/Blob.cok",
+          "heightM": 5.6754,
+          "widthM": 5.6003,
+          "depthM": 6.2254,
+          "boundsMinM": [
+            -2.4152,
+            -0.0136,
+            -3.057
+          ],
+          "boundsMaxM": [
+            3.1851,
+            5.6618,
+            3.1684
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "OakTreeDead01",
+          "geometryId": "8adfe18ed4fd4d063ece94e73fb2da04",
+          "archive": "Game/Blob.cok",
+          "heightM": 10.0777,
+          "widthM": 10.4142,
+          "depthM": 11.6969,
+          "boundsMinM": [
+            -4.9121,
+            -0.0133,
+            -5.685
+          ],
+          "boundsMaxM": [
+            5.5022,
+            10.0644,
+            6.0119
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "OakTreeElderly01",
+          "geometryId": "5b3ae5d74e3027cf3012af1db6535ec9",
+          "archive": "Game/Blob.cok",
+          "heightM": 15.8972,
+          "widthM": 19.4368,
+          "depthM": 20.2558,
+          "boundsMinM": [
+            -9.7998,
+            -0.0035,
+            -10.1275
+          ],
+          "boundsMaxM": [
+            9.6369,
+            15.8937,
+            10.1282
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "OakTreeStump01",
+          "geometryId": "7c7db53141f60d02c51867d3f37b5b30",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1724,
+          "widthM": 0.7149,
+          "depthM": 0.712,
+          "boundsMinM": [
+            -0.3574,
+            0.0,
+            -0.356
+          ],
+          "boundsMaxM": [
+            0.3574,
+            0.1724,
+            0.356
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "OakTreeTeen01",
+          "geometryId": "d37e382607b58657b2b191d61af47e48",
+          "archive": "Game/Blob.cok",
+          "heightM": 10.5729,
+          "widthM": 13.6948,
+          "depthM": 12.835,
+          "boundsMinM": [
+            -6.6908,
+            -0.0078,
+            -6.1594
+          ],
+          "boundsMaxM": [
+            7.004,
+            10.5651,
+            6.6755
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "OakTreeAdult01",
+          "geometryId": "194b0294d7bc23014ca9efe1681cae92",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 14.7289,
+          "widthM": 16.2251,
+          "depthM": 15.236,
+          "boundsMinM": [
+            -8.0406,
+            -0.0128,
+            -8.4489
+          ],
+          "boundsMaxM": [
+            8.1845,
+            14.7161,
+            6.7871
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "OakTreeChild01",
+          "geometryId": "655e82aa7516c0e009d4e94ff0a55338",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 5.6754,
+          "widthM": 5.6003,
+          "depthM": 6.2254,
+          "boundsMinM": [
+            -2.4152,
+            -0.0136,
+            -3.057
+          ],
+          "boundsMaxM": [
+            3.1851,
+            5.6618,
+            3.1684
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "OakTreeDead01",
+          "geometryId": "8adfe18ed4fd4d063ece94e73fb2da04",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 10.0777,
+          "widthM": 10.4142,
+          "depthM": 11.6969,
+          "boundsMinM": [
+            -4.9121,
+            -0.0133,
+            -5.685
+          ],
+          "boundsMaxM": [
+            5.5022,
+            10.0644,
+            6.0119
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "OakTreeElderly01",
+          "geometryId": "5b3ae5d74e3027cf3012af1db6535ec9",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 15.8972,
+          "widthM": 19.4368,
+          "depthM": 20.2558,
+          "boundsMinM": [
+            -9.7998,
+            -0.0035,
+            -10.1275
+          ],
+          "boundsMaxM": [
+            9.6369,
+            15.8937,
+            10.1282
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "OakTreeStump01",
+          "geometryId": "7c7db53141f60d02c51867d3f37b5b30",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1724,
+          "widthM": 0.7149,
+          "depthM": 0.712,
+          "boundsMinM": [
+            -0.3574,
+            0.0,
+            -0.356
+          ],
+          "boundsMaxM": [
+            0.3574,
+            0.1724,
+            0.356
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "OakTreeTeen01",
+          "geometryId": "d37e382607b58657b2b191d61af47e48",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 10.5729,
+          "widthM": 13.6948,
+          "depthM": 12.835,
+          "boundsMinM": [
+            -6.6908,
+            -0.0078,
+            -6.1594
+          ],
+          "boundsMaxM": [
+            7.004,
+            10.5651,
+            6.6755
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:PineTree01",
+      "name": "Pine",
+      "prefabNameCandidate": "PineTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "PineTreeAdult01_Geom",
+          "geometryId": "87fa71d1b964b0349b93584407888345",
+          "archive": "Game/Blob.cok",
+          "heightM": 21.3319,
+          "widthM": 10.4455,
+          "depthM": 11.6372,
+          "boundsMinM": [
+            -5.5749,
+            -0.1079,
+            -6.0823
+          ],
+          "boundsMaxM": [
+            4.8707,
+            21.2239,
+            5.5549
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "PineTreeAdult01",
+          "geometryId": "ab31d4e8d529d3658de71616e4ff6045",
+          "archive": "Game/Blob.cok",
+          "heightM": 21.2518,
+          "widthM": 10.7422,
+          "depthM": 10.8246,
+          "boundsMinM": [
+            -5.5047,
+            -0.0019,
+            -5.7012
+          ],
+          "boundsMaxM": [
+            5.2375,
+            21.2499,
+            5.1233
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "PineTreeChild01",
+          "geometryId": "b1768aeb908a609a934e5a3b56f0d0a1",
+          "archive": "Game/Blob.cok",
+          "heightM": 5.4708,
+          "widthM": 4.7403,
+          "depthM": 4.2989,
+          "boundsMinM": [
+            -2.1773,
+            -0.0022,
+            -1.8653
+          ],
+          "boundsMaxM": [
+            2.5631,
+            5.4687,
+            2.4336
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "PineTreeDead01",
+          "geometryId": "1de2f07de7c733bbc8aa887fe0c05cf3",
+          "archive": "Game/Blob.cok",
+          "heightM": 18.4083,
+          "widthM": 10.2937,
+          "depthM": 11.5856,
+          "boundsMinM": [
+            -4.7497,
+            -0.011,
+            -6.0528
+          ],
+          "boundsMaxM": [
+            5.544,
+            18.3972,
+            5.5328
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "PineTreeElderly01",
+          "geometryId": "e57be8bf02dec838e2d2515e4589689b",
+          "archive": "Game/Blob.cok",
+          "heightM": 18.9217,
+          "widthM": 11.1329,
+          "depthM": 12.3132,
+          "boundsMinM": [
+            -4.9381,
+            -0.0001,
+            -6.0227
+          ],
+          "boundsMaxM": [
+            6.1948,
+            18.9217,
+            6.2905
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "PineTreeStump01",
+          "geometryId": "5b1035dbad6619b11a8cc4c2e5b773f0",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.5707,
+          "widthM": 1.1096,
+          "depthM": 1.1097,
+          "boundsMinM": [
+            -0.5534,
+            -0.0017,
+            -0.5548
+          ],
+          "boundsMaxM": [
+            0.5562,
+            0.569,
+            0.5548
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "PineTreeTeen01",
+          "geometryId": "267f02b0d961eedbb13f727baa94ff56",
+          "archive": "Game/Blob.cok",
+          "heightM": 8.5638,
+          "widthM": 4.7359,
+          "depthM": 4.8946,
+          "boundsMinM": [
+            -2.376,
+            -0.0005,
+            -2.4473
+          ],
+          "boundsMaxM": [
+            2.36,
+            8.5633,
+            2.4473
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "PineTreeAdult01",
+          "geometryId": "ab31d4e8d529d3658de71616e4ff6045",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 21.2518,
+          "widthM": 10.7422,
+          "depthM": 10.8246,
+          "boundsMinM": [
+            -5.5047,
+            -0.0019,
+            -5.7012
+          ],
+          "boundsMaxM": [
+            5.2375,
+            21.2499,
+            5.1233
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "PineTreeChild01",
+          "geometryId": "b1768aeb908a609a934e5a3b56f0d0a1",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 5.4708,
+          "widthM": 4.7403,
+          "depthM": 4.2989,
+          "boundsMinM": [
+            -2.1773,
+            -0.0022,
+            -1.8653
+          ],
+          "boundsMaxM": [
+            2.5631,
+            5.4687,
+            2.4336
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "PineTreeDead01",
+          "geometryId": "1de2f07de7c733bbc8aa887fe0c05cf3",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 18.4083,
+          "widthM": 10.2937,
+          "depthM": 11.5856,
+          "boundsMinM": [
+            -4.7497,
+            -0.011,
+            -6.0528
+          ],
+          "boundsMaxM": [
+            5.544,
+            18.3972,
+            5.5328
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "PineTreeElderly01",
+          "geometryId": "e57be8bf02dec838e2d2515e4589689b",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 18.9217,
+          "widthM": 11.1329,
+          "depthM": 12.3132,
+          "boundsMinM": [
+            -4.9381,
+            -0.0001,
+            -6.0227
+          ],
+          "boundsMaxM": [
+            6.1948,
+            18.9217,
+            6.2905
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "PineTreeStump01",
+          "geometryId": "5b1035dbad6619b11a8cc4c2e5b773f0",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.5707,
+          "widthM": 1.1096,
+          "depthM": 1.1097,
+          "boundsMinM": [
+            -0.5534,
+            -0.0017,
+            -0.5548
+          ],
+          "boundsMaxM": [
+            0.5562,
+            0.569,
+            0.5548
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "PineTreeTeen01",
+          "geometryId": "267f02b0d961eedbb13f727baa94ff56",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 8.5638,
+          "widthM": 4.7359,
+          "depthM": 4.8946,
+          "boundsMinM": [
+            -2.376,
+            -0.0005,
+            -2.4473
+          ],
+          "boundsMaxM": [
+            2.36,
+            8.5633,
+            2.4473
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:RoyalPalmTree01",
+      "name": "Royal Palm Tree",
+      "prefabNameCandidate": "RoyalPalmTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "RoyalPalmTreeAdult01",
+          "geometryId": "be29909be344c26235f034253307ff92",
+          "archive": "Game/Blob.cok",
+          "heightM": 12.8813,
+          "widthM": 5.6588,
+          "depthM": 5.7223,
+          "boundsMinM": [
+            -2.9274,
+            -0.0002,
+            -3.0698
+          ],
+          "boundsMaxM": [
+            2.7314,
+            12.8811,
+            2.6525
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "RoyalPalmTreeChild01",
+          "geometryId": "c77a4e227bd13fda030a93cb755075ed",
+          "archive": "Game/Blob.cok",
+          "heightM": 5.0691,
+          "widthM": 4.5408,
+          "depthM": 4.3492,
+          "boundsMinM": [
+            -2.2294,
+            -0.0013,
+            -2.1586
+          ],
+          "boundsMaxM": [
+            2.3114,
+            5.0678,
+            2.1906
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "RoyalPalmTreeDead01",
+          "geometryId": "cc3047c15ada31ac375a76ddd4671b9b",
+          "archive": "Game/Blob.cok",
+          "heightM": 11.3808,
+          "widthM": 2.7846,
+          "depthM": 2.7862,
+          "boundsMinM": [
+            -1.3638,
+            -0.0001,
+            -1.2638
+          ],
+          "boundsMaxM": [
+            1.4209,
+            11.3808,
+            1.5224
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "RoyalPalmTreeElderly01",
+          "geometryId": "d06105a689c45e462826fc4a9b57aac8",
+          "archive": "Game/Blob.cok",
+          "heightM": 19.4573,
+          "widthM": 5.7226,
+          "depthM": 5.6408,
+          "boundsMinM": [
+            -2.9543,
+            -0.0282,
+            -3.0552
+          ],
+          "boundsMaxM": [
+            2.7684,
+            19.4292,
+            2.5856
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "RoyalPalmTreeStump01",
+          "geometryId": "e62e39f94b46ee902c70aeefc48ed7f9",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1794,
+          "widthM": 0.6604,
+          "depthM": 0.6844,
+          "boundsMinM": [
+            -0.3331,
+            -0.0002,
+            -0.3553
+          ],
+          "boundsMaxM": [
+            0.3272,
+            0.1793,
+            0.3292
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "RoyalPalmTreeTeen01",
+          "geometryId": "69b51fc5510773269dbf3171f9137eeb",
+          "archive": "Game/Blob.cok",
+          "heightM": 9.792,
+          "widthM": 5.9171,
+          "depthM": 5.8339,
+          "boundsMinM": [
+            -3.1287,
+            0.0,
+            -3.04
+          ],
+          "boundsMaxM": [
+            2.7884,
+            9.792,
+            2.7938
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "RoyalPalmTreeAdult01",
+          "geometryId": "be29909be344c26235f034253307ff92",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 12.8813,
+          "widthM": 5.6588,
+          "depthM": 5.7223,
+          "boundsMinM": [
+            -2.9274,
+            -0.0002,
+            -3.0698
+          ],
+          "boundsMaxM": [
+            2.7314,
+            12.8811,
+            2.6525
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "RoyalPalmTreeChild01",
+          "geometryId": "c77a4e227bd13fda030a93cb755075ed",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 5.0691,
+          "widthM": 4.5408,
+          "depthM": 4.3492,
+          "boundsMinM": [
+            -2.2294,
+            -0.0013,
+            -2.1586
+          ],
+          "boundsMaxM": [
+            2.3114,
+            5.0678,
+            2.1906
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "RoyalPalmTreeDead01",
+          "geometryId": "cc3047c15ada31ac375a76ddd4671b9b",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 11.3808,
+          "widthM": 2.7846,
+          "depthM": 2.7862,
+          "boundsMinM": [
+            -1.3638,
+            -0.0001,
+            -1.2638
+          ],
+          "boundsMaxM": [
+            1.4209,
+            11.3808,
+            1.5224
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "RoyalPalmTreeElderly01",
+          "geometryId": "d06105a689c45e462826fc4a9b57aac8",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 19.4573,
+          "widthM": 5.7226,
+          "depthM": 5.6408,
+          "boundsMinM": [
+            -2.9543,
+            -0.0282,
+            -3.0552
+          ],
+          "boundsMaxM": [
+            2.7684,
+            19.4292,
+            2.5856
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "RoyalPalmTreeStump01",
+          "geometryId": "e62e39f94b46ee902c70aeefc48ed7f9",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1794,
+          "widthM": 0.6604,
+          "depthM": 0.6844,
+          "boundsMinM": [
+            -0.3331,
+            -0.0002,
+            -0.3553
+          ],
+          "boundsMaxM": [
+            0.3272,
+            0.1793,
+            0.3292
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "RoyalPalmTreeTeen01",
+          "geometryId": "69b51fc5510773269dbf3171f9137eeb",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 9.792,
+          "widthM": 5.9171,
+          "depthM": 5.8339,
+          "boundsMinM": [
+            -3.1287,
+            0.0,
+            -3.04
+          ],
+          "boundsMaxM": [
+            2.7884,
+            9.792,
+            2.7938
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:SpruceTree01",
+      "name": "Spruce",
+      "prefabNameCandidate": "SpruceTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "SpruceTreeAdult01",
+          "geometryId": "f2d2ad1ad7b0165c4755b216b524fe3b",
+          "archive": "Game/Blob.cok",
+          "heightM": 21.5699,
+          "widthM": 9.3701,
+          "depthM": 8.1425,
+          "boundsMinM": [
+            -4.4486,
+            -0.0003,
+            -4.2557
+          ],
+          "boundsMaxM": [
+            4.9214,
+            21.5696,
+            3.8868
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "SpruceTreeChild01",
+          "geometryId": "324d678c3ea4db2697a606e18e8356aa",
+          "archive": "Game/Blob.cok",
+          "heightM": 7.6693,
+          "widthM": 4.4418,
+          "depthM": 4.0562,
+          "boundsMinM": [
+            -2.0562,
+            -0.0015,
+            -2.1238
+          ],
+          "boundsMaxM": [
+            2.3856,
+            7.6678,
+            1.9324
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "SpruceTreeDead01",
+          "geometryId": "c6aea2042447ef5217e198c34ec1b02d",
+          "archive": "Game/Blob.cok",
+          "heightM": 17.5489,
+          "widthM": 7.0097,
+          "depthM": 6.3066,
+          "boundsMinM": [
+            -3.7756,
+            0.0041,
+            -3.2879
+          ],
+          "boundsMaxM": [
+            3.2341,
+            17.553,
+            3.0187
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "SpruceTreeElderly01",
+          "geometryId": "98ce7786be7a32e09ceda0a0afeacd4f",
+          "archive": "Game/Blob.cok",
+          "heightM": 19.9239,
+          "widthM": 7.0097,
+          "depthM": 7.4749,
+          "boundsMinM": [
+            -3.7756,
+            0.0041,
+            -3.7013
+          ],
+          "boundsMaxM": [
+            3.2341,
+            19.928,
+            3.7736
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "SpruceTreeStump01",
+          "geometryId": "bf26f6add1edd222d050e10cdece9e2a",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1314,
+          "widthM": 0.4576,
+          "depthM": 0.4437,
+          "boundsMinM": [
+            -0.2288,
+            0.0,
+            -0.2068
+          ],
+          "boundsMaxM": [
+            0.2288,
+            0.1314,
+            0.2369
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "SpruceTreeTeen01",
+          "geometryId": "fe88a639a0280de9e08d8113397a3ad6",
+          "archive": "Game/Blob.cok",
+          "heightM": 12.4369,
+          "widthM": 7.0229,
+          "depthM": 8.0621,
+          "boundsMinM": [
+            -3.414,
+            -0.0039,
+            -4.031
+          ],
+          "boundsMaxM": [
+            3.6089,
+            12.433,
+            4.031
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "SpruceTreeAdult01",
+          "geometryId": "f2d2ad1ad7b0165c4755b216b524fe3b",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 21.5699,
+          "widthM": 9.3701,
+          "depthM": 8.1425,
+          "boundsMinM": [
+            -4.4486,
+            -0.0003,
+            -4.2557
+          ],
+          "boundsMaxM": [
+            4.9214,
+            21.5696,
+            3.8868
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "SpruceTreeChild01",
+          "geometryId": "324d678c3ea4db2697a606e18e8356aa",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 7.6693,
+          "widthM": 4.4418,
+          "depthM": 4.0562,
+          "boundsMinM": [
+            -2.0562,
+            -0.0015,
+            -2.1238
+          ],
+          "boundsMaxM": [
+            2.3856,
+            7.6678,
+            1.9324
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "SpruceTreeDead01",
+          "geometryId": "c6aea2042447ef5217e198c34ec1b02d",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 17.5489,
+          "widthM": 7.0097,
+          "depthM": 6.3066,
+          "boundsMinM": [
+            -3.7756,
+            0.0041,
+            -3.2879
+          ],
+          "boundsMaxM": [
+            3.2341,
+            17.553,
+            3.0187
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "SpruceTreeElderly01",
+          "geometryId": "98ce7786be7a32e09ceda0a0afeacd4f",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 19.9239,
+          "widthM": 7.0097,
+          "depthM": 7.4749,
+          "boundsMinM": [
+            -3.7756,
+            0.0041,
+            -3.7013
+          ],
+          "boundsMaxM": [
+            3.2341,
+            19.928,
+            3.7736
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "SpruceTreeStump01",
+          "geometryId": "bf26f6add1edd222d050e10cdece9e2a",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1314,
+          "widthM": 0.4576,
+          "depthM": 0.4437,
+          "boundsMinM": [
+            -0.2288,
+            0.0,
+            -0.2068
+          ],
+          "boundsMaxM": [
+            0.2288,
+            0.1314,
+            0.2369
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "SpruceTreeTeen01",
+          "geometryId": "fe88a639a0280de9e08d8113397a3ad6",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 12.4369,
+          "widthM": 7.0229,
+          "depthM": 8.0621,
+          "boundsMinM": [
+            -3.414,
+            -0.0039,
+            -4.031
+          ],
+          "boundsMaxM": [
+            3.6089,
+            12.433,
+            4.031
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cs2:SylvesterPalmTree01",
+      "name": "Sylvester Palm Tree",
+      "prefabNameCandidate": "SylvesterPalmTree01",
+      "nameConfirmedInLocale": true,
+      "runtimeMeshLinkVerified": false,
+      "kind": "tree",
+      "botanicalProfileRef": null,
+      "botanicalResearchStatus": "notResearched",
+      "placementDefaults": null,
+      "baseGameMeasurements": [
+        {
+          "stage": "mature",
+          "meshName": "SylvesterPalmTreeAdult01",
+          "geometryId": "3645d33f4ced6f926ed4323ab1948827",
+          "archive": "Game/Blob.cok",
+          "heightM": 11.0059,
+          "widthM": 8.7431,
+          "depthM": 8.4991,
+          "boundsMinM": [
+            -4.3643,
+            0.0001,
+            -4.201
+          ],
+          "boundsMaxM": [
+            4.3788,
+            11.006,
+            4.2981
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "SylvesterPalmTreeChild01",
+          "geometryId": "d7da694a824e3da17e1c4b40066e41f2",
+          "archive": "Game/Blob.cok",
+          "heightM": 3.1256,
+          "widthM": 4.3564,
+          "depthM": 4.5501,
+          "boundsMinM": [
+            -2.166,
+            0.0008,
+            -2.296
+          ],
+          "boundsMaxM": [
+            2.1904,
+            3.1264,
+            2.2542
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "SylvesterPalmTreeDead01",
+          "geometryId": "78a870f94c6bcb2a656364f07a5adf59",
+          "archive": "Game/Blob.cok",
+          "heightM": 8.8338,
+          "widthM": 4.2377,
+          "depthM": 3.7679,
+          "boundsMinM": [
+            -2.2456,
+            -0.0017,
+            -2.061
+          ],
+          "boundsMaxM": [
+            1.9921,
+            8.8321,
+            1.707
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "SylvesterPalmTreeElderly01",
+          "geometryId": "996b474ff2d9e85e99cc391ffb72e788",
+          "archive": "Game/Blob.cok",
+          "heightM": 12.3956,
+          "widthM": 8.6231,
+          "depthM": 8.3737,
+          "boundsMinM": [
+            -4.1035,
+            -0.0012,
+            -4.0346
+          ],
+          "boundsMaxM": [
+            4.5196,
+            12.3943,
+            4.3391
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "SylvesterPalmTreeStump01",
+          "geometryId": "0763d4235aef62475aea287b66c8d887",
+          "archive": "Game/Blob.cok",
+          "heightM": 0.1916,
+          "widthM": 0.8238,
+          "depthM": 0.8503,
+          "boundsMinM": [
+            -0.4113,
+            -0.0017,
+            -0.4241
+          ],
+          "boundsMaxM": [
+            0.4125,
+            0.1899,
+            0.4262
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "SylvesterPalmTreeTeen01",
+          "geometryId": "d255b69ab40e2b6ca765bf77aa650f36",
+          "archive": "Game/Blob.cok",
+          "heightM": 7.2748,
+          "widthM": 6.9376,
+          "depthM": 7.0878,
+          "boundsMinM": [
+            -3.5245,
+            -0.0006,
+            -3.6069
+          ],
+          "boundsMaxM": [
+            3.4131,
+            7.2742,
+            3.4809
+          ]
+        },
+        {
+          "stage": "mature",
+          "meshName": "SylvesterPalmTreeAdult01",
+          "geometryId": "3645d33f4ced6f926ed4323ab1948827",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 11.0059,
+          "widthM": 8.7431,
+          "depthM": 8.4991,
+          "boundsMinM": [
+            -4.3643,
+            0.0001,
+            -4.201
+          ],
+          "boundsMaxM": [
+            4.3788,
+            11.006,
+            4.2981
+          ]
+        },
+        {
+          "stage": "young",
+          "meshName": "SylvesterPalmTreeChild01",
+          "geometryId": "d7da694a824e3da17e1c4b40066e41f2",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 3.1256,
+          "widthM": 4.3564,
+          "depthM": 4.5501,
+          "boundsMinM": [
+            -2.166,
+            0.0008,
+            -2.296
+          ],
+          "boundsMaxM": [
+            2.1904,
+            3.1264,
+            2.2542
+          ]
+        },
+        {
+          "stage": "dead",
+          "meshName": "SylvesterPalmTreeDead01",
+          "geometryId": "78a870f94c6bcb2a656364f07a5adf59",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 8.8338,
+          "widthM": 4.2377,
+          "depthM": 3.7679,
+          "boundsMinM": [
+            -2.2456,
+            -0.0017,
+            -2.061
+          ],
+          "boundsMaxM": [
+            1.9921,
+            8.8321,
+            1.707
+          ]
+        },
+        {
+          "stage": "old",
+          "meshName": "SylvesterPalmTreeElderly01",
+          "geometryId": "996b474ff2d9e85e99cc391ffb72e788",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 12.3956,
+          "widthM": 8.6231,
+          "depthM": 8.3737,
+          "boundsMinM": [
+            -4.1035,
+            -0.0012,
+            -4.0346
+          ],
+          "boundsMaxM": [
+            4.5196,
+            12.3943,
+            4.3391
+          ]
+        },
+        {
+          "stage": "stump",
+          "meshName": "SylvesterPalmTreeStump01",
+          "geometryId": "0763d4235aef62475aea287b66c8d887",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 0.1916,
+          "widthM": 0.8238,
+          "depthM": 0.8503,
+          "boundsMinM": [
+            -0.4113,
+            -0.0017,
+            -0.4241
+          ],
+          "boundsMaxM": [
+            0.4125,
+            0.1899,
+            0.4262
+          ]
+        },
+        {
+          "stage": "medium",
+          "meshName": "SylvesterPalmTreeTeen01",
+          "geometryId": "d255b69ab40e2b6ca765bf77aa650f36",
+          "archive": "Game/Blob_Environment.cok",
+          "heightM": 7.2748,
+          "widthM": 6.9376,
+          "depthM": 7.0878,
+          "boundsMinM": [
+            -3.5245,
+            -0.0006,
+            -3.6069
+          ],
+          "boundsMaxM": [
+            3.4131,
+            7.2742,
+            3.4809
+          ]
+        }
+      ]
+    }
+  ]
+}

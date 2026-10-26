@@ -22,6 +22,32 @@ spacing are prototype assumptions and can look sparse and orchard-like.
 Shade competition is not implemented; generation currently supports London Plane
 only. Older design documents describe planned features beyond this prototype.
 
+## Installed vegetation measurements
+
+[Base-game vegetation catalogue](data/base-game-vegetation.v1.json) contains
+stock tree and shrub records, English asset names, growth-stage mesh bounds,
+and source pack/geometry identifiers. Measurements are model-space metres,
+including trunk and foliage; they are not canopy cover, shade opacity, required
+spacing or real-world dimensions. Duplicate mesh variants remain separate.
+Prefab candidates are matched to locale names, not verified live mesh references.
+The coverage report flags unmatched names and unconfirmed mesh groups.
+
+Every record has a botanical research status and a place for a botanical profile
+reference and placement defaults. Unknown defaults are null rather than invented.
+London Plane links to its existing researched profile. This catalogue prepares
+the remaining assets for authoring; it does not enable them in the generator yet.
+
+Refresh from your installed game with Python 3 (no additional packages):
+
+```powershell
+py -3 scripts/measure-vegetation.py --content 'C:/Program Files (x86)/Steam/steamapps/common/Cities Skylines II/Cities2_Data/Content' --game-version 1.6.2f1
+py -3 -m unittest discover -s tests -p 'test_vegetation_measurements.py'
+```
+
+The extractor scans installed stock `Blob*.cok` archives read-only. It writes
+numeric metadata, never game meshes or textures. Update the version argument
+when measuring another game version. Mods are outside this inventory.
+
 ## Try the editor locally
 
 With Node 24 LTS installed:

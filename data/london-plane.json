@@ -1,5 +1,9 @@
 {
   "schemaVersion": 1,
+  "baseGameMeasurements": {
+    "catalog": "base-game-vegetation.v1.json",
+    "assetId": "cs2:NA_LondonPlaneTree01"
+  },
   "asset": {
     "id": "cs2:NA_LondonPlaneTree01",
     "name": "London Plane",
