@@ -30,6 +30,39 @@ from outside this checkout, avoiding the portable `global.json` pin.
 
 ## Integrate the game adapter
 
+The `codex/tree-district-poc` branch now contains the generated adapter under
+`game/TreeDistrict`. Build from the repository root with:
+
+```powershell
+# Once, after bootstrap.ps1: the installed CS2 postprocessor targets net6.0.
+& .\.tools\dotnet-install.ps1 -Runtime dotnet -Version 6.0.36 -InstallDir .\.tools\dotnet -NoPath
+npm.cmd --prefix ui ci
+npm.cmd --prefix game/TreeDistrictUI ci
+& .\scripts\build-game.ps1
+```
+
+The build helper uses the system .NET 8 SDK selected by `game/global.json` and
+the local runtime for the official postprocessor. The generated targets deploy
+to the user's `CSII_LOCALMODSPATH/TreeDistrict` directory. Restart CS2 after a
+build. This is local deployment, not publication to Paradox Mods.
+
+The proof of concept registers a uniquely named, green `SpacePrefab` (a stock
+`AreaPrefab` subtype), adds it to the same menu category as the native district
+prefab, and delegates interaction to the game's `AreaToolSystem`. It does not add
+administrative district components, terrain surfaces, clearing or vegetation.
+The stable prefab name is `TreeDistrict.Area.v1`; area nodes and geometry use
+native game components. Save/load and editing must be verified in-game before
+relying on this in a real city. Sharing the native Space category is an initial
+integration experiment, not the final overlap/isolation contract.
+
+Inspected installation: CS2 1.6.2f1 (767.21d1), game runtime Unity 2022.3.71f1;
+installed toolchain Unity 2022.3.62f2,
+Entities 1.3.10, official template 1.0.0, SDK 8.0.427, postprocessor runtime
+6.0.36. Official build and postprocessing succeed with no warnings. No game
+assemblies are copied into the deployed output.
+
+The original integration checklist follows:
+
 1. Start CS2 and install/update the official toolchain in **Options → Modding**.
    Let it select Unity, Burst/Entities, SDK and Node dependencies. Do not substitute
    the latest Unity release or an old BepInEx tutorial.
@@ -64,7 +97,7 @@ from outside this checkout, avoiding the portable `global.json` pin.
 6. First prove that the generated mod loads and logs on a disposable test city.
    Implement the [settings/district host contract](ui-scaffold.md), then verify
    drawing, selection, editing and save/load. Do not add tree generation yet.
-7. To integrate the existing shared editor and native entry, run `npx create-csii-ui-mod` inside the adapter
+7. To integrate the existing shared editor and native entry, use the installed `@colossalorder/create-csii-ui-mod` generator inside the adapter
    directory using the toolchain's Node environment. Match its mod ID to the C#
    assembly name, commit its lockfile, and use `npm ci` for subsequent installs.
    Verify deploy order: the C# deployment can clear the shared mod output folder.

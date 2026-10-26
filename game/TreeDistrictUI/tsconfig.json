@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "jsx": "react", "target": "ES2020", "module": "ESNext", "moduleResolution": "Bundler",
+    "strict": true, "esModuleInterop": true, "skipLibCheck": true,
+    "resolveJsonModule": true, "lib": ["ES2020", "DOM", "DOM.Iterable"]
+  },
+  "include": ["src/index.tsx", "types/**/*.d.ts", "../../ui/src/game/index.tsx", "../../ui/src/editor/**/*", "../../ui/src/domain/**/*"]
+}

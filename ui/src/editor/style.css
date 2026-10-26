@@ -108,6 +108,20 @@
 .td-foldout-body {
     margin-top: 10px;
 }
+.td-chevron {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid #c7d5da;
+    border-bottom: 2px solid #c7d5da;
+    transform: rotate(-45deg);
+    margin-right: 10px;
+    margin-bottom: 1px;
+}
+.td-chevron-open {
+    transform: rotate(45deg);
+    margin-bottom: 3px;
+}
 .td-foldout .td-foldout {
     margin-left: 8px;
 }
@@ -166,10 +180,41 @@
     left: 16px;
     top: 80px;
 }
+.td-game-panel,
+.td-game-panel .td-editor,
+.td-game-panel input {
+    font-family: var(--fontFamily);
+    white-space: normal;
+}
+.td-game-panel .td-help,
+.td-game-panel h2 {
+    white-space: normal;
+}
+.td-game-panel .td-input {
+    width: 100%;
+    background-color: #142029;
+    color: #f1f6f8;
+    border: 1px solid #4a5a64;
+    border-radius: 4px;
+    padding: 9px 10px;
+    font-size: 14px;
+}
 .td-icon {
     width: 24px;
     height: 24px;
     margin-right: 8px;
+}
+.td-entry {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+}
+.td-game-scroll {
+    max-height: 68vh;
+}
+.td-game-panel .td-editor-content {
+    overflow: visible;
+    max-height: none;
 }
 .td-modal-backdrop {
     position: fixed;

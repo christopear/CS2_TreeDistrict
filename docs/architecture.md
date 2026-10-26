@@ -12,8 +12,10 @@ settings and district UX, with no vegetation generation.
   carry snapshots and comparison baselines; city climate is resolved at use time.
 - `ui/src/editor`: shared settings editor, independent of storage and drawing host.
 - `ui/src/preview`: browser-only test host for drawing, selection and persistence.
-- `ui/src/game`: native CS2 component/binding scaffold with UIL icons. The C# host
-  and installed-toolchain integration remain to be implemented on Windows.
+- `ui/src/game`: native CS2 controls and binding adapter with an original area icon.
+- `game/TreeDistrict`: native AreaPrefab, settings validation, per-area snapshots
+  and save references, plus a reusable JSON set library.
+- `game/TreeDistrictUI`: installed official UI template, declarations and build.
 - `src/TreeDistrict.Core`: existing game-independent C# terrain-rule foundation.
   Its legacy water flag is not a requirement for the future generator and is not
   used by the editor. The core must not reference Unity, UI or runtime ECS IDs.
@@ -42,8 +44,8 @@ deferred to v2. Ownership must still identify one creating district per plant.
    Linux/Windows tests; settings schemas and data-driven placeholder catalog.
 2. **UX scaffold — implemented locally:** set-first editor, city inheritance,
    nested asset/age controls, draw/select/redraw/delete preview, custom set saving,
-   import/export, native UI entry and command contract. No game host yet.
-3. **Windows integration — next:** official template build, real district tool,
+   import/export, native UI entry and command contract. Game host now implemented.
+3. **Windows integration — in progress:** official template build, real district tool,
    host bindings, asset enumeration, stable climate, save/load and input verification.
    No generation is needed to validate this stage.
 4. **Dedicated profile research:** estimate real asset/age footprints and responses;

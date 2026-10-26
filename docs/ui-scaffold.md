@@ -1,8 +1,39 @@
 # Local UX scaffold and game integration contract
 
-Implemented 2026-10-26. This is a runnable local editor and a game-facing UI entry,
-not an installable mod. No vegetation generation, terrain sampling or game entity
-creation has been implemented.
+Implemented 2026-10-26. The shared editor now has a native Windows CS2 adapter.
+The game creates empty Tree Areas through its stock AreaToolSystem; each native
+area receives its own settings snapshot. Vegetation generation and terrain
+sampling remain unimplemented.
+
+## Native Tree Area integration
+
+Build/deploy with `scripts/build-game.ps1` after installing both UI projects'
+locked dependencies (see windows-setup.md). Open **Tree Areas** at the top left,
+choose a set and draw using the native area tool. Completing an area selects its
+settings automatically. Use the Tree Area dropdown to revisit existing areas;
+editing an area's boundary also selects its settings. Ordinary map selection is
+not yet a dedicated Tree Area picking tool.
+
+The original tree-over-polygon SVG is served by the C# host and used in the entry
+and native area menu. No external icon mod is required.
+
+`TreeAreaSettingsSystem` validates queued commands in its UI update. Each area's
+working set, baseline, name, seed and mode belong to its native Entity. City
+serialization writes Entity references through CS2's serializer for remapping;
+native area geometry is never duplicated in the mod's saved data. Custom sets
+live in `ModsSettings/TreeDistrict/sets.v1.json` under the game user-data folder,
+with atomic replacement and a backup. Invalid library data is preserved and
+blocks writes until repaired. Editing or saving a set never updates other areas.
+
+`TreeDistrictTreeOwner` reserves a serializable native area reference for future
+generated trees. It is not attached to any existing vegetation. No generator or
+ownership claiming runs yet. Generate/regenerate/ungenerate/bake remain disabled;
+delete boundaries with the game's area tool. Climate and asset data still use
+explicit placeholders/manual defaults.
+
+Verified on CS2 1.6.2f1: icon loading, native drawing and automatic settings
+attachment/selection. Host validation tests and browser workflows pass. Full
+settings save/reload, gamepad navigation and UI scaling remain acceptance work.
 
 ## Run and verify
 
@@ -54,7 +85,7 @@ focus, styling, tool input and scaling need Windows verification.
 | `ui/src/domain/store.ts` | Pure reference command semantics, snapshots, inheritance, polygon validation |
 | `ui/src/editor/` | Shared editor; host and UI primitives supplied at the boundary |
 | `ui/src/preview/` | Browser-only drawing, storage, import/export and undo host |
-| `ui/src/game/` | Native CS2 controls, UIL entry icon, binding/command adapter |
+| `ui/src/game/` | Native CS2 controls, custom entry icon, binding/command adapter |
 
 Profiles are JSON data. Asset keys are stable textual identifiers, not runtime
 Entity indices. Placeholder keys start with `placeholder:`. Their ages, footprints,
@@ -82,7 +113,7 @@ explicit. Do not equate passing JSON Schema validation with complete validation.
 
 ## Host protocol version 1
 
-The proposed group is `TreeDistrict`. The native UI reads string value binding
+The binding group is `TreeDistrict`. The native UI reads string value binding
 `editor`, a JSON envelope:
 
 ```typescript
@@ -103,7 +134,7 @@ Drawing nodes and completion come from the host's map input system, not a React
 DOM canvas in the game. Selecting a district must publish its ID and snapshot in
 one envelope. Invalid or deleted selections must not leave stale edit targets.
 
-The future C# host is authoritative. It must validate every command, assign or
+The C# host is authoritative. It must validate every command, assign or
 validate unique IDs, execute commands in order, reject invalid changes without
 mutating state, then republish the envelope. Never trust UI validation alone.
 `saveSet.afterSaveLibraryId` makes Save-as-then-replace atomic: a failed save must
@@ -118,20 +149,14 @@ both sections together for convenience; browser localStorage is NOT the game's
 persistence mechanism. Game asset availability, climate lookup, ECS save/load,
 city transitions and atomic file writes remain host integration work.
 
-`src/game/index.tsx` uses `cs2/ui` Panel, Button and Dropdown components, registers
-under `Game` and `UniversalModMenu`, and uses
-`coui://uil/Standard/Trees.svg`. Declare Unified Icon Library as a Paradox Mods
-dependency when creating release metadata. No UIL assets are copied into this repo.
-A missing host snapshot renders no editor and triggers no local fallback mutation.
-The module exports `hasCSS` alongside its registrar.
+`src/game/index.tsx` uses native Panel, Button, Dropdown and Scrollable controls,
+registers under `Game` and `GameTopLeft`, and exports `hasCSS`. Text fields use the
+installed game's registered TextInput component; its internal module path is a
+version-sensitive integration point. The official generated declarations live in
+`game/TreeDistrictUI/types` and are used by both typechecks.
 
-`npm run build:game-contract` checks the narrow authored contract and emits a
-smoke-test `.mjs`/`.css` pair under `artifacts/ui-contract`. React and CS2 modules
-remain external. **This is not the official game build or a distributable mod.**
-Replace `cs2-contract.d.ts` with installed official types and use the official UI
-generator/webpack deployment before claiming compatibility. The narrow declarations
-are deliberately not a vendored full SDK or proof that native controls work.
-
+`npm run build:game-contract` emits a standalone smoke-test pair to
+`artifacts/ui-contract`; use the official webpack project for deployment.
 ## Windows acceptance work
 
 1. Generate the official C# and UI projects using the installed modding toolchain;

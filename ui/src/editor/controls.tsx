@@ -28,9 +28,38 @@ export interface ChoiceProps {
     onChange: (value: string) => void;
 }
 export interface Primitives {
+    Checkbox?: ComponentType<{
+        label: string;
+        checked: boolean;
+        onChange: (checked: boolean) => void;
+    }>;
+    Input?: ComponentType<React.InputHTMLAttributes<HTMLInputElement>>;
     Button: ComponentType<ButtonProps>;
     Panel: ComponentType<PanelProps>;
     Choice: ComponentType<ChoiceProps>;
+}
+export function CheckboxField(props: {
+    label: string;
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+}) {
+    const { Checkbox } = useControls();
+    return Checkbox ? (
+        <Checkbox {...props} />
+    ) : (
+        <label>
+            <input
+                type="checkbox"
+                checked={props.checked}
+                onChange={(e) => props.onChange(e.target.checked)}
+            />{" "}
+            {props.label}
+        </label>
+    );
+}
+export function TextField(props: React.InputHTMLAttributes<HTMLInputElement>) {
+    const { Input } = useControls();
+    return Input ? <Input {...props} /> : <input {...props} />;
 }
 export const Controls = createContext<Primitives | null>(null);
 export function useControls() {
@@ -54,7 +83,12 @@ export function Foldout({
                 onSelect={() => setOpen(!open)}
                 title={open ? "Collapse settings" : "Expand settings"}
             >
-                <span aria-hidden>{open ? "▾" : "▸"} </span>
+                <span
+                    aria-hidden
+                    className={
+                        open ? "td-chevron td-chevron-open" : "td-chevron"
+                    }
+                />
                 {title}
             </Button>
             {open && (
@@ -90,7 +124,7 @@ export function NumberField({
     return (
         <label className="td-field" htmlFor={id}>
             <span>{label}</span>
-            <input
+            <TextField
                 id={id}
                 type="number"
                 value={text}

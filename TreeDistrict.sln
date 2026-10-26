@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeDistrict.Core.Tests", "tests\TreeDistrict.Core.Tests\TreeDistrict.Core.Tests.csproj", "{90C88774-7340-450C-A7A5-53F9E53077B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeDistrict.Settings.Tests", "tests\TreeDistrict.Settings.Tests\TreeDistrict.Settings.Tests.csproj", "{409B2996-D1EC-4D14-9264-E1328477A13B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,18 @@ Global
 		{90C88774-7340-450C-A7A5-53F9E53077B5}.Release|x64.Build.0 = Release|Any CPU
 		{90C88774-7340-450C-A7A5-53F9E53077B5}.Release|x86.ActiveCfg = Release|Any CPU
 		{90C88774-7340-450C-A7A5-53F9E53077B5}.Release|x86.Build.0 = Release|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Debug|x64.Build.0 = Debug|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Debug|x86.Build.0 = Debug|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Release|x64.ActiveCfg = Release|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Release|x64.Build.0 = Release|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Release|x86.ActiveCfg = Release|Any CPU
+		{409B2996-D1EC-4D14-9264-E1328477A13B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,5 +66,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{63A24310-A127-4E13-814F-01C1118E2CE5} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{90C88774-7340-450C-A7A5-53F9E53077B5} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{409B2996-D1EC-4D14-9264-E1328477A13B} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

@@ -7,8 +7,10 @@ import {
     Dropdown,
     DropdownItem,
     DropdownToggle,
+    Scrollable,
 } from "cs2/ui";
 import type { ModRegistrar } from "cs2/modding";
+import { getModule } from "cs2/modding";
 import { z } from "zod";
 import { Controls, type Primitives } from "../editor/controls";
 import { Editor } from "../editor/Editor";
@@ -16,7 +18,7 @@ import { workspaceSchema } from "../domain/schema";
 import "../editor/style.css";
 
 // No preview store, localStorage, fictional canvas, ReactDOM root or game mutation here.
-// A future C# host owns this snapshot and executes validated commands on the simulation thread.
+// The C# host owns this snapshot and applies queued, validated commands during its update.
 const snapshot = bindValue("TreeDistrict", "editor", "");
 const envelopeSchema = z.object({
     protocolVersion: z.literal(1),
@@ -27,7 +29,33 @@ const envelopeSchema = z.object({
     error: z.string().nullable(),
 });
 const native: Primitives = {
-    Panel: ({ children, ...props }) => <Panel {...props}>{children}</Panel>,
+    Checkbox: ({ label, checked, onChange }) => (
+        <native.Choice
+            label={label}
+            value={checked ? "inherit" : "override"}
+            options={[
+                { value: "inherit", label: "Use city default" },
+                { value: "override", label: "Override for this set" },
+            ]}
+            onChange={(value) => onChange(value === "inherit")}
+        />
+    ),
+    Input: (props) => {
+        // Use the installed game's keyboard/gamepad-aware text field.
+        const Input = getModule(
+            "game-ui/common/input/text/text-input.tsx",
+            "TextInput",
+        ) as React.ComponentType<React.InputHTMLAttributes<HTMLInputElement>>;
+        if (props.type === "checkbox") return <input {...props} />;
+        return <Input {...props} type="text" className="td-input" />;
+    },
+    Panel: ({ children, ...props }) => (
+        <Panel {...props} onClose={() => send({ type: "togglePanel" })}>
+            <Scrollable vertical className="td-game-scroll">
+                {children}
+            </Scrollable>
+        </Panel>
+    ),
     Button: ({ title, ...props }) => <Button {...props} tooltipLabel={title} />,
     Choice: ({ label, value, options, onChange }) => (
         <div className="td-field">
@@ -62,10 +90,11 @@ function Entry() {
     return (
         <Button
             onSelect={() => send({ type: "togglePanel" })}
-            tooltipLabel="Vegetation districts"
+            tooltipLabel="Tree Areas"
+            className="td-entry"
         >
-            <Icon className="td-icon" src="coui://uil/Standard/Trees.svg" />
-            Vegetation districts
+            <Icon className="td-icon" src="coui://treedistrict/TreeArea.svg" />
+            Tree Areas
         </Button>
     );
 }
@@ -97,6 +126,30 @@ function GamePanel() {
         <div className="td-game-panel">
             <Controls.Provider value={native}>
                 <Editor
+                    topContent={
+                        <>
+                            <native.Choice
+                                label="Tree Area"
+                                value={envelope.selectedId ?? ""}
+                                options={[
+                                    { value: "", label: "New Tree Area" },
+                                    ...envelope.workspace.districts.map(
+                                        (d) => ({
+                                            value: d.id,
+                                            label: d.name,
+                                        }),
+                                    ),
+                                ]}
+                                onChange={(id) =>
+                                    send({
+                                        type: "selectDistrict",
+                                        id: id || null,
+                                    })
+                                }
+                            />
+                        </>
+                    }
+                    nativeAreaTools
                     key={envelope.selectedId ?? "draft"}
                     state={envelope.workspace}
                     selectedId={envelope.selectedId}
@@ -115,7 +168,7 @@ function GamePanel() {
 export const hasCSS = true;
 const register: ModRegistrar = (registry) => {
     try {
-        registry.append("UniversalModMenu", Entry);
+        registry.append("GameTopLeft", Entry);
         registry.append("Game", GamePanel);
     } catch (error) {
         console.error("TreeDistrict UI registration failed", error);

@@ -3,9 +3,9 @@
 A Cities: Skylines II mod in development: draw a vegetation area, choose its tree
 and shrub mix, and populate it according to density, elevation and slope rules.
 
-**Status: local UX/settings scaffold; no installable game mod or tree generation yet.**
+**Status: native Tree Area and in-game settings editor; no tree generation yet.**
 The repository includes a runnable district editor preview, versioned JSON
-placeholder profiles, a native CS2 UI binding scaffold, and the portable C# core.
+placeholder profiles, a CS2 AreaPrefab/settings adapter, and the portable C# core.
 See [what works and the Windows integration contract](docs/ui-scaffold.md).
 
 ## Try the editor locally
@@ -71,11 +71,11 @@ mod, follow [the Windows handoff](docs/windows-setup.md).
   still needs an in-game test.
 - xUnit, the .NET test SDK and coverage collector from the installed SDK's test
   template. NuGet lockfiles make dependency restoration reproducible.
-- The **official CS2 mod template and post-processor** for the future adapter.
+- The **official CS2 mod template and post-processor** for the Windows adapter.
   Game-facing SDK/runtime/Unity versions come from the installed toolchain.
 - React 18.3.1 / TypeScript for the shared editor, with a Vite-only local preview,
-  Vitest state tests and Playwright workflow tests. Game builds will use the
-  installed official UI generator; CS2 native controls and UIL are selected.
+  Vitest state tests and Playwright workflow tests. Game builds use the
+  installed official UI generator, native controls and an original Tree Area icon.
 
 No game assemblies, Unity installation, generated mod, or third-party source code
 are bundled here. The default solution deliberately builds without them.

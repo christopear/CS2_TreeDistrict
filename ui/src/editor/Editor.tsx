@@ -14,7 +14,14 @@ import {
     targetOf,
     type Command,
 } from "../domain/store";
-import { Foldout, Modal, NumberField, useControls } from "./controls";
+import {
+    CheckboxField,
+    Foldout,
+    Modal,
+    NumberField,
+    TextField,
+    useControls,
+} from "./controls";
 export interface EditorProps {
     state: Workspace;
     selectedId: string | null;
@@ -23,6 +30,8 @@ export interface EditorProps {
     beginDrawing: (edit: boolean) => void;
     drawing: boolean;
     error: string | null;
+    nativeAreaTools?: boolean;
+    topContent?: React.ReactNode;
 }
 const climateFields = [
     ["referenceTemperatureC", "Reference temperature (°C)", -100, 100, 0.5],
@@ -172,6 +181,8 @@ export function Editor({
     beginDrawing,
     drawing,
     error,
+    nativeAreaTools = false,
+    topContent,
 }: EditorProps) {
     const { Panel, Button, Choice } = useControls();
     const target = targetOf(state, selectedId),
@@ -229,13 +240,14 @@ export function Editor({
                 onPointerDown={(e) => e.stopPropagation()}
                 onWheel={(e) => e.stopPropagation()}
             >
+                {topContent}
                 <div className="td-eyebrow">
                     {district ? "Selected district" : "New district"}
                 </div>
                 {district && (
                     <label className="td-field">
                         <span>District name</span>
-                        <input
+                        <TextField
                             aria-label="District name"
                             value={district.name}
                             maxLength={80}
@@ -261,7 +273,7 @@ export function Editor({
                 </h2>
                 <label className="td-field">
                     <span>Find a vegetation set</span>
-                    <input
+                    <TextField
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Search built-in and my sets"
@@ -332,7 +344,11 @@ export function Editor({
                         disabled={drawing}
                         onSelect={() => beginDrawing(!!district)}
                     >
-                        {district ? "Redraw boundary" : "Draw district"}
+                        {district
+                            ? nativeAreaTools
+                                ? "Edit boundary"
+                                : "Redraw boundary"
+                            : "Draw district"}
                     </Button>
                     {district && (
                         <Button onSelect={() => select(null)}>
@@ -359,22 +375,18 @@ export function Editor({
                     <Foldout title="Climate · city defaults or overrides">
                         {climateFields.map(([key, label, min, max, step]) => (
                             <div key={key} className="td-override">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={set.climate[key] === undefined}
-                                        onChange={(e) => {
-                                            const climate = { ...set.climate };
-                                            if (e.target.checked)
-                                                delete climate[key];
-                                            else
-                                                climate[key] =
-                                                    resolved.climate[key];
-                                            edit({ ...set, climate });
-                                        }}
-                                    />{" "}
-                                    Use city default: {label}
-                                </label>
+                                <CheckboxField
+                                    label={label}
+                                    checked={set.climate[key] === undefined}
+                                    onChange={(checked) => {
+                                        const climate = { ...set.climate };
+                                        if (checked) delete climate[key];
+                                        else
+                                            climate[key] =
+                                                resolved.climate[key];
+                                        edit({ ...set, climate });
+                                    }}
+                                />
                                 {set.climate[key] === undefined ? (
                                     <p className="td-help">
                                         Resolved: {resolved.climate[key]} ·
@@ -565,6 +577,12 @@ export function Editor({
                             ))}
                             <Button
                                 className="td-danger"
+                                disabled={nativeAreaTools}
+                                title={
+                                    nativeAreaTools
+                                        ? "Remove areas with the native area tool"
+                                        : undefined
+                                }
                                 onSelect={() => setDialog("delete")}
                             >
                                 Delete district
@@ -648,7 +666,7 @@ export function Editor({
                                 </p>
                                 <label className="td-field">
                                     <span>Search vegetation</span>
-                                    <input
+                                    <TextField
                                         value={assetQuery}
                                         onChange={(e) =>
                                             setAssetQuery(e.target.value)
@@ -765,7 +783,7 @@ export function Editor({
                                 <h3>Save vegetation set</h3>
                                 <label className="td-field">
                                     <span>Set name</span>
-                                    <input
+                                    <TextField
                                         autoFocus
                                         maxLength={80}
                                         value={saveName}
