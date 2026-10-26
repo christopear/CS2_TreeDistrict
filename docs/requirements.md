@@ -1,257 +1,202 @@
-# TreeDistrict — draft product requirements
+# TreeDistrict — product requirements draft
 
-Status: discussion draft, 2026-10-26. This describes intended behaviour, not
-implemented functionality. Recommendations below remain open to revision.
+Updated 2026-10-26 after reference review. The direction below incorporates the
+user's scope corrections; remaining recommendations are labelled. It describes
+intended behaviour, not implemented functionality.
 
-Selected references and the proposed technical baseline are documented in the
-[foliage reference research and design report](foliage-reference-design.md).
-That report narrows open density/climate/competition choices to concrete proposals
-for prototyping; those proposals still need validation.
+Use the [reference design report](foliage-reference-design.md) for the selected
+Unreal Procedural Foliage and EcoBrush references, research and proposed pipeline.
 
-## Goal and division of control
+## Goal
 
-Let the player design vegetation communities and their boundaries, then generate
-natural-looking vegetation within those boundaries using editable environmental
-preferences. Automate individual placement, local species selection and density
-variation. Keep landscape composition under human control.
+Draw a district, select a reusable vegetation community, and generate its plants
+according to terrain, configured climate, occupied space and neighbouring plants.
+The user chooses the community and boundary; the mod automates placement inside it.
+Trees and shrubs belong to the same community, with species-specific preferences.
 
-The player decides where woodland, scrub and lakeside planting belong. The mod
-does not infer biomes, identify shorelines for special planting, choose unselected
-species, or spread vegetation beyond an area. Water detection for exclusion is
-required; shoreline classification for choosing vegetation is out of scope.
+## 1. City setup
 
-Environmental adaptation describes how a generated layout responds to terrain.
-It does not imply ongoing ecological simulation, succession or automatic regrowth.
+The user defines three stable climate inputs, saved with the city:
 
-## Direction established in discussion
+- Reference temperature in °C.
+- Reference elevation in metres, in the same height convention as terrain samples.
+- Cooling rate in °C per kilometre of elevation gained.
 
-- Vegetation profiles have editable defaults for environmental preferences.
-- Stable map climate and elevation jointly determine local climate suitability;
-  this is unrelated to momentary weather.
-- Trees and shrubs belong to one community. Their placement can interact through
-  shade, available space and species-specific terrain preferences. Independent
-  tree/shrub density layers are not an agreed requirement.
-- Players combine vegetation into reusable groups with per-member abundance.
-- Groups support spatial variation such as clumping.
-- Vegetation must avoid water, roads, railways, buildings and placed objects.
-- Presets should be reusable across saved cities; a favourite/default set should
-  make starting a new area quick.
-- Different landscape communities, including shoreline vegetation, are drawn by
-  the player as separate areas.
-- Ordinary manual placement and brushes remain useful and must keep working.
+For terrain height h:
 
-The following sections propose concrete behaviour for those requirements.
+    localTemperature = referenceTemperature
+        - coolingCPerKm × (h - referenceElevation) / 1000
 
-## Three editable levels
+These user values are authoritative. No live weather input or additional climate
+inference is required. Recommendation: label the temperature as annual mean and
+calibrate defaults accordingly. A future automatic suggestion must explain its
+source and must not overwrite the user's settings.
 
-### Vegetation profile: how one plant behaves
+The map supplies terrain heights/normals, occupied geometry and existing vegetation.
+Exact game APIs, units and coordinates still require verification. Geometric
+height is sampled from terrain, not from the water surface or tops of buildings.
 
-Each supported vegetation asset has a stable identifier and defaults for:
+## 2. Vegetation profiles and age states
 
-- Climate suitability, ranging from unsuitable to fully suitable.
-- Slope suitability, with an optional absolute cutoff.
-- Physical footprint, approximate canopy extent and shade tolerance.
-- Optional elevation constraints for explicit art direction or non-temperature
-  effects; avoid applying the same thermal restriction twice.
+Selecting an asset pre-populates an editable profile:
 
-Provide useful defaults and a reset action. Treat built-in profiles as editable
-artistic presets, not authoritative botanical models. Broad categories such as
-"oak" and "shrub" must not imply precise universal ecological tolerances.
-Unknown/custom assets need a visible fallback profile and manual editing support.
+- Temperature and slope response curves.
+- Optional hard placement limits.
+- Physical footprint, representative height, canopy extent and opacity.
+- Shade response, distinguishing shade tolerance from a preference for shade.
+- Default candidate density, measured in opportunities per hectare.
+- Available ages/variants and their estimated properties.
 
-Proposed basic curve editor: four ordered environmental values — lower limit, start
-of preferred band, end of preferred band, upper limit. Suitability rises from 0
-to 1, stays at 1, then falls to 0. Unequal transition widths allow a long uphill
-tail without asking players to understand probability distributions. For climate
-preferences the horizontal axis is temperature rather than raw elevation. A compact
-graph makes the result visible. More flexible curves can come later.
+Each age state needs its own estimates, especially height, occupied footprint,
+canopy radius and opacity. Species preferences may be shared initially, with
+age-specific overrides supported where useful. Do not assume everything scales
+uniformly with height. Record whether an estimate is measured, tuned or inherited.
 
-### Vegetation set: what a community contains
+The selected age must be resolved before collision, shade and clearance checks.
+Changing a species' age mixture divides its candidate opportunities among ages;
+it does not allocate a full density to every age independently.
 
-A named set contains selected assets, per-species abundance/density defaults and
-shared spatial controls. Trees and shrubs are members of the same community.
+Existing game growth needs a Windows spike: determine whether plants change age
+or size after placement, and how to preserve future obstacle clearance. Freezing
+ages is not assumed, nor is it an agreed requirement.
 
-Proposed UX: one overall density multiplier, with editable per-species abundance
-in the advanced editor. Whether abundance means candidate counts per hectare or
-relative weights remains open: a shrub and a mature tree occupy different amounts
-of space, so a flat percentage model may be misleading. Show estimated per-species
-counts. Ratios may change with terrain, shade, spacing and competition.
+Unknown/custom assets receive an explicit fallback profile which can be edited.
+Defaults are artistic approximations, not universal ecological measurements.
 
-Keep the initial spatial controls small: clumping strength and patch size.
-Physical footprint and shade influence must be distinct: a shrub may coexist
-under a canopy without intersecting a trunk. Use species-specific shade responses,
-not a blanket "trees win, shrubs disappear" rule. Multi-pass placement may be an
-implementation technique; it does not require separate user-facing communities.
+## 3. Reusable vegetation sets
 
-Named presets can be created, duplicated, edited and deleted. A favourite/default
-set is preselected for new areas. Save edited area settings as a new set.
+A set contains the selected assets and their effective profile settings, plus:
 
-### Vegetation area: where it applies
+| Control | Meaning |
+|---|---|
+| Per-species density percentage | Multiplier of that species' default; independent of other species |
+| Overall density percentage | Multiplier applied to all species in the set |
+| Age selection/mixture | Allowed age states and relative weights within each species |
+| Clumping strength and patch size | Shared spatial variation controls |
+| Optional set-wide hard limits | Additional bounds applying to every selected plant |
 
-An area contains an editable outer boundary, exclusion holes, a set snapshot,
-local overrides, a random seed and ownership information for generated plants.
-Areas are independent of administrative districts.
+**Density percentages do not sum to 100%.** Recommendation: show 100% as the
+profile default, 50% as half its candidate density, and 0% as disabled. A selected
+species at 50% in a set at 60% receives 30% of its default candidate opportunities.
+Permit values above 100% only if useful in the prototype, within global caps.
 
-Ordinary workflow: choose a set, draw the boundary, inspect a preview, apply.
-Initially show only the set, overall density and clumping controls. Reveal
-species and terrain preferences through an advanced editor.
+    candidateDensity_i = defaultDensity_i
+        × speciesDensityPercent_i / 100
+        × overallDensityPercent / 100
 
-Exclusion holes are the first mechanism for deliberate clearings and preserving
-specific open land. Clumping creates incidental low-density patches. A dedicated
-procedural-clearings control is optional later work, not essential first-version UI.
+Climate, slope, shade, occupied space and spacing affect how many opportunities
+become plants. A species' default can differ substantially from another's: 100%
+for a shrub does not mean the same count as 100% for a large tree.
 
-## Environmental adaptation and density
+Do not redistribute rejected opportunities to force a final total. Suitable shrubs
+can still occupy space where trees fail. The preview reports resulting counts per
+species and age, and explains major rejection reasons.
 
-Default recommendation: terrain-aware generation. Provide a simple "Use terrain
-preferences" toggle for players who want a consistent selected mix instead.
-Turning it off never bypasses water, obstacle or placement-safety checks.
+Set-wide hard limits intersect species limits, so the more restrictive condition
+wins. They do not override physical collision constraints. Prefer leaving these
+advanced controls unset by default; the district already defines spatial extent.
 
-Interpret the environmental curve as a suitability multiplier, not as a probability
-distribution over altitude: a map may contain very different amounts of land at
-different elevations. Suitability changes the chance of placement at a location.
+Save, duplicate, rename and delete sets in a library available across cities on
+this machine. Support a favourite/default set. Export/import is useful for sharing
+and dual-boot use; cloud sync is out of scope. Presets contain settings and asset
+references, never asset files. Missing assets remain visibly unresolved.
 
-For each selected species, conceptually (a proposed model, not a fixed algorithm):
+Each district stores a snapshot. Editing or deleting a library preset must not
+silently alter existing districts. Updating a district from a set is explicit and
+previewed. Local density overrides should be savable as a new set if desired.
 
-    local contribution of species i
-      = base candidate density of i × overall density multiplier
-        × environmental suitability of i at this location
-        × response to local shade/space competition
-        × spatial density variation
+## 4. District geometry and exclusions
 
-Do not automatically force a fixed total count after terrain filtering. However,
-do not prohibit replacement either: shrubs may occupy space unsuitable for trees
-or benefit from reduced canopy shade. Let species preferences and interactions
-determine that outcome. All selected species being unsuitable must permit bare
-ground. The earlier independent-layer formula is superseded by this discussion.
+A district is one simple closed polygon, which may be concave. C/U shapes and a
+ring with an open slice are valid. Populate only inside the drawn domain; do not
+replace it with its bounding box or convex hull. Self-intersections are invalid.
+**No interior-ring/hole editor is required.**
 
-Spacing, obstacles and placement limits may reduce achieved density further. Do
-not compensate by cramming plants into the remaining usable land. Show requested
-versus estimated achieved counts, and explain when terrain rules reject most of
-the area. Density units should be plants per hectare with a simpler sparse/dense
-slider presentation; a final mapping needs visual tuning.
+Water coverage is deliberately ignored. If underwater terrain is included, plants
+may be generated there when the other rules allow it. This does not require the
+mod to defeat any native game restriction. No water query, flood cleanup, or
+shoreline classifier is part of the first version.
 
-Proposed climate proxy:
+Occupied roads, rail corridors, buildings and ploppables remain exclusions. Use
+physical extent and clearance rather than only a trunk-centre test. Account for
+vertical separation, including bridges and tunnels. Apply conservative physical
+footprint containment at district edges; canopy influence is not a hard border
+exclusion. The visible shape of foliage depends on its asset representation.
 
-    local baseline temperature
-      = map reference temperature
-        - cooling per kilometre × (height - reference height) / 1000
+Existing vegetation is preserved, affects spacing/shade where relevant, and is
+not automatically assigned to a district. Neighbours outside the district may
+influence plants just inside it.
 
-All quantities have explicit units and editable defaults. Use stable map climate
-metadata if suitable data is available; otherwise expose a manual reference
-temperature and height. Inspect whether game-provided temperatures already include
-elevation before applying a correction. Save these inputs with the city.
+Overlapping district interiors remain an open decision. Recommendation for the
+first version: reject overlapping interiors while allowing shared boundaries.
+Never duplicate planting or leave ownership ambiguous.
 
-Two sites with matching derived temperatures should receive matching thermal
-suitability, even on maps with different reference climates. Other factors may
-still differ. This is an artistic climate proxy, not a full ecological equivalence.
-The cooling coefficient and exact climate statistic remain to be chosen. No live
-weather or seasonal replacement is implied. Temperature is part of the proposed
-core model, not automatically deferred to a later release.
+## 5. Ownership, deletion and baking
 
-## Placement, ownership and editing
+All plants created by a district belong to it, regardless of their age or type.
+This ownership survives save/load. Merely drawing around existing plants does not
+claim them.
 
-Never place vegetation intersecting excluded water or occupied infrastructure.
-Use spatial extent and clearance, not just a test of the trunk's centre point.
-Road and rail exclusions include their occupied corridor. Exact footprint and
-clearance behaviour must be verified in the game, including bridges and tunnels;
-an underground tunnel should not automatically sterilise the surface above it.
+- **Delete district:** remove the district and its owned plants.
+- **Bake to ordinary vegetation:** keep its plants, detach procedural ownership,
+  and remove the district. Existing ordinary game tools can edit those plants.
+- **Regenerate:** replace/reconcile only that district's owned plants using its
+  effective settings and seed. Preserve manually placed and baked vegetation.
 
-Generated vegetation belongs to its area. Clearing or regenerating an area must
-only affect its own plants. Existing manual vegetation is preserved and considered
-when spacing new placements. Overlapping areas must not double-populate land.
-Proposed first-version policy: show overlapping interiors as invalid until the
-player trims them or creates a hole; touching boundaries remain valid.
+Baking is the intended name for the proposed "raster" action. It does not convert
+plants into an image, merge meshes, or reduce their rendering cost. It is not
+silently reversible by redrawing the same boundary; use undo to restore ownership.
+Deletion and baking must be undoable operations with safe save/load behaviour.
+Deleting a preset from the library is unrelated to deleting a district.
 
-Proposed lifecycle:
+## 6. Everyday workflow
 
-1. Preview generation without altering the city; show estimated counts.
-2. Apply in bounded, cancellable batches, with undo for the operation.
-3. Parameter or boundary edits create a pending preview; Apply confirms changes.
-4. Regenerate uses the saved seed; "New variation" explicitly changes it.
-5. Deleting an area offers either removing its plants or keeping them as ordinary,
-   unmanaged vegetation. These must be distinct, clearly labelled actions.
+1. Configure city climate once.
+2. Pick a vegetation set, or create one by selecting plants and accepting defaults.
+3. Draw a district.
+4. Preview; optionally adjust local overall density and clumping.
+5. Apply. Save set changes explicitly when they should be reusable.
 
-No periodic refilling of manually bulldozed trees. New roads/buildings must not
-leave generated vegetation intersecting them: use normal game removal if adequate,
-otherwise clean up affected owned plants. This cleanup must never add replacements.
-Terrain edits and water changes also need an invalid-placement policy. Temporary
-flooding versus permanent water change is an open decision; no per-frame whole-map
-regeneration is acceptable.
+Keep detailed profile/age parameters in an advanced editor. Preview/apply is
+explicit; settings changes do not silently regenerate the city. A saved seed
+repeats a layout for the same inputs/version, while New variation changes it.
 
-## Persistence and sharing between cities
+Lower density targets fewer generated instances, not a precise VRAM budget. No
+promise is made that reducing density by half halves GPU memory: asset variety,
+rendering and other game behaviour matter. Preview plant counts and enforce a
+visible instance/candidate cap rather than inventing a VRAM estimate.
 
-City saves retain area geometry, holes, effective set/profile settings, seed,
-schema/generator version, and plant ownership. Reloading must not reroll a layout.
-Use stable asset identifiers; runtime entity identifiers alone are insufficient.
+Generation must be bounded, cancellable and applied in batches. No periodic
+refilling after manual bulldozing. Newly occupied infrastructure must not leave
+conflicting owned plants; prefer native game removal where sufficient, otherwise
+perform local cleanup. This never triggers automatic replacement planting.
 
-A separate local preset library is available across cities on the same machine.
-Each area keeps a snapshot: editing a library preset never silently changes
-existing areas or cities. Updating an area from a preset is explicit and previewed.
+## 7. Acceptance examples
 
-Export/import of versioned preset files is desirable for sharing and dual-boot
-use; automatic cloud/account sync is out of scope. A preset contains references
-and settings, not asset files. Missing assets are reported; do not silently replace
-them or redistribute their abundance to other species. A saved city should retain
-the unresolved settings so an asset can be restored later.
+- Equivalent derived temperatures on different maps give matching thermal scores.
+- Tolerant shrubs can remain on slopes where selected trees are unsuitable.
+- Shade-tolerant vegetation coexists under canopy without physical intersections.
+- A C/U district leaves its open cutout empty; included underwater terrain receives
+  no special rejection by the planner.
+- Age mixtures use the matching footprint/canopy estimates, without multiplying
+  the species' requested population.
+- 50% species density and 60% overall density yield 30% of baseline candidate
+  opportunities before environmental rejection, subject to deterministic rounding.
+- Set-wide limits cannot widen tighter species restrictions.
+- Delete removes only owned plants; Bake preserves them and removes the district.
+- Undo and reload preserve or restore ownership correctly; no reroll on reload.
+- Changing a saved set does not mutate existing districts without explicit update.
+- Occupied infrastructure blocks placement, including a last recheck before Apply.
 
-## First playable scope and acceptance examples
+## 8. Next decisions and implementation gaps
 
-The first playable release should include editable areas with holes, reusable
-sets, climate/elevation and slope suitability, interacting vegetation, basic clumping, obstacle
-avoidance, previews, explicit application, ownership, undo and persistence.
-Dynamic weather simulation, automatic biome detection, succession, seasonal
-replacement and ecological regrowth are excluded.
+- Measure/tune age-specific profiles for the available CS2 foliage assets.
+- Verify game growth/age transitions and future-clearance policy.
+- Tune candidate density and clumping so simple controls produce useful results.
+- Validate the reference report's proposed height-ordered interaction pass.
+- Decide district overlap rules and undo retention limits.
+- Verify terrain, occupied geometry, asset and ownership/save APIs in Windows.
 
-- A forest spanning a hill changes mix and thins uphill according to its profiles;
-  a uniformly unsuitable summit stays empty instead of filling with the last species.
-- Matching derived temperatures on two different maps produce the same thermal
-  suitability for the same species, with other inputs held equal.
-- A selected shrub with greater slope tolerance can remain where selected trees
-  are rejected. Shade-tolerant shrubs can coexist with canopy where space allows.
-- Disabling terrain preferences produces the base mix, subject to spacing and
-  exclusions; it does not permit planting in a lake or through a road.
-- An exclusion hole remains unplanted through generation, save/load and edits.
-- A separately drawn shoreline area uses only its selected vegetation.
-- Adding a road leaves no intersecting generated plants, and removing the road
-  does not immediately regrow them.
-- Clearing an area leaves manually planted park trees intact.
-- A preset saved in city A can be used in city B. Editing the preset leaves both
-  cities' existing areas unchanged until explicitly updated.
-- Preview and application agree for the same inputs; changes to the world between
-  them trigger revalidation. Identical inputs, seed and generator version reproduce
-  the plan. Save/load preserves the actual placed entities and manual removals.
-- Large areas have bounded work, cancellation and a visible placement cap. On
-  reaching a cap, explain it rather than silently reducing the requested density.
-
-## Decisions to resolve before implementation
-
-1. Which per-species density and competition policy gives predictable controls
-   while permitting undergrowth and natural changes in composition?
-2. Accept explicit Apply/regenerate, with automatic removal only for conflicts?
-3. Is rejecting overlapping interiors acceptable initially, or is area priority
-   important enough to implement from the start?
-4. Which stable climate input and cooling coefficient should the proxy use?
-5. Which elevation reference and water-change policy best match actual gameplay?
-
-Performance budgets and exact supported obstacle categories require a game spike.
-The existing TerrainRules class is only a hard eligibility filter; soft species
-suitability and these product behaviours have not been implemented yet.
-
-## Related work informing the proposal
-
-The following is the initial survey. The selected build references are now Unreal
-Procedural Foliage and EcoBrush; see the [reference report](foliage-reference-design.md).
-EcoSys and Silva remain background, not additional implementation targets.
-
-- [Deussen et al., Realistic Modeling and Rendering of Plant Ecosystems (1998)](https://graphics.stanford.edu/papers/ecosys/):
-  combines manual landscape design with plant/environment interaction modelling.
-- [Unreal Engine Procedural Foliage](https://dev.epicgames.com/documentation/unreal-engine/procedural-foliage-tool-in-unreal-engine):
-  uses collision/shade concepts, shade-related placement settings and overlap
-  priority. A practical reference for compact controls, not a CS2 dependency.
-- [Silva: Generating and Rendering Large Scale Tiled Plant Populations (2013)](https://www.jvrb.org/jvrb/en/article/view/10.2013.1):
-  considers environmental factors and plant neighbourhoods in a configurable
-  generation pipeline. Its rendering/tiling machinery is outside this mod's scope.
-
-These establish useful precedents, not botanical validation of our proposed
-defaults. The first implementation should approximate local conditions and
-neighbour interactions without requiring a time-stepped ecosystem simulation.
+The existing TerrainRules class is initial hard-filter scaffolding. Its water
+parameter reflects an older scope and must not become a requirement in the new
+planner. No generator, age catalogue, baking or district integration exists yet.

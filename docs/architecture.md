@@ -11,7 +11,9 @@ are agreed; they are not a complete statement of first-release scope.
 `src/TreeDistrict.Core` owns game-independent planning and validation. It must not
 reference Unity, game DLLs, UI code, filesystem paths or live ECS entities.
 World coordinates and elevations use metres; slopes use degrees from horizontal.
-Terrain limits are inclusive. Invalid samples and water/obstacles are rejected.
+Terrain limits are inclusive. Invalid samples and occupied obstacles are rejected.
+Water-specific exclusion is out of scope. The existing TerrainRules water flag is
+legacy scaffolding and must not be wired into the new generator as a requirement.
 
 The future `game/TreeDistrict` adapter will own input tools, terrain/obstacle
 sampling, entity creation, undo/removal, save/load and UI bindings. Its official

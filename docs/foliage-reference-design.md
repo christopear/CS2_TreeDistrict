@@ -1,6 +1,10 @@
 # Procedural foliage references and TreeDistrict design
 
-Version: 0.1 — researched 2026-10-26.
+Version: 0.2 — researched 2026-10-26; scope revised after user review.
+
+Revision: one concave district boundary, no interior-hole editor or water checks;
+manual city climate reference; age-specific profiles; delete-owned/bake lifecycle.
+Sections 2–3 describe the original references and retain their water-related facts.
 
 **Decision:** Unreal Engine Procedural Foliage is our primary behavioural reference.
 EcoBrush (Gain, Long, Cordonnier and Cani, 2017) is our supporting environmental
@@ -114,7 +118,7 @@ about what either reference implements.
 
 | ID | Decision | Reason / tradeoff |
 |---|---|---|
-| D01 | Polygon plus holes defines the planting domain | Matches district editing and deliberate clearings |
+| D01 | One simple, possibly concave polygon defines the planting domain | C/U shapes and cut-open rings express the desired extent; no interior rings |
 | D02 | One community contains every selected tree and shrub | No mandatory independent tree/shrub tools or density layers |
 | D03 | Use stable climate plus elevation and slope | Meets cross-map climate intent without live-weather coupling |
 | D04 | Separate hard occupied space from soft canopy influence | Allows undergrowth without allowing trunk/object intersections |
@@ -141,10 +145,9 @@ classes. Reject NaN/infinity and out-of-range values explicitly.
 | Input | Source / fallback | Exposure and validation |
 |---|---|---|
 | Terrain height and normal | CS2 adapter, API unverified | Internal; convert to one declared coordinate convention; unavailable samples reject placement |
-| Water coverage and surface elevation | CS2 adapter, API unverified | Internal hard exclusion; distinguish terrain from water surface |
 | Occupied geometry / clearance query | CS2 adapter, API unverified | Must cover roads, railways, buildings and ploppables; account for vertical separation |
 | Existing plants: position, footprint, height, canopy | Game entities plus profile catalogue | Preserve them; include relevant neighbours even outside the area |
-| `ReferenceTemperatureC` | Stable map climate if semantically suitable; otherwise manual | City-level setting with visible source; never today's temperature |
+| `ReferenceTemperatureC` | User-defined stable reference | City-level, editable; authoritative over map weather |
 | `ReferenceElevationM` | Explicit elevation for that temperature | City-level; not an unlabelled assumption that world zero is sea level |
 | `CoolingCPerKm` | Editable project default | City-level, finite and nonnegative; zero supports constant climate |
 | Climate statistic/version | Declared by our profile schema | Prevent mixing annual-mean profiles with seasonal-maximum inputs |
@@ -152,8 +155,8 @@ classes. Reject NaN/infinity and out-of-range values explicitly.
 **Recommended first statistic:** annual-mean temperature as an artistic proxy,
 with profiles authored for that statistic. **Proposed starting cooling default:**
 6.5°C/km, editable and subject to visual tuning. This is our reduced model, not
-EcoBrush's full temperature calculation. If CS2 only exposes incompatible climate
-values, use manual configuration rather than silently substituting them.
+EcoBrush's full temperature calculation. User-provided reference values are
+authoritative. No additional live climate input is needed by the first generator.
 
 Do not apply an elevation correction to data already corrected for that location.
 For reference height `h0` and candidate height `h`:
@@ -180,21 +183,39 @@ test, not a claim that the locations have identical real-world ecosystems.
 | Canopy radius and opacity | Extent and strength of approximate shade | Profile; radius ≥0, opacity in [0,1] |
 | Shade response | 0–1 suitability versus canopy coverage | Profile; tolerating shade and requiring shade are distinct curves |
 | Density default | Candidate opportunities per hectare in suitable conditions | Profile; finite and ≥0 |
-| Appearance choices | Allowed game-supported ages/variants and rotations | Adapter-verified list; collision and canopy estimates must match chosen variant |
+| Appearance choices | Allowed game-supported ages/variants, age weights and rotations | Choose age before placement tests; use that age's estimated physical and canopy properties |
 
 Shrubs use the same fields. A shrub can have a different slope or shade response
 without receiving a universal "shrubs survive anything" exemption. No roots,
 reproduction rates, lifespan, or arbitrary biological growth simulation are needed.
+
+### Age-specific parameter estimates
+
+Resolve each asset to available game age states. A species profile provides shared
+preferences; each age state has estimated height, physical footprint, canopy
+radius/opacity and optional preference overrides. Record whether each estimate is
+measured from an asset, manually tuned, or inherited. Do not assume all properties
+scale linearly with height. Allow age mixtures in a set, normalize their weights
+within that species, and choose the age before checking shade and clearance.
+Changing age weights must not multiply the species' candidate density.
 
 ### 5.3 Per-set and per-area inputs
 
 | Scope | Stored inputs | Normal UI |
 |---|---|---|
 | Reusable set | ID/version/name, asset list, per-species density multipliers, profile overrides, density/clumping defaults | Set picker; advanced species editor |
-| Area | Polygon, holes, set snapshot, overrides, seed, generator version | Boundary editing, density, clumping, preview/apply |
+| Area | Simple polygon, set snapshot, overrides, seed, generator version | Boundary editing, density, clumping, preview/apply |
 | Spatial variation | Clumping strength [0,1], patch scale >0 m | Two controls; default to preset values |
 | Execution | Placement and candidate caps, cancellation, chunk budget | Internal limits; show count/cap warnings |
 | Persistence | Ownership records, actual placed entities, saved climate inputs and profile snapshots | Save/load; explicit preset updates |
+
+Density percentages are independent multipliers, not shares that sum to 100%:
+100% retains the profile default, 50% halves it, 0% disables it. For species i:
+`candidateDensity_i = defaultDensity_i × speciesPercent/100 × overallPercent/100`.
+Climate, slope, shade, spacing and exclusions then reduce accepted placements.
+Species with small footprints can have different default counts from large trees.
+Set-wide hard limits intersect species limits; they never loosen obstacle checks.
+A district may override overall density without changing the saved set.
 
 Changing a shared preset does not rewrite existing areas. Cross-city import carries
 settings and asset references, not meshes. Save stable input versions with a plan.
@@ -214,7 +235,7 @@ flowchart LR
     F --> G[Revalidate and apply owned plants]
 ```
 
-1. Validate the polygon/holes and profile references. Capture immutable settings
+1. Validate the simple polygon and profile references. Capture immutable settings
    and a world snapshot/version. Overlapping area policy remains a separate UX
    decision; do not silently double-fill their intersection.
 2. Generate bounded candidate opportunities for each selected species over the
@@ -255,17 +276,25 @@ must not invalidate promised obstacle clearance unnoticed.
 ## 7. UX and operational requirements
 
 The default flow is **choose a community → draw → adjust density/clumping → preview
-→ apply**. Climate is configured once per city, with an automatic value only when
-we can explain its provenance. Most players should never edit a response curve.
+→ apply**. Climate is explicitly configured once per city using the three reference inputs. Most players should never edit a response curve.
 
 The advanced species editor shows a small graph and descriptive values. A preview
 inspection at a point should explain, for example, "too cold", "slope unsuitable",
 "occupied by road", or "insufficient canopy shade". A density control cannot
 promise an exact final count while these rules apply.
 
-Holes express deliberate clearings. Separate districts express different shoreline
-communities. Do not infer banks, rain shadows, soil, or river-dependent plant
-selection. Water still remains a mandatory exclusion.
+The drawn boundary is the planting domain, including concave C/U shapes. No
+interior-hole editing is required. Separate districts express different shoreline
+communities. Do not infer banks, rain shadows, soil, or river-dependent selection.
+Water is deliberately not queried or excluded: included underwater terrain may
+receive vegetation if other rules permit it. Never move plants to the water surface.
+
+All generated plants belong to their district; existing manually placed plants
+are never implicitly adopted. Delete district removes its owned plants. A separate
+**Bake to ordinary vegetation** operation detaches ownership and removes the district
+while preserving the plants. Baked plants retain no procedural edit relationship.
+Both operations need undo and save/load validation. Baking is not a rendering or
+memory optimization; it changes ownership only.
 
 No continuous filling of gaps after bulldozing. Construction-conflict cleanup may
 remove owned plants, but must not plant replacements. Undo, save/load, cancellation
@@ -283,17 +312,17 @@ and representations differ from CS2. Establish our own budgets with profiling.
 | Mixed community | Under-canopy planting works without physical intersections; sun-dependent plants thin beneath dense canopy |
 | Shade semantics | Shade-required plants fail in open ground; shade-tolerant plants are not forced under trees |
 | Empty habitat | All-zero suitability yields no plants and no retry loop |
-| District edges | Holes stay empty; outside plants still affect edge clearance/shade |
+| District edges | Concave cutouts stay empty; outside plants still affect edge clearance/shade |
 | Determinism | Same normalized inputs/seed/version yields the same plan regardless of task scheduling |
-| Safety | Water and every supported infrastructure category reject intersections, including changed geometry before Apply |
+| Safety | Every supported infrastructure category rejects intersections, including changed geometry before Apply; no water-specific rejection |
 | Save/undo | Manual plants survive clear/undo; reloading neither rerolls nor refills deliberate removals |
 | Scale | Candidate cap, cancellation latency, memory and generation time measured for small/large areas |
 
-**Before game-facing implementation:** identify actual CS2 terrain, water,
-obstacle, prefab and climate data. Record game version, units, coordinate axes and
+**Before game-facing implementation:** identify actual CS2 terrain,
+obstacle, prefab and age-state data. Record game version, units, coordinate axes and
 sample outputs. No method names have been assumed in this report. In particular,
 an unavailable obstacle query is a release blocker, not permission to ignore that
-obstacle category. A missing climate value can use the explicit manual fallback.
+obstacle category. Climate is supplied explicitly by the user; automatic climate inference is not required.
 
 **Prototype next:** a game-independent synthetic hillside with three fictional
 plant profiles. Vary map temperature, slope and canopy settings; inspect predicted
@@ -308,7 +337,7 @@ owned batch of real game assets on Windows.
 - Select the spatial patch field and exact density normalization.
 - Validate height-ordered placement versus a bounded competition pass.
 - Decide overlapping-area priority versus rejecting overlaps for the first release.
-- Define temporary flood versus permanent-water cleanup, and undo retention limits.
+- Define undo retention limits and verify bake/save/load behaviour.
 
 The references are selected now; these implementation choices are not falsely
 presented as settled by them. Record future changes with a date and reason.
