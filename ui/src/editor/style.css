@@ -187,7 +187,12 @@
     white-space: normal;
 }
 .td-game-panel .td-help,
-.td-game-panel h2 {
+.td-game-panel h2,
+.td-game-panel p,
+.td-game-panel .td-error {
+    display: block;
+    width: 100%;
+    min-width: 0;
     white-space: normal;
 }
 .td-game-panel .td-input {
@@ -213,8 +218,10 @@
     max-height: 68vh;
 }
 .td-game-panel .td-editor-content {
+    width: 430px;
+    flex-shrink: 0;
     overflow: visible;
-    max-height: none;
+    max-height: 100000px;
 }
 .td-modal-backdrop {
     position: fixed;

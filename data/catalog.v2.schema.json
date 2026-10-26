@@ -1,0 +1,508 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 2
+    },
+    "disclaimer": {
+      "type": "string"
+    },
+    "cityDefaults": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "game",
+            "manual"
+          ]
+        },
+        "referenceTemperatureC": {
+          "type": "number",
+          "minimum": -100,
+          "maximum": 100
+        },
+        "referenceElevationM": {
+          "type": "number",
+          "minimum": -2000,
+          "maximum": 20000
+        },
+        "coolingCPerKm": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "source",
+        "referenceTemperatureC",
+        "referenceElevationM",
+        "coolingCPerKm"
+      ],
+      "additionalProperties": false
+    },
+    "assets": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "placeholder": {
+            "type": "boolean"
+          },
+          "prefabName": {
+            "type": "string"
+          },
+          "densityPercent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "profile": {
+            "type": "object",
+            "properties": {
+              "matureSpacingM": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 200
+              },
+              "heightM": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 200
+              },
+              "canopyRadiusM": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "canopyOpacityPercent": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "shadeTolerancePercent": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "temperature": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number"
+                  },
+                  "optimum": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "min",
+                  "optimum",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "slope": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "number"
+                  },
+                  "optimum": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "min",
+                  "optimum",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              "limits": {
+                "type": "object",
+                "properties": {
+                  "minElevationM": {
+                    "type": "number",
+                    "minimum": -2000,
+                    "maximum": 20000
+                  },
+                  "maxElevationM": {
+                    "type": "number",
+                    "minimum": -2000,
+                    "maximum": 20000
+                  },
+                  "maxSlopeDegrees": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 90
+                  }
+                },
+                "required": [
+                  "minElevationM",
+                  "maxElevationM",
+                  "maxSlopeDegrees"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "matureSpacingM",
+              "heightM",
+              "canopyRadiusM",
+              "canopyOpacityPercent",
+              "shadeTolerancePercent",
+              "temperature",
+              "slope",
+              "limits"
+            ],
+            "additionalProperties": false
+          },
+          "ages": {
+            "minItems": 1,
+            "maxItems": 16,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "proportionPercent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "proportionPercent"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "placeholder",
+          "densityPercent",
+          "profile",
+          "ages"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "sets": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "builtIn": {
+            "type": "boolean"
+          },
+          "set": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "overallDensityPercent": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "clumpingPercent": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "climate": {
+                "type": "object",
+                "properties": {
+                  "referenceTemperatureC": {
+                    "type": "number",
+                    "minimum": -100,
+                    "maximum": 100
+                  },
+                  "referenceElevationM": {
+                    "type": "number",
+                    "minimum": -2000,
+                    "maximum": 20000
+                  },
+                  "coolingCPerKm": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 20
+                  }
+                },
+                "additionalProperties": false
+              },
+              "limits": {
+                "type": "object",
+                "properties": {
+                  "minElevationM": {
+                    "type": "number",
+                    "minimum": -2000,
+                    "maximum": 20000
+                  },
+                  "maxElevationM": {
+                    "type": "number",
+                    "minimum": -2000,
+                    "maximum": 20000
+                  },
+                  "maxSlopeDegrees": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 90
+                  }
+                },
+                "required": [
+                  "minElevationM",
+                  "maxElevationM",
+                  "maxSlopeDegrees"
+                ],
+                "additionalProperties": false
+              },
+              "assets": {
+                "maxItems": 128,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 160
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "placeholder": {
+                      "type": "boolean"
+                    },
+                    "prefabName": {
+                      "type": "string"
+                    },
+                    "densityPercent": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "profile": {
+                      "type": "object",
+                      "properties": {
+                        "matureSpacingM": {
+                          "type": "number",
+                          "minimum": 1,
+                          "maximum": 200
+                        },
+                        "heightM": {
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 200
+                        },
+                        "canopyRadiusM": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "canopyOpacityPercent": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "shadeTolerancePercent": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "temperature": {
+                          "type": "object",
+                          "properties": {
+                            "min": {
+                              "type": "number"
+                            },
+                            "optimum": {
+                              "type": "number"
+                            },
+                            "max": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "min",
+                            "optimum",
+                            "max"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "slope": {
+                          "type": "object",
+                          "properties": {
+                            "min": {
+                              "type": "number"
+                            },
+                            "optimum": {
+                              "type": "number"
+                            },
+                            "max": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "min",
+                            "optimum",
+                            "max"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "limits": {
+                          "type": "object",
+                          "properties": {
+                            "minElevationM": {
+                              "type": "number",
+                              "minimum": -2000,
+                              "maximum": 20000
+                            },
+                            "maxElevationM": {
+                              "type": "number",
+                              "minimum": -2000,
+                              "maximum": 20000
+                            },
+                            "maxSlopeDegrees": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 90
+                            }
+                          },
+                          "required": [
+                            "minElevationM",
+                            "maxElevationM",
+                            "maxSlopeDegrees"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "matureSpacingM",
+                        "heightM",
+                        "canopyRadiusM",
+                        "canopyOpacityPercent",
+                        "shadeTolerancePercent",
+                        "temperature",
+                        "slope",
+                        "limits"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "ages": {
+                      "minItems": 1,
+                      "maxItems": 16,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 160
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 80
+                          },
+                          "proportionPercent": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "proportionPercent"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "placeholder",
+                    "densityPercent",
+                    "profile",
+                    "ages"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "name",
+              "overallDensityPercent",
+              "clumpingPercent",
+              "climate",
+              "limits",
+              "assets"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "builtIn",
+          "set"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "disclaimer",
+    "cityDefaults",
+    "assets",
+    "sets"
+  ],
+  "additionalProperties": false
+}

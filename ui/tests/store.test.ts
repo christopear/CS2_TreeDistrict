@@ -24,12 +24,10 @@ const withDistrict = () =>
         boundary,
     });
 describe("editor domain", () => {
-    it("loads explicitly fictional data with distinct age profiles", () => {
+    it("loads London Plane with one species profile and age proportions", () => {
         expect(catalogSchema.safeParse(catalog).success).toBe(true);
-        expect(catalog.assets.every((a) => a.placeholder)).toBe(true);
-        expect(catalog.assets[0].ages[0].footprintRadiusM).not.toBe(
-            catalog.assets[0].ages[1].footprintRadiusM,
-        );
+        expect(catalog.assets[0].placeholder).toBe(false);
+        expect(catalog.assets[0].profile.matureSpacingM).toBe(20);
     });
     it("snapshots settings per district without aliasing", () => {
         const state = withDistrict();
@@ -102,7 +100,7 @@ describe("editor domain", () => {
             }),
         ).toThrow("Save as");
         const set = clone(state.districts[0].working);
-        set.assets[0].ages[0].heightM = 7;
+        set.assets[0].profile.heightM = 7;
         set.climate.coolingCPerKm = 5;
         let next = reduce(state, {
             type: "editSet",
@@ -115,8 +113,8 @@ describe("editor domain", () => {
             name: "My mix",
             newId: "user:mix",
         });
-        expect(next.library[2].set.assets[0].ages[0].heightM).toBe(7);
-        expect(next.library[2].set.climate).toEqual({ coolingCPerKm: 5 });
+        expect(next.library[1].set.assets[0].profile.heightM).toBe(7);
+        expect(next.library[1].set.climate).toEqual({ coolingCPerKm: 5 });
         expect(modified(next.districts[0])).toBe(false);
     });
     it("updating a library set preserves other district snapshots and baselines", () => {
@@ -194,7 +192,7 @@ describe("editor domain", () => {
     });
     it("rejects invalid curves, duplicate assets, inverted limits and nonfinite values", () => {
         const set = clone(catalog.sets[0].set);
-        set.assets[0].ages[0].temperature.optimum = 100;
+        set.assets[0].profile.temperature.optimum = 100;
         expect(setSchema.safeParse(set).success).toBe(false);
         expect(
             setSchema.safeParse({

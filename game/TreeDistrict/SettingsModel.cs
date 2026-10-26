@@ -158,13 +158,16 @@ namespace TreeDistrict
             foreach (var asset in assets)
             {
                 Text(asset["name"], 80); Boolean(asset["placeholder"]); Number(asset["densityPercent"], 0, 100);
+                var profile = Object(asset["profile"]);
+                Number(profile["matureSpacingM"], 1, 200);
+                if (Number(profile["heightM"], 0, 200) <= 0) throw new ArgumentException("Height must be positive.");
+                Number(profile["canopyRadiusM"], 0, 100);
+                Number(profile["canopyOpacityPercent"], 0, 100); Number(profile["shadeTolerancePercent"], 0, 100);
+                Response(profile["temperature"], false); Response(profile["slope"], true); Limits(profile["limits"]);
                 var ages = Array(asset["ages"], 1, 16); Unique(ages);
                 foreach (var age in ages)
                 {
-                    Text(age["name"], 80); Boolean(age["enabled"]);
-                    foreach (string key in new[] { "densityPercent", "canopyOpacityPercent", "shadeTolerancePercent" }) Number(age[key], 0, 100);
-                    if (Number(age["footprintRadiusM"], 0, 100) <= 0 || Number(age["heightM"], 0, 200) <= 0) throw new ArgumentException("Dimensions must be positive.");
-                    Number(age["canopyRadiusM"], 0, 100); Response(age["temperature"], false); Response(age["slope"], true); Limits(age["limits"]);
+                    Text(age["name"], 80); Number(age["proportionPercent"], 0, 100);
                 }
             }
         }

@@ -27,12 +27,8 @@ export const limitsSchema = z
         (l) => l.minElevationM <= l.maxElevationM,
         "Minimum elevation must not exceed maximum",
     );
-export const ageSchema = z.object({
-    id,
-    name,
-    enabled: z.boolean(),
-    densityPercent: percent,
-    footprintRadiusM: number.positive().max(100),
+export const profileSchema = z.object({
+    matureSpacingM: number.min(1).max(200),
     heightM: number.positive().max(200),
     canopyRadiusM: number.min(0).max(100),
     canopyOpacityPercent: percent,
@@ -44,12 +40,15 @@ export const ageSchema = z.object({
     ),
     limits: limitsSchema,
 });
+export const ageSchema = z.object({ id, name, proportionPercent: percent });
 export const assetSchema = z
     .object({
         id,
         name,
         placeholder: z.boolean(),
+        prefabName: z.string().optional(),
         densityPercent: percent,
+        profile: profileSchema,
         ages: z.array(ageSchema).min(1).max(16),
     })
     .refine(
@@ -80,6 +79,9 @@ export const districtSchema = z.object({
     libraryId: id.nullable(),
     baseline: setSchema.nullable(),
     working: setSchema,
+    generatedCount: number.int().nonnegative().optional(),
+    generatedRevision: number.int().nonnegative().nullable().optional(),
+    generationStatus: z.string().optional(),
 });
 export const libraryEntrySchema = z.object({
     id,
@@ -107,7 +109,7 @@ export const workspaceSchema = z
         "Duplicate library/district identifier",
     );
 export const catalogSchema = z.object({
-    schemaVersion: z.literal(1),
+    schemaVersion: z.literal(2),
     disclaimer: z.string(),
     cityDefaults: climateSchema,
     assets: z.array(assetSchema).min(1),

@@ -1,4 +1,6 @@
-import fixture from "../../../data/placeholder-catalog.v1.json";
+import manifest from "../../../data/catalog.v2.json";
+import londonPlane from "../../../data/london-plane.json";
+import { migrateLegacyWorkspace } from "./migrate";
 import {
     catalogSchema,
     workspaceSchema,
@@ -9,7 +11,21 @@ import {
     type Climate,
 } from "./schema";
 
-export const catalog = catalogSchema.parse(fixture);
+export const catalog = catalogSchema.parse({
+    ...manifest,
+    assets: [londonPlane.asset],
+    sets: manifest.sets.map((entry) => ({
+        ...entry,
+        set: {
+            ...entry.set,
+            assets: entry.set.assetIds.map((id) => {
+                if (id !== londonPlane.asset.id)
+                    throw new Error("Unknown catalog asset");
+                return londonPlane.asset;
+            }),
+        },
+    })),
+});
 export function clone<T>(value: T): T {
     return JSON.parse(JSON.stringify(value)) as T;
 }
@@ -240,7 +256,7 @@ export function serialize(state: Workspace): string {
 export function deserialize(json: string): Workspace {
     if (json.length > 5_000_000)
         throw new Error("Settings document is too large");
-    const state = workspaceSchema.parse(JSON.parse(json));
+    const state = workspaceSchema.parse(migrateLegacyWorkspace(JSON.parse(json)));
     for (const d of state.districts) {
         const error = polygonError(d.boundary);
         if (error) throw new Error(error);

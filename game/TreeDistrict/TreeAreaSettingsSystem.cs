@@ -43,6 +43,8 @@ namespace TreeDistrict
             base.OnCreate();
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TreeDistrict.Catalog"))
             using (var reader = new StreamReader(stream)) _catalog = SettingsModel.Parse(reader.ReadToEnd());
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TreeDistrict.LondonPlane"))
+            using (var reader = new StreamReader(stream)) _catalog = ProfileMigration.Catalog(_catalog, SettingsModel.Parse(reader.ReadToEnd()));
             _prefabs = World.GetOrCreateSystemManaged<PrefabSystem>();
             _tools = World.GetOrCreateSystemManaged<ToolSystem>();
             _selection = World.GetOrCreateSystemManaged<SelectedInfoUISystem>();
@@ -59,6 +61,7 @@ namespace TreeDistrict
         private void ResetState()
         {
             _state = SettingsModel.Initial(_catalog); _areaIds.Clear(); _selectedId = null; _error = null;
+            _trees.Clear(); _orphanTrees.Clear();
             _initialScan = true; _lastSelection = Entity.Null; _visible = false; _wasAreaTool = false;
             while (_commands.TryDequeue(out _)) { }
             LoadLibrary();
@@ -74,7 +77,7 @@ namespace TreeDistrict
             base.OnGameLoadingComplete(purpose, mode);
             _ready = mode == GameMode.Game; _initialScan = true;
             _selectedId = null; _lastSelection = Entity.Null; _wasAreaTool = false;
-            if (_ready) { ScanAreas(); Publish(); }
+            if (_ready) Publish();
         }
         private bool IsTreeArea(Entity entity)
         {
@@ -118,15 +121,25 @@ namespace TreeDistrict
             }
             foreach (var entity in _areaIds.Keys.Where(e => !live.Contains(e)).ToArray())
             {
+                RemoveOwned(entity);
                 string id = _areaIds[entity]; _areaIds.Remove(entity);
                 SettingsModel.Target(_state, id).Remove();
                 if (_selectedId == id) _selectedId = null;
             }
             _initialScan = false;
+            RefreshTreeCounts();
         }
         protected override void OnUpdate()
         {
             base.OnUpdate();
+            if (!_ready) return;
+            if (_visible || _tools.activePrefab == Mod.Area) Publish();
+            else if (_lastEnvelope != "") { _binding.Update(""); _lastEnvelope = ""; }
+        }
+        // Invoked before native tools and modification systems. UIUpdate is too late:
+        // cleanup would strip Created/Updated before native object initialization runs.
+        internal void ProcessCommands()
+        {
             if (!_ready) return;
             bool active = _tools.activePrefab == Mod.Area;
             if (active && !_wasAreaTool) _visible = true;
@@ -146,8 +159,6 @@ namespace TreeDistrict
                 try { Execute(SettingsModel.Parse(json)); _error = null; }
                 catch (Exception ex) { _error = ex.Message; Mod.Log.Warn("Settings command rejected: " + ex.Message); }
             }
-            if (_visible || active) Publish();
-            else if (_lastEnvelope != "") { _binding.Update(""); _lastEnvelope = ""; }
         }
         private Entity EntityFor(string id)
         {
@@ -173,7 +184,10 @@ namespace TreeDistrict
                     if (!(bool)command["edit"]) { _selectedId = null; _selection.SetSelection(Entity.Null); _tools.selected = Entity.Null; }
                     _tools.ActivatePrefabTool(Mod.Area); _visible = true; return;
                 case "deleteDistrict":
-                    throw new ArgumentException("Use the native area tool to remove this area. Generation is not available yet.");
+                case "generate":
+                case "removeGenerated":
+                case "bakeDelete":
+                    GenerationCommand(type, command); return;
             }
             if (type != "city" && command["districtId"]?.Type != JTokenType.Null)
                 EntityFor(SettingsModel.Text(command["districtId"], 160));
@@ -203,7 +217,7 @@ namespace TreeDistrict
                 {
                     var id = SettingsModel.Text(entry["id"], 160);
                     if (library.Any(e => (string)e["id"] == id)) throw new ArgumentException("Duplicate library identifier.");
-                    SettingsModel.ValidateSet(entry["set"]);
+                    ProfileMigration.Set(entry["set"]); SettingsModel.ValidateSet(entry["set"]);
                     library.Add(new JObject { ["id"] = id, ["builtIn"] = false, ["set"] = entry["set"].DeepClone() });
                 }
             }
@@ -228,7 +242,7 @@ namespace TreeDistrict
         {
             // Only save records for live areas, not cached deleted entities.
             var records = _areaIds.Where(p => IsTreeArea(p.Key)).ToArray();
-            writer.Write(1);
+            writer.Write(2);
             writer.Write(new JObject { ["city"] = _state["city"].DeepClone(), ["draft"] = _state["draft"].DeepClone() }.ToString(Formatting.None));
             writer.Write(records.Length);
             foreach (var pair in records)
@@ -237,14 +251,22 @@ namespace TreeDistrict
                 var record = (JObject)SettingsModel.Target(_state, pair.Value).DeepClone();
                 record.Remove("boundary"); // Native area nodes are authoritative.
                 writer.Write(record.ToString(Formatting.None));
+                var trees = _trees.TryGetValue(pair.Key, out var owned) ? owned.Where(LivingReference).ToArray() : new Entity[0];
+                writer.Write(trees.Length);
+                foreach (var tree in trees) writer.Write(tree);
             }
+            // Preserve pending cleanup if a save occurs between native deletion and our next scan.
+            var orphaned = _trees.Where(p => !IsTreeArea(p.Key)).SelectMany(p => p.Value).Concat(_orphanTrees).Where(LivingReference).Distinct().ToArray();
+            writer.Write(orphaned.Length);
+            foreach (var tree in orphaned) writer.Write(tree);
         }
         public void Deserialize<TReader>(TReader reader) where TReader : IReader
         {
             ResetState();
             reader.Read(out int version);
-            if (version != 1) throw new InvalidDataException("Unsupported TreeDistrict save version: " + version);
+            if (version != 1 && version != 2) throw new InvalidDataException("Unsupported TreeDistrict save version: " + version);
             reader.Read(out string headerJson); var header = SettingsModel.Parse(headerJson);
+            ProfileMigration.Working(header["draft"]);
             SettingsModel.ValidateClimate(header["city"], false); SettingsModel.ValidateWorking((JObject)header["draft"]);
             _state["city"] = header["city"]; _state["draft"] = header["draft"];
             reader.Read(out int count);
@@ -253,11 +275,25 @@ namespace TreeDistrict
             for (int i = 0; i < count; i++)
             {
                 reader.Read(out Entity entity); reader.Read(out string json);
-                var record = SettingsModel.Parse(json); SettingsModel.ValidateRecord(record);
+                var record = SettingsModel.Parse(json); ProfileMigration.Working(record); SettingsModel.ValidateRecord(record);
                 string id = (string)record["id"];
                 if (!ids.Add(id)) throw new InvalidDataException("Duplicate Tree Area ID in save.");
-                if (entity == Entity.Null) continue;
+                var trees = new List<Entity>();
+                if (version >= 2)
+                {
+                    reader.Read(out int treeCount);
+                    if (treeCount < 0 || treeCount > PlacementPlanner.MaxTrees) throw new InvalidDataException("Invalid owned tree count.");
+                    for (int j = 0; j < treeCount; j++) { reader.Read(out Entity tree); if (tree != Entity.Null) trees.Add(tree); }
+                }
+                if (entity == Entity.Null) { _orphanTrees.AddRange(trees); continue; }
+                _trees.Add(entity, trees);
                 _areaIds.Add(entity, id); ((JArray)_state["districts"]).Add(record);
+            }
+            if (version >= 2)
+            {
+                reader.Read(out int orphanCount);
+                if (orphanCount < 0 || orphanCount > 2048 * PlacementPlanner.MaxTrees) throw new InvalidDataException("Invalid pending cleanup count.");
+                for (int j = 0; j < orphanCount; j++) { reader.Read(out Entity tree); if (tree != Entity.Null) _orphanTrees.Add(tree); }
             }
             Mod.Log.Info("Loaded settings for " + _areaIds.Count + " Tree Areas.");
         }

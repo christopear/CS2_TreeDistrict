@@ -10,6 +10,10 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <Compile Include="../../game/TreeDistrict/SettingsModel.cs" Link="SettingsModel.cs" />
-    <None Include="../../data/placeholder-catalog.v1.json" Link="catalog.json" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="../../game/TreeDistrict/ProfileMigration.cs" Link="ProfileMigration.cs" />
+    <Compile Include="../../game/TreeDistrict/PlacementPlanner.cs" Link="PlacementPlanner.cs" />
+    <None Include="../../data/catalog.v2.json" Link="catalog.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/london-plane.json" Link="london-plane.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/placeholder-catalog.v1.json" Link="legacy.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

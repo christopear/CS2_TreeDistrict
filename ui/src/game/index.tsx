@@ -149,6 +149,9 @@ function GamePanel() {
                             />
                         </>
                     }
+                    generationAction={(type, districtId, confirmed) =>
+                        send({ type, districtId, confirmed })
+                    }
                     nativeAreaTools
                     key={envelope.selectedId ?? "draft"}
                     state={envelope.workspace}

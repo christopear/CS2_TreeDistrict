@@ -20,7 +20,7 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await page.getByLabel("Overall density (%)", { exact: true }).fill("42");
     await expect(
         page.getByRole("heading", {
-            name: "Example mixed vegetation *",
+            name: "London Plane *",
             exact: true,
         }),
     ).toBeVisible();
@@ -31,21 +31,21 @@ test("draw, edit, save, reselect, reload and remove district", async ({
         page.getByRole("heading", { name: "My test mix", exact: true }),
     ).toBeVisible();
     await page
-        .getByRole("button", { name: "Set settings · 2 vegetation assets" })
+        .getByRole("button", { name: "Set settings · 1 vegetation assets" })
         .click();
     await page
-        .getByRole("button", { name: "Remove Example understorey — fictional" })
+        .getByRole("button", { name: "Remove London Plane" })
         .click();
     await page
         .getByRole("button", { name: "Add vegetation…", exact: true })
         .click();
     await expect(
         page.getByRole("button", {
-            name: "Add Example understorey — fictional",
+            name: "Add London Plane",
         }),
     ).toBeVisible();
     await page
-        .getByRole("button", { name: "Add Example understorey — fictional" })
+        .getByRole("button", { name: "Add London Plane" })
         .click();
     await page
         .getByRole("button", { name: "City defaults", exact: true })
@@ -101,12 +101,12 @@ test("saving before replacement preserves edits and custom library survives a ne
     await page.getByLabel("Overall density (%)", { exact: true }).fill("30");
     await page
         .getByLabel("Vegetation set", { exact: true })
-        .selectOption("builtin:example-open");
+        .selectOption("builtin:london-plane");
     await page.getByRole("button", { name: "Save as first…" }).click();
     await page.getByLabel("Set name", { exact: true }).fill("Retained mix");
     await page.getByRole("button", { name: "Save new copy" }).click();
     await expect(
-        page.getByRole("heading", { name: "Example open canopy", exact: true }),
+        page.getByRole("heading", { name: "London Plane", exact: true }),
     ).toBeVisible();
     await page
         .getByLabel("Vegetation set", { exact: true })
@@ -162,7 +162,7 @@ test("add vegetation remains discoverable when all placeholder assets are includ
 }) => {
     await page.goto("/");
     await page
-        .getByRole("button", { name: "Set settings · 2 vegetation assets" })
+        .getByRole("button", { name: "Set settings · 1 vegetation assets" })
         .click();
     await page
         .getByRole("button", { name: "Add vegetation…", exact: true })
@@ -173,12 +173,12 @@ test("add vegetation remains discoverable when all placeholder assets are includ
     });
     await expect(
         picker.getByText(
-            "All available placeholder vegetation is already in this set.",
+            "All available vegetation is already in this set.",
         ),
     ).toBeVisible();
     await expect(
         picker.getByRole("button", {
-            name: "Add Example canopy — fictional",
+            name: "Add London Plane",
             exact: true,
         }),
     ).toBeDisabled();
@@ -189,7 +189,7 @@ test("add vegetation remains discoverable when all placeholder assets are includ
     await picker.getByRole("button", { name: "Cancel", exact: true }).click();
     await expect(
         page.getByRole("heading", {
-            name: "Example mixed vegetation",
+            name: "London Plane",
             exact: true,
         }),
     ).toBeVisible();

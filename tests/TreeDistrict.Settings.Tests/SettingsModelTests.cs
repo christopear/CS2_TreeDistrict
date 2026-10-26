@@ -9,7 +9,7 @@ namespace TreeDistrict.Tests
     {
         private static JObject State()
         {
-            var state = SettingsModel.Initial(SettingsModel.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "catalog.json"))));
+            var state = SettingsModel.Initial(ProfileMigration.Catalog(SettingsModel.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "catalog.json"))), SettingsModel.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "london-plane.json")))));
             foreach (var id in new[] { "area-a", "area-b" })
             {
                 var record = (JObject)state["draft"].DeepClone();
@@ -59,7 +59,7 @@ namespace TreeDistrict.Tests
         public void RejectsInvalidNestedCurveAndDuplicateAssets()
         {
             var set = SettingsModel.Target(State(), null)["working"].DeepClone();
-            set["assets"][0]["ages"][0]["slope"]["optimum"] = 91;
+            set["assets"][0]["profile"]["slope"]["optimum"] = 91;
             Assert.Throws<ArgumentException>(() => SettingsModel.ValidateSet(set));
             set = SettingsModel.Target(State(), null)["working"].DeepClone();
             ((JArray)set["assets"]).Add(set["assets"][0].DeepClone());

@@ -3,10 +3,24 @@
 A Cities: Skylines II mod in development: draw a vegetation area, choose its tree
 and shrub mix, and populate it according to density, elevation and slope rules.
 
-**Status: native Tree Area and in-game settings editor; no tree generation yet.**
+**Status: native Tree Area, in-game settings editor and manual London Plane generation.**
 The repository includes a runnable district editor preview, versioned JSON
-placeholder profiles, a CS2 AreaPrefab/settings adapter, and the portable C# core.
+species profiles, a CS2 AreaPrefab/settings adapter, and the portable C# core.
 See [what works and the Windows integration contract](docs/ui-scaffold.md).
+
+Generation creates ordinary native trees and keeps remapped ownership references
+in area records. Regenerate replaces owned trees; remove clears them; deleting an
+area also removes its owned trees. Bake + delete releases the trees and removes
+the area after confirmation. Boundary edits do not automatically regenerate.
+The user has confirmed visible generation after the native update-order fix;
+save/reload, native deletion and the previously reported second-area crash still
+need a complete regression pass before release.
+
+[London Plane data](data/london-plane.json) separates botanical evidence from
+provisional simulation values. The current jittered-grid placement and 20 m
+spacing are prototype assumptions and can look sparse and orchard-like.
+Shade competition is not implemented; generation currently supports London Plane
+only. Older design documents describe planned features beyond this prototype.
 
 ## Try the editor locally
 
@@ -19,7 +33,8 @@ npm --prefix ui run dev
 
 Open http://127.0.0.1:5173. Pick a set, draw a district, then edit its settings.
 The preview stores settings in this browser and supports JSON export/import.
-All supplied vegetation is explicitly fictional; profile research comes later.
+London Plane is the first researched profile; numerical shade and environmental
+curves remain provisional, as recorded alongside its source references.
 
 ```bash
 npm --prefix ui run check
