@@ -1,0 +1,19 @@
+.tools/
+**/bin/
+**/obj/
+TestResults/
+**/TestResults/
+.vs/
+.idea/
+*.user
+*.suo
+node_modules/
+artifacts/
+*.local.*
+# Game/toolchain files and local publishing credentials must stay private.
+**/Managed/
+**/GameAssemblies/
+**/PublishConfiguration.xml
+*.dll
+*.pdb
+*.cok

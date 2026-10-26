@@ -1,0 +1,59 @@
+# Windows game-integration handoff
+
+The portable core is ready to develop on Ubuntu. Creating the game adapter is the
+next integration step and requires access to an installed CS2 modding toolchain.
+Do this on Windows, where the game is already installed.
+
+1. Start CS2 and install/update the official toolchain in **Options → Modding**.
+   Let it select Unity, Burst/Entities, SDK and Node dependencies. Do not substitute
+   the latest Unity release or an old BepInEx tutorial.
+2. Restart your terminal/IDE so it sees the new `CSII_*` environment variables.
+   Visual Studio or Rider can use the installed mod template; VS Code is also an
+   editing option. Keep game-installation paths out of tracked files.
+3. Inspect the installation before creating a project:
+
+   ```powershell
+   Get-ChildItem Env:CSII_*
+   dotnet --list-sdks
+   dotnet new csiimod --help
+   ```
+
+4. Generate the adapter with that installed template. The root `global.json` is
+   for portable development: run the generator from a temporary folder outside
+   this checkout if it requires a different SDK. Move the generated project into
+   `game/TreeDistrict`, and give `game/global.json` the SDK required by the
+   toolchain if necessary. The nested file must be used by building from `game/`.
+   Typical generator command (check its help first):
+
+   ```powershell
+   dotnet new csiimod -n TreeDistrict
+   ```
+
+5. Preserve the generated `Mod.props` / `Mod.targets` imports and framework.
+   Add a reference to `../../src/TreeDistrict.Core/TreeDistrict.Core.csproj`.
+   Verify the post-processed output and that the core DLL is deployed alongside
+   the mod. Keep the adapter outside the portable solution; use a separate game
+   solution if needed. Do not add global Directory.Build.props overrides that
+   interfere with the toolchain.
+6. First prove that the generated mod loads, logs, and survives save/load on a
+   disposable test city. Then implement a small placement/removal experiment.
+   Track generated plants explicitly and verify manual trees survive removal.
+7. When a custom panel is needed, run `npx create-csii-ui-mod` inside the adapter
+   directory using the toolchain's Node environment. Match its mod ID to the C#
+   assembly name, commit its lockfile, and use `npm ci` for subsequent installs.
+   Verify deploy order: the C# deployment can clear the shared mod output folder.
+
+Every game/Unity assembly reference must have `Private=false`; never distribute
+those DLLs. Keep `Properties/PublishConfiguration.xml` local (ignored), review it
+for account details, and provide a sanitised example if documentation needs it.
+
+## Before claiming the adapter works
+
+- Record the actual game version and toolchain versions used.
+- Build through the official post-processor and restart the game.
+- Check the game log for loader errors and unwanted bundled game assemblies.
+- Verify spawning, cancellation, clearing, and save/reload on a test city.
+- Check ordinary vegetation tools and construction still behave normally.
+
+The Linux core CI proves none of these game behaviours. Publishing to Paradox
+Mods is a separate release step, after in-game verification.
