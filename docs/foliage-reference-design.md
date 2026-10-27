@@ -228,7 +228,126 @@ A district may override overall density without changing the saved set.
 Changing a shared preset does not rewrite existing areas. Cross-city import carries
 settings and asset references, not meshes. Save stable input versions with a plan.
 
-## 6. Proposed generation pipeline
+## 6. Generation pipeline
+
+### Standalone pipeline v1 (implemented)
+
+`TreeDistrict.Core.Foliage.FoliageGenerator` now implements an engine-independent
+planner, version `foliage-v1-local-priority`. This section supersedes the older
+height-priority physical-conflict proposal below. No CS2/Unity/UI/JSON types cross
+its boundary. `tools/TreeDistrict.Foliage.Cli` is a separate JSON/console/SVG adapter.
+The CS2 adapter still uses its previous single-species planner until UX integration.
+
+Input is a `GenerationRequest` plus `Func<Position2, GroundSample>` and optional
+`CancellationToken`. The caller supplies stable terrain and existing-tree snapshots
+and must not mutate inputs during the synchronous call. Output is a read-only
+placement list (opaque species ID, candidate index, X/Z, elevation, rotation, age,
+available light) and per-species diagnostics. IDs need not identify game assets.
+The library does not write files or create/delete entities; a failure or cancellation
+returns no partial result, allowing an adapter to preserve its current planting.
+
+1. Validate inputs and calculate polygon area. Compute each species' candidate
+   expectation as `area/10000 × candidatesPerHectare × speciesDensity × overallDensity`.
+   Independently stochastic-round each expectation to an integer. Sample uniform
+   positions by bounded rejection sampling inside the polygon bounding box.
+   This is a fixed-count/binomial point process, not exactly a Poisson process;
+   Poisson calculations below are large-plot approximations.
+2. Reject water, blocked ground, invalid samples and intersected set/species hard
+   terrain limits. Temperature and slope curves combine using their minimum;
+   flat ground below the slope optimum is fully suitable. Missing curves mean
+   no environmental penalty. Each candidate gets an independent acceptance draw.
+   An optional `ClimateProfile` computes `referenceTemperature -
+   (sampledElevation - referenceElevation)/1000 × coolingCPerKm`; otherwise the
+   callback supplies temperature directly. This is a spawn suitability factor,
+   never a live health simulation.
+3. Reject candidates overlapping immutable existing plants. Conflict distance is
+   the sum of physical exclusion radii; equality is permitted. Existing trees
+   outside the polygon can still matter and must be supplied by the adapter.
+4. Resolve generated physical competition using stable random priorities. Reject
+   a candidate if ANY eligible candidate within summed exclusion radii has a lower
+   priority, even if that competitor also loses. This is Matérn-II-style local
+   thinning, not greedy maximal packing. It intentionally leaves some gaps, but
+   is order-independent and has a tractable population estimate. Species get no
+   arbitrary priority bonus. Exclusion radius is neither crown radius nor a root
+   measurement. The original density-spacing proxy is not used for this exclusion.
+5. Process physical survivors by descending absolute crown top (terrain elevation
+   plus mature height), with deterministic tie-breaking. Only sufficiently taller,
+   accepted crowns and existing plants shade a candidate's crown centre. The
+   default minimum top-height difference is 2 m, an explicit canopy-layer proxy:
+   tiny height differences on a gentle slope should not abruptly make every
+   otherwise equal tree shade its neighbour. Within
+   a canopy disk, multiply transmission by `1 - opacity`; outside it multiply by 1.
+   Equal-height crowns do not shade one another in this initial vertical model.
+   Available light is the product, in canonical order, of those transmissions.
+   Acceptance ramps linearly from 0 at `MinimumLight` to 1 at `FullLight`, clamped
+   to [0,1]. `RequiresShade` additionally rejects fully lit positions. Failed shade
+   candidates never cast shade; there is no refill of physical losers afterward.
+6. Apportion accepted ages by largest remainder and shuffle with a separate stream.
+   All physical dimensions use the mature profile regardless of age. Rotations,
+   ages, candidate locations and acceptance draws use independent deterministic
+   channels. Input species order does not change the result; disabled or wholly
+   unsuitable species do not perturb another species' placements.
+
+Randomness uses explicitly defined SplitMix64 and an ordinal UTF-16 ID hash, not
+`System.Random` or process-dependent string hashing. Species and candidate index
+provide stable keys. Same inputs/version are repeatable in the tested runtime;
+cross-platform floating-point bit identity is not promised. Spatial hash grids
+avoid unconditional all-pairs work. Candidate, position-attempt, neighbour-check
+and accepted-placement limits fail explicitly, never silently truncate. The
+standalone accepted limit defaults to 100,000, separate from the game's 10,000 cap.
+Input polygons are simple, have 3–2,048 vertices, and use coordinates within ±1e9 m.
+Very thin polygons can hit the bounded rejection-sampling limit. Holes can be
+represented as blocked terrain but do not reduce the initial candidate budget.
+
+Terrain support is deliberately 2.5D: positions include sampled ground elevation,
+but candidate density and physical radii use horizontal map area/distance. Trees
+stay upright; no terrain-normal tilt, meshes, overhangs or surface-area correction
+is applied. Tests first verify the flat model, then 20% and 30% uphill/downhill
+grades without climate penalties. The pure-maple test retains identical X/Z
+positions and counts while each Y follows the slope exactly. Mixed-forest slope
+tests check all species remain present and mean count stays within 10% of flat.
+A separate final thermal test uses 30% grade over 1 km: 300 m rise gives 1.95°C
+cooling at 6.5°C/km. A known linear temperature response predicts 902.5 survivors
+from 1,000 candidates; this is checked over 64 seeds. Moving both the terrain and
+climate reference altitude by the same amount must preserve candidate selection.
+
+`data/foliage-model.v1.json` holds provisional model choices, not botanical facts:
+
+| Profile | Candidates/ha | Height | Physical radius | Crown radius | Opacity | Minimum / full light |
+|---|---:|---:|---:|---:|---:|---:|
+| Compact maple | 100 | 10 m | 1.5 m | 4 m | 0.60 | 0.10 / 0.60 |
+| Silver birch | 44.44 | 16 m | 1.5 m | 5 m | 0.35 | 0.40 / 0.85 |
+| Oak | 25 | 20 m | 2 m | 8 m | 0.70 | 0.30 / 0.80 |
+
+For uniform independent candidates, define species intensity `lambda_i = N_i/A`
+and conflict load `C_i = sum_j(lambda_j × pi × (r_i+r_j)^2)`. Then the Poisson
+local-thinning approximation is `N_i × (1-exp(-C_i))/C_i`, with limit `N_i` at zero.
+It ignores boundaries and fixed-count effects. The reference for marked local
+thinning is [Matérn retention probabilities](https://pure.au.dk/ws/files/90757390/math_csgb_2015_08.pdf).
+Epic informs the separate collision/shade controls; this is our implementation,
+not a claim to reproduce Epic's seed-growth engine or its output.
+
+For the default 4 ha mixed plot, 64-seed tests gave:
+
+| Species | Candidates | Physical estimate | Physical observed mean | Full shade/competition estimate | Full observed mean |
+|---|---:|---:|---:|---:|---:|
+| Maple | 400 | 314.1 | 315.4 | 245.6 | 262.2 |
+| Birch | 177.8 | 139.6 | 140.9 | 97.0 | 103.8 |
+| Oak | 100 | 72.5 | 72.3 | 72.5 | 72.3 |
+
+The full estimate integrates the light-response curve over independently Poisson
+distributed taller-canopy cover, processing heights in order. It does NOT simply
+apply the response to mean light (a nonlinear response makes those different).
+Physical tests allow ±5% mean error; the approximate full-coverage test allows ±20%
+because hard-core trees and conditioned surviving locations are spatially
+correlated. Uniform known overhead-canopy tests isolate shade with a tighter ±5%
+mean band. These are engineering tolerances, not ecological confidence intervals.
+
+Deliberate limits: no seed dispersal/growth iterations, spatial clumping, sun-angle
+shadows, crown-volume intersections, root/moisture competition, or live succession.
+Flat disks and single mature profiles make this version explainable and testable.
+Natural patch structure and more realistic canopy responses can be added as
+versioned changes after visual calibration. No shared game/UI settings were migrated.
 
 ### Population contracts: a 200 m by 200 m test plot
 
@@ -236,7 +355,8 @@ settings and asset references, not meshes. Save stable input versions with a pla
 population scenarios. These are model expectations, not field surveys or Unreal
 output samples. `SetPopulationTests.cs` exercises the actual current planner;
 `test_population_contracts.py` checks fixture arithmetic and independent density
-semantics. Passing fixture checks does **not** mean mixed generation works.
+semantics. `FoliageGeneratorTests` now runs all 16 fixtures against the new standalone
+generator. Passing fixture arithmetic alone is still not a generator test.
 
 The controlled plot is flat, empty, at the species' optimum temperature, with
 clumping disabled and no shade/competition unless a scenario explicitly says so.
@@ -279,14 +399,13 @@ remain complementary. A quarter-area case checks that counts scale with area.
 
 The 200 m plot avoids today's 10,000-tree safety cap. Scaling the three-species
 baseline to 1 km² would request about 16,944 candidates before competition. A
-future planner must expose requested, rejected and accepted counts rather than
-silently truncate or force a quota. All-species-zero currently throws: an
-explicitly skipped contract records the desired empty-plan behaviour. Mixed
-planner tests are explicitly skipped until it supports asset IDs and stage counts,
-never emulated by a toy generator merely to obtain green tests.
+planner must expose requested, rejected and accepted counts rather than silently
+truncate or force a quota; the standalone planner now does this. All-species-zero
+still throws in the legacy game planner: its skipped contract remains pending
+adapter integration. The standalone implementation returns an empty plan.
 
-When mixed placement is implemented, connect the fixtures through a test adapter
-and enable the skipped tests. Then add shared-space competition experiments:
+Standalone tests now cover these shared-space contracts; they must be preserved
+when integrating the planner into the game adapter:
 
 - Equal-footprint/equal-height species should not gain an advantage from list
   order; permuting input order must preserve results by stable asset ID.
@@ -300,12 +419,13 @@ and enable the skipped tests. Then add shared-space competition experiments:
   and the shade response. Compare against analytical bounds or independently
   derived controlled arrangements, not snapshots of the implementation under test.
 
-This deliberately leaves realistic shared-space final populations undecided:
-spacing alone cannot tell us how many maples survive beneath birch canopy.
-Density normalization is a proposed calibration target; species competition is
-still an open model choice.
+The implemented model supplies an initial shared-space estimate. Its numerical
+opacity and light-response calibration remain authoring assumptions: spacing
+alone cannot tell us how many maples survive beneath birch canopy.
 
-This is an original simplification to prototype. It is not the Unreal seed-growth
+The following is the earlier pipeline proposal, retained for its design context;
+physical ordering and shade details are superseded by the implemented v1 above.
+This is an original simplification. It is not the Unreal seed-growth
 algorithm or EcoBrush's statistical synthesis algorithm.
 
 ```mermaid

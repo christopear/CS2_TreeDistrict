@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "algorithmVersion": "foliage-v1-local-priority",
+  "description": "Standalone modelling presets, not botanical measurements or runtime CS2 settings.",
+  "assumptions": [
+    "Uniform independent candidates; all three profiles are suitable on the default flat terrain.",
+    "Height and crown scales are selected modelling values. Physical exclusion radii are distinct from crowns and density spacing.",
+    "Opacity and light-response numbers are provisional calibration choices, not published survival probabilities.",
+    "Maple is the compact field-maple analogue. Birch and oak dimensions are reference models, not dynamically resolved CS2 mesh measurements.",
+    "All visual ages use the mature profile for competition; age weights affect appearance only."
+  ],
+  "profiles": [
+    {
+      "id": "maple",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "matureHeightM": 10,
+      "exclusionRadiusM": 1.5,
+      "crownRadiusM": 4,
+      "crownOpacity": 0.6,
+      "minimumLight": 0.1,
+      "fullLight": 0.6,
+      "requiresShade": false,
+      "ages": [
+        {
+          "id": "young",
+          "weight": 10
+        },
+        {
+          "id": "teen",
+          "weight": 15
+        },
+        {
+          "id": "mature",
+          "weight": 70
+        },
+        {
+          "id": "old",
+          "weight": 5
+        }
+      ]
+    },
+    {
+      "id": "birch",
+      "candidatesPerHectare": 44.44444444444444,
+      "densityPercent": 100,
+      "matureHeightM": 16,
+      "exclusionRadiusM": 1.5,
+      "crownRadiusM": 5,
+      "crownOpacity": 0.35,
+      "minimumLight": 0.4,
+      "fullLight": 0.85,
+      "requiresShade": false,
+      "ages": [
+        {
+          "id": "young",
+          "weight": 10
+        },
+        {
+          "id": "teen",
+          "weight": 15
+        },
+        {
+          "id": "mature",
+          "weight": 70
+        },
+        {
+          "id": "old",
+          "weight": 5
+        }
+      ]
+    },
+    {
+      "id": "oak",
+      "candidatesPerHectare": 25,
+      "densityPercent": 100,
+      "matureHeightM": 20,
+      "exclusionRadiusM": 2,
+      "crownRadiusM": 8,
+      "crownOpacity": 0.7,
+      "minimumLight": 0.3,
+      "fullLight": 0.8,
+      "requiresShade": false,
+      "ages": [
+        {
+          "id": "young",
+          "weight": 10
+        },
+        {
+          "id": "teen",
+          "weight": 15
+        },
+        {
+          "id": "mature",
+          "weight": 70
+        },
+        {
+          "id": "old",
+          "weight": 5
+        }
+      ]
+    }
+  ]
+}

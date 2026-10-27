@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <None Include="../../data/foliage-model.v1.json" Link="foliage-model.v1.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../fixtures/set-population.v1.json" Link="set-population.v1.json" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="../../src/TreeDistrict.Core/TreeDistrict.Core.csproj" />
   </ItemGroup>
 

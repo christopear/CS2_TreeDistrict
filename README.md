@@ -22,15 +22,50 @@ crown and provisional 8 m spacing. Published botanical observations remain
 separate from those adaptations. The filename, prefab and built-in set IDs remain
 stable for compatibility; existing saved settings keep their previous values.
 The current jittered-grid placement can still look orchard-like.
-Shade competition is not implemented; generation currently supports this one prefab
-only. Older design documents describe planned features beyond this prototype.
+The in-game adapter currently supports this one prefab only. The independent
+generator described below now supports mixed species and shade; it has not yet
+been connected to the game adapter or UX.
+
+## Standalone foliage generator
+
+`TreeDistrict.Core.Foliage.FoliageGenerator` is a .NET Standard 2.0 library with no
+CS2, Unity, UI or JSON dependency. It plans candidates, terrain/environment
+filtering, physical competition, overhead shade and visual ages, returning native
+C# placements and per-species rejection counts. No game entities are created.
+[Model presets](data/foliage-model.v1.json) provide separate provisional maple,
+birch and oak inputs; they do not overwrite the old runtime defaults.
+
+Run the .NET 10 demonstration from the repository root after loading `scripts/env.ps1`:
+
+```powershell
+dotnet run --project tools/TreeDistrict.Foliage.Cli -c Release -- --seed 42 --output artifacts/foliage/seed42.json --svg artifacts/foliage/seed42.svg
+dotnet run --project tools/TreeDistrict.Foliage.Cli -c Release -- --species maple,birch --density 50 --no-shade
+dotnet run --project tools/TreeDistrict.Foliage.Cli -c Release -- --grade-percent 30 --elevation 100 --output artifacts/foliage/slope30.json
+dotnet test tests/TreeDistrict.Core.Tests -c Release --filter FullyQualifiedName~FoliageGeneratorTests --logger "console;verbosity=detailed"
+```
+
+The CLI defaults to an empty, flat 200 m square. `--grade-percent` adds a simple
+inclined terrain plane, and `--elevation` sets its starting altitude. Grade is
+percent (rise/run), not degrees: 30% is about 16.7°. `--profiles` accepts a model JSON;
+`--size`, `--seed`, `--density`, `--species` and `--temperature` adjust its scenario.
+`--no-competition` and `--no-shade` isolate stages for testing. The presets omit
+temperature curves, so climate does not thin these example forests. Custom profiles
+can use `--temperature`, `--reference-elevation` and `--cooling-per-km` to apply the
+optional altitude-temperature model. The checks proceed from flat 2D, to slopes
+without climate penalties, to a separately controlled thermal gradient.
+JSON exports include the inputs, algorithm version, final placements and counts;
+SVG exports show tree positions and model crowns. Library callers can supply any
+simple polygon, terrain callback and existing-tree snapshot, including outside
+neighbours that affect the boundary. See the
+[implemented rules and limitations](docs/foliage-reference-design.md#standalone-pipeline-v1-implemented).
 
 Population expectations live in [set scenarios](tests/fixtures/set-population.v1.json)
 and the [population contract design](docs/foliage-reference-design.md#population-contracts-a-200-m-by-200-m-test-plot).
-The main plot is 200 m × 200 m. Tests compare the real single-species planner to
-independent count envelopes across eight seeds; mixed-species cases specify future
-candidate budgets and controlled final counts, with unsupported execution tests
-explicitly skipped. They do not claim to predict shared-space competition yet.
+The main plot is 200 m × 200 m. The legacy planner has eight-seed checks. All 16
+scenarios now also execute against the standalone generator across 32 seeds;
+mixed physical competition and shade have independent analytical checks across
+64 seeds. The remaining skipped test documents zero-density handling in the
+legacy game adapter, which is already handled by the standalone generator.
 Run the population tests with `dotnet test tests/TreeDistrict.Settings.Tests -c Release --filter FullyQualifiedName~SetPopulationTests --logger "console;verbosity=detailed"`
 and the fixture checks with `py -3 -m unittest discover -s tests -p 'test_population_contracts.py'`.
 

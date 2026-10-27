@@ -77,11 +77,8 @@ namespace TreeDistrict.Tests
                 (x, z) => throw new InvalidOperationException("Unsupported sets must fail before terrain sampling.")));
         }
 
-        [Fact(Skip = "Future mixed generator: expose candidate counts by asset ID, then run candidateBudget fixtures before competition. See docs/foliage-reference-design.md population contracts.")]
-        public void MixedCandidateBudgetsMatchIndependentSpeciesRequests() => throw new NotImplementedException();
-
-        [Fact(Skip = "Future mixed generator: add a test adapter that disables interactions, then run mixed uncontestedPlacement fixtures across Seeds. Final plans must report asset IDs.")]
-        public void MixedUncontestedPopulationsMatchPerSpeciesEnvelopes() => throw new NotImplementedException();
+        // Mixed contracts now execute in TreeDistrict.Core.Tests/FoliageGeneratorTests.
+        // The legacy game adapter remains intentionally unmodified until UX integration.
 
         [Fact(Skip = "Known gap: all species at zero density currently throws. Contract expects an empty plan, including when other species are added at zero.")]
         public void AllDisabledSpeciesProducesAnEmptyPlan() => throw new NotImplementedException();
