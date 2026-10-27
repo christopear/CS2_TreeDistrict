@@ -51,6 +51,7 @@ namespace TreeDistrict.Core.Foliage
         public string Id { get; set; } = "";
         public double CandidatesPerHectare { get; set; }
         public double DensityPercent { get; set; } = 100;
+        public double? PreferredSpacingRadiusM { get; set; }
         public double MatureHeightM { get; set; }
         public double ExclusionRadiusM { get; set; }
         public double CrownRadiusM { get; set; }
@@ -130,13 +131,19 @@ namespace TreeDistrict.Core.Foliage
     public sealed class GenerationResult
     {
         internal GenerationResult(List<Placement> placements, List<SpeciesCounts> counts, double area,
-            int attempts, long checks)
+            int attempts, long checks, string algorithmVersion = FoliageGenerator.AlgorithmVersion,
+            int samplingOpportunities = 0, int emptyEnvironmentSamples = 0, int spacingRejectedSamples = 0)
         {
+            SamplingOpportunities = samplingOpportunities; EmptyEnvironmentSamples = emptyEnvironmentSamples;
+            SpacingRejectedSamples = spacingRejectedSamples;
             Placements = new ReadOnlyCollection<Placement>(placements);
             Counts = new ReadOnlyCollection<SpeciesCounts>(counts);
-            AreaM2 = area; PositionAttempts = attempts; NeighbourChecks = checks;
+            AreaM2 = area; PositionAttempts = attempts; NeighbourChecks = checks; AlgorithmVersion = algorithmVersion;
         }
-        public string AlgorithmVersion => FoliageGenerator.AlgorithmVersion;
+        public int SamplingOpportunities { get; }
+        public int EmptyEnvironmentSamples { get; }
+        public int SpacingRejectedSamples { get; }
+        public string AlgorithmVersion { get; }
         public IReadOnlyList<Placement> Placements { get; }
         public IReadOnlyList<SpeciesCounts> Counts { get; }
         public double AreaM2 { get; }

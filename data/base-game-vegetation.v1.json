@@ -7,7 +7,7 @@
     "Groups use mesh naming conventions and English asset labels; active prefab-to-mesh references are not verified.",
     "All matching mesh variants are retained, including older and environment-pack versions. No active variant is guessed.",
     "Bounds exclude runtime scaling, rotation, wind and seasonal changes. Width/depth are not measured foliage cover or opacity.",
-    "Placement, shade and botanical defaults are not derived automatically from bounding boxes."
+    "Preferred spacing is a documented authoring heuristic from mature/static dimensions; hard clearance, shade and botanical defaults are not inferred."
   ],
   "archivesScanned": [
     "BridgesAndPorts/Blob.cok",
@@ -40,7 +40,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 4.7321
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -282,7 +284,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 5.0426
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -543,7 +547,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 4.2184
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -785,7 +791,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 7.8537
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -1027,7 +1035,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 5.1797
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -1269,7 +1279,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 2.7085
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -1530,7 +1542,9 @@
       "kind": "tree",
       "botanicalProfileRef": null,
       "botanicalResearchStatus": "notResearched",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 7.3829
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -1657,7 +1671,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 3.3771
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -1899,7 +1915,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 1.3639
+      },
       "baseGameMeasurements": [
         {
           "stage": "static",
@@ -1951,7 +1969,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 1.6266
+      },
       "baseGameMeasurements": [
         {
           "stage": "static",
@@ -1984,7 +2004,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 1.4951
+      },
       "baseGameMeasurements": [
         {
           "stage": "static",
@@ -2017,7 +2039,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 2.5099
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -2145,7 +2169,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 2.5911
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -2254,7 +2280,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 1.1892
+      },
       "baseGameMeasurements": [
         {
           "stage": "static",
@@ -2287,7 +2315,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 1.1999
+      },
       "baseGameMeasurements": [
         {
           "stage": "static",
@@ -2320,7 +2350,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 1.548
+      },
       "baseGameMeasurements": [
         {
           "stage": "static",
@@ -2353,7 +2385,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 2.313
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -2462,7 +2496,9 @@
       "kind": "shrub",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 3.234
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -2571,7 +2607,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 6.9032
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -2813,7 +2851,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 3.7028
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -3055,7 +3095,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 4.6401
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -3297,7 +3339,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 8.6126
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -3539,7 +3583,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 6.3186
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -3800,7 +3846,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 3.3611
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -4042,7 +4090,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 5.1851
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -4284,7 +4334,9 @@
       "kind": "tree",
       "botanicalProfileRef": "real-world-vegetation.v1.json",
       "botanicalResearchStatus": "sourcedReference",
-      "placementDefaults": null,
+      "placementDefaults": {
+        "preferredSpacingRadiusM": 4.8716
+      },
       "baseGameMeasurements": [
         {
           "stage": "mature",
@@ -4517,5 +4569,13 @@
       ],
       "botanicalProfileId": "cs2:SylvesterPalmTree01"
     }
-  ]
+  ],
+  "preferredSpacingPolicy": {
+    "field": "placementDefaults.preferredSpacingRadiusM",
+    "formula": "max_over_mature_variants(max(widthM, depthM) / 2) + 0.5",
+    "fallback": "Use static variants only when no mature variants exist; otherwise leave unset.",
+    "paddingM": 0.5,
+    "interpretation": "Preferred centre distance is the sum of the two plants' radii at 100% density. Authoring heuristic; not hard physical clearance or shade extent.",
+    "refresh": "Fill missing values only; preserve existing authored defaults."
+  }
 }

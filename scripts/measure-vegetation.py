@@ -138,13 +138,45 @@ def collect(content, game_version):
                 "Groups use mesh naming conventions and English asset labels; active prefab-to-mesh references are not verified.",
                 "All matching mesh variants are retained, including older and environment-pack versions. No active variant is guessed.",
                 "Bounds exclude runtime scaling, rotation, wind and seasonal changes. Width/depth are not measured foliage cover or opacity.",
-                "Placement, shade and botanical defaults are not derived automatically from bounding boxes."],
+                "Preferred spacing is a documented authoring heuristic from mature/static dimensions; hard clearance, shade and botanical defaults are not inferred."],
             "archivesScanned": scanned,
             "coverage": {"namedVegetationAssets": len(named_vegetation),
                          "namedAssetsWithoutMeasurements": missing,
                          "unconfirmedMeshGroups": sorted(r["id"] for r in records.values() if not r["nameConfirmedInLocale"])},
             "rejectedMeasurements": rejected,
             "assets": sorted(records.values(), key=lambda r: r["id"])}
+
+
+
+def add_preferred_spacing_defaults(inventory):
+    """Fill missing authoring defaults; preserve manually edited placement values.
+
+    Half the larger horizontal mature dimension approximates a round crown;
+    0.5m padding per plant yields 1m extra separation for a pair. This is not
+    a circumscribed bounding-box circle, trunk clearance, or botanical claim.
+    """
+    inventory["preferredSpacingPolicy"] = {
+        "field": "placementDefaults.preferredSpacingRadiusM",
+        "formula": "max_over_mature_variants(max(widthM, depthM) / 2) + 0.5",
+        "fallback": "Use static variants only when no mature variants exist; otherwise leave unset.",
+        "paddingM": 0.5,
+        "interpretation": "Preferred centre distance is the sum of the two plants' radii at 100% density. Authoring heuristic; not hard physical clearance or shade extent.",
+        "refresh": "Fill missing values only; preserve existing authored defaults."
+    }
+    for asset in inventory["assets"]:
+        measurements = asset["baseGameMeasurements"]
+        variants = [m for m in measurements if m["stage"] == "mature"]
+        if not variants:
+            variants = [m for m in measurements if m["stage"] == "static"]
+        if not variants:
+            continue
+        for variant in variants:
+            if any(not math.isfinite(variant[k]) or variant[k] <= 0 for k in ("widthM", "depthM")):
+                raise ValueError("Invalid horizontal dimensions for " + asset["id"])
+        radius = max(max(m["widthM"], m["depthM"]) / 2 for m in variants) + 0.5
+        if asset.get("placementDefaults") is None:
+            asset["placementDefaults"] = {}
+        asset["placementDefaults"].setdefault("preferredSpacingRadiusM", round(radius, 4))
 
 
 def link_botanical_references(inventory, catalogue):
@@ -173,6 +205,13 @@ def main():
     catalogue = Path(__file__).resolve().parents[1] / "data/real-world-vegetation.v1.json"
     if catalogue.exists():
         link_botanical_references(result, json.loads(catalogue.read_text(encoding="utf-8")))
+    if args.output.exists():
+        previous = json.loads(args.output.read_text(encoding="utf-8"))
+        authored = {asset["id"]: asset.get("placementDefaults") for asset in previous["assets"]}
+        for asset in result["assets"]:
+            if authored.get(asset["id"]) is not None:
+                asset["placementDefaults"] = authored[asset["id"]]
+    add_preferred_spacing_defaults(result)
     args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Measured {len(result['assets'])} asset groups / {sum(len(r['baseGameMeasurements']) for r in result['assets'])} meshes across {len(result['archivesScanned'])} archives")
 

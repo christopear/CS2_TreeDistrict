@@ -49,6 +49,32 @@ class Measurements(unittest.TestCase):
                 self.assertGreater(mesh["depthM"], 0)
                 self.assertNotIn("_LOD", mesh["meshName"])
 
+    def test_spacing_defaults_use_largest_mature_dimension_and_preserve_overrides(self):
+        inventory = {"assets": [
+            {"id": "tree", "baseGameMeasurements": [
+                {"stage": "mature", "widthM": 4, "depthM": 6},
+                {"stage": "mature", "widthM": 8, "depthM": 5},
+                {"stage": "old", "widthM": 30, "depthM": 30}]},
+            {"id": "bush", "baseGameMeasurements": [{"stage": "static", "widthM": 2, "depthM": 3}]},
+            {"id": "missing", "baseGameMeasurements": [{"stage": "young", "widthM": 1, "depthM": 1}]}
+        ]}
+        measure.add_preferred_spacing_defaults(inventory)
+        self.assertEqual(inventory["assets"][0]["placementDefaults"]["preferredSpacingRadiusM"], 4.5)
+        self.assertEqual(inventory["assets"][1]["placementDefaults"]["preferredSpacingRadiusM"], 2)
+        self.assertNotIn("placementDefaults", inventory["assets"][2])
+        inventory["assets"][0]["placementDefaults"]["preferredSpacingRadiusM"] = 7
+        measure.add_preferred_spacing_defaults(inventory)
+        self.assertEqual(inventory["assets"][0]["placementDefaults"]["preferredSpacingRadiusM"], 7)
+
+    def test_inventory_spacing_defaults_match_documented_policy(self):
+        data = json.loads((ROOT / "data/base-game-vegetation.v1.json").read_text(encoding="utf-8"))
+        for asset in data["assets"]:
+            variants = [m for m in asset["baseGameMeasurements"] if m["stage"] == "mature"]
+            if not variants:
+                variants = [m for m in asset["baseGameMeasurements"] if m["stage"] == "static"]
+            expected = round(max(max(m["widthM"], m["depthM"]) / 2 for m in variants) + .5, 4)
+            self.assertEqual(asset["placementDefaults"]["preferredSpacingRadiusM"], expected)
+
     def test_london_plane_keeps_pack_variants(self):
         data = json.loads((ROOT / "data/base-game-vegetation.v1.json").read_text(encoding="utf-8"))
         asset = next(a for a in data["assets"] if a["id"] == "cs2:NA_LondonPlaneTree01")

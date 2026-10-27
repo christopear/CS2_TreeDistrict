@@ -1,0 +1,8 @@
+{
+  "spacingM": 6.25,
+  "attemptsPerPoint": 15,
+  "description": "Independent local composition and abundance before placement. Abundance scales preferred spacing; spacingM is the fallback centre distance for profiles without radii.",
+  "usePrePlacementSuitability": true,
+  "enableLocalComposition": true,
+  "enableLocalAbundance": false
+}

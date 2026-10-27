@@ -9,20 +9,22 @@ try
     var options = new Dictionary<string, string>(StringComparer.Ordinal);
     var flags = new HashSet<string>(StringComparer.Ordinal);
     var valueOptions = new[] { "--profiles", "--size", "--seed", "--density", "--species", "--temperature", "--output", "--svg",
-        "--grade-percent", "--elevation", "--reference-elevation", "--cooling-per-km" };
+        "--terrain-smoothing", "--terrain-shape", "--environment-cell-size", "--generator", "--scatter-settings", "--spacing", "--attempts-per-point", "--grade-percent", "--elevation", "--reference-elevation", "--cooling-per-km" };
     for (int i = 0; i < args.Length; i++)
     {
         string key = args[i];
         if (key == "--help")
         {
-            Console.WriteLine("Standalone foliage planner: --profiles FILE --size METRES --seed UINT64 --density PERCENT --species maple,birch,oak --temperature C --grade-percent GRADE --elevation METRES --reference-elevation METRES --cooling-per-km C --no-competition --no-shade --output PLAN.json --svg PLOT.svg");
+            Console.WriteLine("Standalone foliage planner: --generator original|proton --terrain-smoothing METRES --terrain-shape plane|plateau --environment-cell-size METRES --scatter-settings FILE --spacing METRES --attempts-per-point N --profiles FILE --size METRES --seed UINT64 --density PERCENT --species maple,birch,oak --temperature C --grade-percent GRADE --elevation METRES --reference-elevation METRES --cooling-per-km C --no-competition --no-shade --post-suitability --no-composition --abundance | --no-abundance --output PLAN.json --svg PLOT.svg");
             return 0;
         }
-        if (key == "--no-competition" || key == "--no-shade")
+        if (key == "--no-competition" || key == "--no-shade" || key == "--post-suitability" || key == "--no-composition" || key == "--no-abundance" || key == "--abundance")
         { if (!flags.Add(key)) throw new ArgumentException("Duplicate flag: " + key); continue; }
         if (!valueOptions.Contains(key) || i + 1 >= args.Length || !options.TryAdd(key, args[++i]))
             throw new ArgumentException("Unknown, duplicate or incomplete option: " + key);
     }
+    if (flags.Contains("--abundance") && flags.Contains("--no-abundance"))
+        throw new ArgumentException("Choose either --abundance or --no-abundance.");
     string Option(string key, string fallback) => options.TryGetValue(key, out var value) ? value : fallback;
     double Number(string key, double fallback) => options.TryGetValue(key, out var value)
         ? double.Parse(value, CultureInfo.InvariantCulture) : fallback;
@@ -46,6 +48,11 @@ try
     if (!double.IsFinite(temperature)) throw new ArgumentException("Temperature must be finite.");
     double grade = Number("--grade-percent", 0), elevation = Number("--elevation", 0);
     if (!double.IsFinite(grade) || !double.IsFinite(elevation)) throw new ArgumentException("Grade and elevation must be finite.");
+    string terrainShape = Option("--terrain-shape", "plane");
+    if (terrainShape != "plane" && terrainShape != "plateau") throw new ArgumentException("Unknown terrain shape.");
+    double smoothingM = Number("--terrain-smoothing", 0);
+    if (!double.IsFinite(smoothingM) || smoothingM < 0) throw new ArgumentException("Terrain smoothing must be nonnegative and finite.");
+    double rampStartM = side * .35, rampEndM = side * .65;
     double slopeDegrees = Math.Atan(Math.Abs(grade) / 100) * 180 / Math.PI;
     var request = new GenerationRequest
     {
@@ -59,9 +66,53 @@ try
     };
     using var cancellation = new CancellationTokenSource();
     Console.CancelKeyPress += (_, e) => { e.Cancel = true; cancellation.Cancel(); };
-    var result = new FoliageGenerator().Generate(request,
-        p => new GroundSample(elevation + p.X * grade / 100, slopeDegrees), cancellation.Token);
+    string generator = Option("--generator", "original");
+    if (generator != "original" && generator != "proton") throw new ArgumentException("Unknown generator.");
+    ProtonScatterSettings? scatterSettings = null;
+    if (generator == "proton")
+    {
+        scatterSettings = JsonSerializer.Deserialize<ProtonScatterSettings>(File.ReadAllText(
+            Option("--scatter-settings", Path.Combine(AppContext.BaseDirectory, "proton-scatter.v1.json"))), json)
+            ?? throw new ArgumentException("Missing scatter settings.");
+        if (flags.Contains("--post-suitability")) scatterSettings.UsePrePlacementSuitability = false;
+        if (flags.Contains("--no-composition")) scatterSettings.EnableLocalComposition = false;
+        if (flags.Contains("--abundance")) scatterSettings.EnableLocalAbundance = true;
+        if (flags.Contains("--no-abundance")) scatterSettings.EnableLocalAbundance = false;
+        scatterSettings.SpacingM = Number("--spacing", scatterSettings.SpacingM);
+        scatterSettings.AttemptsPerPoint = int.Parse(Option("--attempts-per-point",
+            scatterSettings.AttemptsPerPoint.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+    }
+    var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+    GroundSample Sample(Position2 p)
+    {
+        if (terrainShape == "plane") return new GroundSample(elevation + p.X * grade / 100, slopeDegrees);
+        double run = Math.Clamp(p.X - rampStartM, 0, rampEndM - rampStartM);
+        double derivative = p.X >= rampStartM && p.X < rampEndM ? 1 : 0;
+        if (smoothingM > 0)
+        {
+            // Exact centred box-filter convolution of the piecewise-linear heightmap.
+            double PositiveSquare(double v) => Math.Pow(Math.Max(0, v), 2);
+            double Integral(double x) => .5 * (PositiveSquare(x - rampStartM) - PositiveSquare(x - rampEndM));
+            double left = p.X - smoothingM / 2, right = p.X + smoothingM / 2;
+            run = (Integral(right) - Integral(left)) / smoothingM;
+            derivative = (Math.Clamp(right - rampStartM, 0, rampEndM - rampStartM)
+                - Math.Clamp(left - rampStartM, 0, rampEndM - rampStartM)) / smoothingM;
+        }
+        return new GroundSample(elevation + run * grade / 100,
+            Math.Atan(Math.Abs(derivative * grade / 100)) * 180 / Math.PI);
+    }
+    var environment = generator == "proton"
+        ? LocalEnvironmentGrid.FromTerrain(request.Boundary, Sample, request.Climate,
+            Number("--environment-cell-size", LocalEnvironmentGrid.DefaultCellSizeM), cancellationToken: cancellation.Token)
+        : null;
+    var result = generator == "proton"
+        ? new ProtonFoliageGenerator().Generate(request, Sample, scatterSettings!, cancellation.Token, environment)
+        : new FoliageGenerator().Generate(request, Sample, cancellation.Token);
+    stopwatch.Stop();
+    Console.WriteLine($"Planning: {stopwatch.Elapsed.TotalMilliseconds:F1} ms (includes first-call/JIT overhead)");
     Console.WriteLine($"{result.AlgorithmVersion}; seed={request.Seed}; area={result.AreaM2:F0} m²");
+    if (scatterSettings?.UsePrePlacementSuitability == true)
+        Console.WriteLine($"Opportunities={result.SamplingOpportunities}; environmentally empty={result.EmptyEnvironmentSamples}; spacing/obstacle rejected={result.SpacingRejectedSamples}");
     Console.WriteLine("Species  Candidates  Terrain  Environment  Existing  Competition  Shade  Accepted");
     foreach (var c in result.Counts)
         Console.WriteLine($"{c.SpeciesId,-8} {c.Candidates,10} {c.TerrainRejected,8} {c.EnvironmentRejected,12} {c.ExistingPlantRejected,9} {c.CompetitionRejected,12} {c.ShadeRejected,6} {c.Accepted,9}");
@@ -73,7 +124,7 @@ try
         Console.WriteLine("Wrote " + absolute);
     }
     if (options.TryGetValue("--output", out var output))
-        Save(output, JsonSerializer.Serialize(new { schemaVersion = 1, request, terrain = new { baseElevationM = elevation, gradePercent = grade, slopeDegrees }, result }, json));
+        Save(output, JsonSerializer.Serialize(new { schemaVersion = 1, generator, scatterSettings, environmentGrid = environment == null ? null : new { environment.CellSizeM, environment.Columns, environment.Rows, environment.SampleCount }, request, terrain = new { shape = terrainShape, baseElevationM = elevation, gradePercent = grade, slopeDegrees, rampStartM, rampEndM, smoothingM }, result }, json));
     if (options.TryGetValue("--svg", out var svgPath))
     {
         string F(double n) => n.ToString("0.###", CultureInfo.InvariantCulture);
@@ -82,7 +133,7 @@ try
         var ordered = profiles.OrderBy(p => p.Id, StringComparer.Ordinal).ToArray();
         var colors = ordered.Select((p, i) => (p.Id, Color: palette[i % palette.Length])).ToDictionary(p => p.Id, p => p.Color);
         var profilesById = profiles.ToDictionary(p => p.Id);
-        var svg = new StringBuilder($"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"900\" height=\"960\" viewBox=\"0 0 900 960\"><rect width=\"900\" height=\"960\" fill=\"#f5f3ed\"/><text x=\"30\" y=\"28\" font-family=\"sans-serif\" font-size=\"18\">Foliage plan · {F(side)} m square · seed {request.Seed}</text>");
+        var svg = new StringBuilder($"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"900\" height=\"960\" viewBox=\"0 0 900 960\"><rect width=\"900\" height=\"960\" fill=\"#f5f3ed\"/><text x=\"30\" y=\"28\" font-family=\"sans-serif\" font-size=\"18\">{Escape(generator == "proton" ? "ProtonScatter port" : "Original generator")} · {F(side)} m square · seed {request.Seed}</text>");
         double scale = 840 / side;
         svg.Append("<defs><clipPath id=\"plot\"><rect x=\"30\" y=\"50\" width=\"840\" height=\"840\"/></clipPath></defs><g clip-path=\"url(#plot)\">");
         foreach (var p in result.Placements.OrderBy(p => profilesById[p.SpeciesId].MatureHeightM))

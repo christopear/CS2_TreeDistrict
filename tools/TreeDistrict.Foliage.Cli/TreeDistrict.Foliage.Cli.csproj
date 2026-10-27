@@ -11,4 +11,7 @@
     <ProjectReference Include="../../src/TreeDistrict.Core/TreeDistrict.Core.csproj" />
     <None Include="../../data/foliage-model.v1.json" Link="foliage-model.v1.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="../../data/proton-scatter.v1.json" Link="proton-scatter.v1.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

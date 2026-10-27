@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "algorithmVersion": "foliage-v1-local-priority",
+  "description": "Slope experiment: measured mature sizes and authored preferred radii from the asset catalogue; illustrative slope responses only. Temperature and shade effects disabled.",
+  "profiles": [
+    {
+      "id": "field-maple",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "matureHeightM": 7.7058,
+      "exclusionRadiusM": 1.5,
+      "crownRadiusM": 4.1401,
+      "crownOpacity": 0.6,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 70
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "assetId": "cs2:NA_LondonPlaneTree01",
+      "preferredSpacingRadiusM": 4.6401,
+      "sizeSource": "base-game-vegetation.v1.json; maximum mature dimensions; field-maple is the user naming for London Plane"
+    },
+    {
+      "id": "bush",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "matureHeightM": 2.6933,
+      "exclusionRadiusM": 0.5,
+      "crownRadiusM": 1.813,
+      "crownOpacity": 0.2,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "slope": {
+        "minimum": -1,
+        "optimum": 55,
+        "maximum": 90
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "assetId": "cs2:GreenBushWild01",
+      "preferredSpacingRadiusM": 2.313,
+      "sizeSource": "base-game-vegetation.v1.json; maximum mature dimensions; field-maple is the user naming for London Plane"
+    }
+  ]
+}

@@ -206,7 +206,7 @@ namespace TreeDistrict.Core.Foliage
             return order != 0 ? order : a.Index.CompareTo(b.Index);
         }
 
-        private static string[] AssignAges(SpeciesProfile species, int count, ulong seed)
+        internal static string[] AssignAges(SpeciesProfile species, int count, ulong seed)
         {
             var ages = species.Ages.OrderBy(a => a.Id, StringComparer.Ordinal).ToArray();
             double sum = ages.Sum(a => a.Weight);
@@ -225,7 +225,7 @@ namespace TreeDistrict.Core.Foliage
             return labels.ToArray();
         }
 
-        private static void Validate(GenerationRequest request)
+        internal static void Validate(GenerationRequest request)
         {
             void Nonnegative(double value, string field)
             { if (!Polygon.Finite(value) || value < 0) throw new ArgumentException(field + " must be finite and nonnegative."); }
@@ -249,6 +249,9 @@ namespace TreeDistrict.Core.Foliage
             {
                 if (p == null || string.IsNullOrWhiteSpace(p.Id) || !ids.Add(p.Id)) throw new ArgumentException("Species IDs must be unique and nonempty.");
                 Nonnegative(p.CandidatesPerHectare, nameof(p.CandidatesPerHectare)); Nonnegative(p.DensityPercent, nameof(p.DensityPercent));
+                if (p.PreferredSpacingRadiusM.HasValue && (!Polygon.Finite(p.PreferredSpacingRadiusM.Value)
+                    || p.PreferredSpacingRadiusM.Value < .001 || p.PreferredSpacingRadiusM.Value > 1e6))
+                    throw new ArgumentException("Preferred spacing radius must be finite and in [0.001,1000000].");
                 Nonnegative(p.MatureHeightM, nameof(p.MatureHeightM)); Nonnegative(p.ExclusionRadiusM, nameof(p.ExclusionRadiusM));
                 Nonnegative(p.CrownRadiusM, nameof(p.CrownRadiusM)); Fraction(p.CrownOpacity, nameof(p.CrownOpacity));
                 if (p.MatureHeightM > 1e6 || p.ExclusionRadiusM > 1e6 || p.CrownRadiusM > 1e6)
