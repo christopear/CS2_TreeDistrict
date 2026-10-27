@@ -1,8 +1,20 @@
 # Windows game-integration handoff
 
-The portable core is ready to develop on Ubuntu. Creating the game adapter is the
-next integration step and requires access to an installed CS2 modding toolchain.
-Do this on Windows, where the game is already installed.
+Current checkpoint: `codex/standalone-foliage-pipeline`. Ubuntu now validates the
+researched profile catalogue, six presets, editor settings and pure
+`DistrictGenerationAdapter` → Proton solver connection. The live game generator
+still uses its earlier single-London-Plane planner; mixed sets intentionally fail
+before touching owned trees. The bridge is available but not wired to spawning.
+
+On Windows, first pull this branch with CS2 closed, then build below. Check the
+new Core project reference is deployed alongside the mod. Next replace the legacy
+planner with the shared adapter/coordinator, resolve every species to its native
+prefab, and distinguish tree ages from static bush/flower entities. Validate
+terrain sampling and occupied land, then ownership across regenerate, ungenerate,
+bake/delete, save/reload and a second area. Stable game climate is still a TODO;
+manual city temperature remains the fallback. Use a disposable test city.
+
+Do not calibrate culling or turn pre-abundance on as part of this integration.
 
 ## Prepare a repository terminal
 
@@ -30,7 +42,7 @@ from outside this checkout, avoiding the portable `global.json` pin.
 
 ## Integrate the game adapter
 
-The `codex/tree-district-poc` branch now contains the generated adapter under
+The current branch contains the generated adapter under
 `game/TreeDistrict`. Build from the repository root with:
 
 ```powershell

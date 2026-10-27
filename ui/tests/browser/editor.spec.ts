@@ -20,7 +20,7 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await page.getByLabel("Overall density (%)", { exact: true }).fill("42");
     await expect(
         page.getByRole("heading", {
-            name: "Field Maple *",
+            name: "London Plane *",
             exact: true,
         }),
     ).toBeVisible();
@@ -33,20 +33,16 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await page
         .getByRole("button", { name: "Set settings · 1 vegetation assets" })
         .click();
-    await page
-        .getByRole("button", { name: "Remove Field Maple" })
-        .click();
+    await page.getByRole("button", { name: "Remove London Plane" }).click();
     await page
         .getByRole("button", { name: "Add vegetation…", exact: true })
         .click();
     await expect(
         page.getByRole("button", {
-            name: "Add Field Maple",
+            name: "Add London Plane",
         }),
     ).toBeVisible();
-    await page
-        .getByRole("button", { name: "Add Field Maple" })
-        .click();
+    await page.getByRole("button", { name: "Add London Plane" }).click();
     await page
         .getByRole("button", { name: "City defaults", exact: true })
         .click();
@@ -106,7 +102,7 @@ test("saving before replacement preserves edits and custom library survives a ne
     await page.getByLabel("Set name", { exact: true }).fill("Retained mix");
     await page.getByRole("button", { name: "Save new copy" }).click();
     await expect(
-        page.getByRole("heading", { name: "Field Maple", exact: true }),
+        page.getByRole("heading", { name: "London Plane", exact: true }),
     ).toBeVisible();
     await page
         .getByLabel("Vegetation set", { exact: true })
@@ -157,7 +153,7 @@ test("redraw cancellation and undo restore the existing district", async ({
     ).toHaveValue("75");
 });
 
-test("add vegetation remains discoverable when all placeholder assets are included", async ({
+test("picker offers researched vegetation while preventing duplicates", async ({
     page,
 }) => {
     await page.goto("/");
@@ -172,13 +168,14 @@ test("add vegetation remains discoverable when all placeholder assets are includ
         exact: true,
     });
     await expect(
-        picker.getByText(
-            "All available vegetation is already in this set.",
-        ),
-    ).toBeVisible();
+        picker.getByRole("button", {
+            name: "Add Wild Green Bush 01",
+            exact: true,
+        }),
+    ).toBeEnabled();
     await expect(
         picker.getByRole("button", {
-            name: "Add Field Maple",
+            name: "Add London Plane",
             exact: true,
         }),
     ).toBeDisabled();
@@ -189,8 +186,34 @@ test("add vegetation remains discoverable when all placeholder assets are includ
     await picker.getByRole("button", { name: "Cancel", exact: true }).click();
     await expect(
         page.getByRole("heading", {
-            name: "Field Maple",
+            name: "London Plane",
             exact: true,
         }),
     ).toBeVisible();
+});
+
+test("NZ preset exposes its three editable proxy profiles", async ({
+    page,
+}) => {
+    await page.goto("/");
+    await page
+        .getByLabel("Vegetation set", { exact: true })
+        .selectOption("builtin:nz-regenerating-bush");
+    await page
+        .getByRole("button", { name: "Set settings · 3 vegetation assets" })
+        .click();
+    await expect(
+        page.getByLabel("Wild Green Bush 01 density (%)", { exact: true }),
+    ).toHaveValue("55");
+    await page
+        .getByRole("button", {
+            name: "Species profile · shared across ages",
+            exact: true,
+        })
+        .first()
+        .click();
+    await page.screenshot({
+        path: "../artifacts/editor-nz-checkpoint.png",
+        fullPage: true,
+    });
 });

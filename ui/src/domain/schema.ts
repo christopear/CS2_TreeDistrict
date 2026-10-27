@@ -19,8 +19,8 @@ export const responseSchema = z
     );
 export const limitsSchema = z
     .object({
-        minElevationM: number.min(-2000).max(20000),
-        maxElevationM: number.min(-2000).max(20000),
+        minElevationM: number.min(-10000).max(20000),
+        maxElevationM: number.min(-10000).max(20000),
         maxSlopeDegrees: number.min(0).max(90),
     })
     .refine(

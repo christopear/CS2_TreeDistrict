@@ -358,7 +358,7 @@ export function Editor({
                     title={`Set settings · ${set.assets.length} vegetation assets`}
                 >
                     <NumberField
-                        label="Clumping (%)"
+                        label="Clumping (%) · reserved; use 0"
                         value={set.clumpingPercent}
                         min={0}
                         max={100}
@@ -424,8 +424,9 @@ export function Editor({
                         Add vegetation…
                     </Button>
                     <p className="td-help">
-                        Field Maple uses a compact 10 m profile with an 8 m
-                        crown and provisional placement preferences.
+                        Profiles use measured mature footprints and estimated
+                        temperature/slope responses. Preset overrides stay with
+                        the set; NZ plants are visual proxies.
                     </p>
                     {set.assets.map((asset) => (
                         <div key={asset.id} className="td-asset">
@@ -452,13 +453,9 @@ export function Editor({
                                 }
                             />
                             <p className="td-help">
-                                {Math.round(
-                                    (set.overallDensityPercent *
-                                        asset.densityPercent) /
-                                        100,
-                                )}
-                                % of baseline opportunities, before
-                                environmental suitability.
+                                Relative selection weight before local
+                                suitability. Zero excludes this asset; overall
+                                density controls spacing across the set.
                             </p>
                             <ProfileEditor
                                 profile={asset.profile}

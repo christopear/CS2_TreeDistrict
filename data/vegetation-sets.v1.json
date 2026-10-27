@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "passVersion": "0.2.0",
-  "description": "Prototype solver presets. Relative proposal weights are not final count or coverage percentages. Regions are visual/game themes, not verified native ranges. Existing authored profiles and sampler defaults remain unchanged.",
+  "description": "Prototype solver presets. Relative proposal weights are not final count or coverage percentages. Regions are visual/game themes, not verified native ranges. Per-member profileOverrides apply only to that set and do not modify source profiles.",
   "sets": [
     {
       "id": "low-cover",
@@ -144,6 +144,81 @@
         {
           "assetId": "cs2:NA_LondonPlaneTree01",
           "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "nz-regenerating-bush",
+      "name": "New Zealand regenerating bush",
+      "description": "Low and tall scrub with occasional small canopy trees. Existing game meshes are structural proxies; no NZ species or evergreen seasonal behaviour is claimed.",
+      "overallDensityPercent": 100,
+      "sources": [
+        {
+          "url": "https://www.doc.govt.nz/nature/native-plants/manuka-kahikatoa-and-kanuka/",
+          "basis": "Mānuka is a widespread, hardy pioneer across varied habitats; supports the hardy-scrub role, not these exact numerical curves."
+        },
+        {
+          "url": "https://www.nzplants.auckland.ac.nz/en/about/seed-plants-flowering/pittosporaceae/pittosporum-tenuifolium.html",
+          "basis": "Kōhūhū provides a small-tree structural reference; its reported form does not validate the chosen temperature/slope parameters."
+        }
+      ],
+      "members": [
+        {
+          "assetId": "cs2:GreenBushWild01",
+          "weight": 55,
+          "proxyRole": "Dense low scrub; loosely kāramū-like",
+          "profileBasis": "Authored NZ scrub proxy, not a measured species tolerance. Temperature is long-term annual mean, not frost minimum. Mesh footprint and preferred spacing are inherited.",
+          "profileOverrides": {
+            "temperature": {
+              "minimum": -4,
+              "optimum": 12,
+              "maximum": 27
+            },
+            "slope": {
+              "minimum": -1,
+              "optimum": 30,
+              "maximum": 80
+            },
+            "maximumSlopeDegrees": 60
+          }
+        },
+        {
+          "assetId": "cs2:GreenBushWild02",
+          "weight": 30,
+          "proxyRole": "Hardy taller scrub; loosely mānuka-like",
+          "profileBasis": "Authored NZ scrub proxy, not a measured species tolerance. Temperature is long-term annual mean, not frost minimum. Mesh footprint and preferred spacing are inherited.",
+          "profileOverrides": {
+            "temperature": {
+              "minimum": -6,
+              "optimum": 10,
+              "maximum": 25
+            },
+            "slope": {
+              "minimum": -1,
+              "optimum": 30,
+              "maximum": 80
+            },
+            "maximumSlopeDegrees": 60
+          }
+        },
+        {
+          "assetId": "cs2:NA_LindenTree01",
+          "weight": 15,
+          "proxyRole": "Occasional small canopy tree; loosely kōhūhū-like",
+          "profileBasis": "Authored NZ scrub proxy, not a measured species tolerance. Temperature is long-term annual mean, not frost minimum. Mesh footprint and preferred spacing are inherited.",
+          "profileOverrides": {
+            "temperature": {
+              "minimum": 2,
+              "optimum": 14,
+              "maximum": 27
+            },
+            "slope": {
+              "minimum": -1,
+              "optimum": 20,
+              "maximum": 65
+            },
+            "maximumSlopeDegrees": 45
+          }
         }
       ]
     }

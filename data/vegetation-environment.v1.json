@@ -1,0 +1,2293 @@
+{
+  "schemaVersion": 1,
+  "algorithmVersion": "foliage-v1-local-priority",
+  "passVersion": "0.2.0",
+  "reviewed": "2026-10-27",
+  "purpose": "Authored runtime-ready environmental profiles, separated from botanical evidence. Load explicitly through --profiles data/vegetation-environment.v1.json. This JSON-only pass does not change the catalogue adapter or preset loader.",
+  "temperatureMetric": "longTermMeanAnnualAirTemperatureCAtLocation",
+  "temperatureSemantics": "Reference city/set temperature must represent a long-term annual mean, then elevation cooling is applied. Not instantaneous weather, daily extremes, growing-season temperature, cold-hardiness zone, or tissue temperature.",
+  "scoring": {
+    "temperature": "Existing triangular response: 0 at/outside minimum/maximum, 1 at optimum; linear interpolation.",
+    "slope": "Existing slope response: 1 at 0..optimum, then linear decline toward maximum.",
+    "combined": "min(temperatureScore, slopeScore); hard Allowed is independent of soft Score.",
+    "hardSlope": "Allowed is false only when exact local slope > terrain.maximumSlopeDegrees; equality is permitted. At the cap the soft slope score is still positive."
+  },
+  "suggestedSetDefault": {
+    "maximumSlopeDegrees": 45,
+    "note": "Authoring recommendation, not automatically wired by this file. Effective cap is min(set cap, profile cap); use a 60-degree set override to allow shrubs on steeper terrain. A 45-degree set caps shrubs too."
+  },
+  "modellingNotes": [
+    "All exact triangle endpoints and peaks are authoring choices, even where anchored by observed climate distributions; occurrence statistics are not growth optima or mortality thresholds.",
+    "Slope caps are conservative placement policies, not researched universal survival bounds. All trees currently use 45 degrees and shrubs 60 degrees; stored per asset for future adjustment.",
+    "No researched temperature range is promoted to a hard temperature exclusion; a zero soft temperature score alone does not make Allowed false.",
+    "Broad elevation bounds are solver safety defaults, not species altitude limits; avoid counting altitude twice through climate and an invented biological altitude cap.",
+    "Raw source dataset remains separate to avoid presenting model assumptions as measured botanical facts.",
+    "London plane uses Platanus, superseding the historical Acer campestre interpretation. The unmatched EuropeanSpruce mesh is provisional and remains excluded from starter presets."
+  ],
+  "sources": {
+    "malus-domestica": {
+      "url": "https://plants.ces.ncsu.edu/plants/malus-domestica/",
+      "title": "malus domestica",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "aesculus-x-carnea": {
+      "url": "https://plants.ces.ncsu.edu/plants/aesculus-x-carnea/",
+      "title": "aesculus x carnea",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "rhs-aspen-erecta": {
+      "url": "https://www.rhs.org.uk/plants/94236/populus-tremula-erecta/details",
+      "title": "Populus tremula 'Erecta'",
+      "publisher": "Royal Horticultural Society",
+      "accessed": "2026-10-27"
+    },
+    "sabal-palmetto": {
+      "url": "https://plants.ces.ncsu.edu/plants/sabal-palmetto/",
+      "title": "sabal palmetto",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "tilia-cordata": {
+      "url": "https://plants.ces.ncsu.edu/plants/tilia-cordata/",
+      "title": "tilia cordata",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "uf-royal": {
+      "url": "https://ask.ifas.ufl.edu/publication/ST574",
+      "title": "Roystonea regia: Royal Palm",
+      "publisher": "University of Florida IFAS",
+      "accessed": "2026-10-27"
+    },
+    "picea-abies": {
+      "url": "https://plants.ces.ncsu.edu/plants/picea-abies/",
+      "title": "picea abies",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "uf-sylvester": {
+      "url": "https://ask.ifas.ufl.edu/publication/FR308",
+      "title": "Phoenix sylvestris, Wild Date Palm",
+      "publisher": "University of Florida IFAS",
+      "accessed": "2026-10-27"
+    },
+    "dasiphora-fruticosa": {
+      "url": "https://plants.ces.ncsu.edu/plants/dasiphora-fruticosa/",
+      "title": "dasiphora fruticosa",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "spiraea-japonica": {
+      "url": "https://plants.ces.ncsu.edu/plants/spiraea-japonica/",
+      "title": "spiraea japonica",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "hydrangea-macrophylla": {
+      "url": "https://plants.ces.ncsu.edu/plants/hydrangea-macrophylla/",
+      "title": "hydrangea macrophylla",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "spiraea-x-vanhouttei": {
+      "url": "https://plants.ces.ncsu.edu/plants/spiraea-x-vanhouttei/",
+      "title": "spiraea x vanhouttei",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "ilex-crenata-helleri": {
+      "url": "https://plants.ces.ncsu.edu/plants/ilex-crenata-helleri/",
+      "title": "ilex crenata helleri",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "buxus-microphylla": {
+      "url": "https://plants.ces.ncsu.edu/plants/buxus-microphylla/",
+      "title": "buxus microphylla",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "rhs-yew": {
+      "url": "https://www.rhs.org.uk/plants/385663/taxus-%C3%97-media-densiformis-m/details",
+      "title": "Taxus × media 'Densiformis'",
+      "publisher": "Royal Horticultural Society",
+      "accessed": "2026-10-27"
+    },
+    "cornus-sanguinea": {
+      "url": "https://plants.ces.ncsu.edu/plants/cornus-sanguinea/",
+      "title": "cornus sanguinea",
+      "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-27"
+    },
+    "nrc-birch": {
+      "url": "https://www.planthardiness.gc.ca/?lang=en&m=7&speciesid=5331916",
+      "title": "Betula pendula bioclimatic profile",
+      "publisher": "Natural Resources Canada",
+      "accessed": "2026-10-27",
+      "observations": {
+        "metric": "annualMeanTemperatureC",
+        "period": "1971–2000",
+        "observations": 533,
+        "minimum": 0.9,
+        "median": 9.3,
+        "maximum": 16.8
+      }
+    },
+    "nrc-alder": {
+      "url": "https://www.planthardiness.gc.ca/?lang=en&m=7&speciesid=2876213",
+      "title": "Alnus glutinosa bioclimatic profile",
+      "publisher": "Natural Resources Canada",
+      "accessed": "2026-10-27",
+      "observations": {
+        "metric": "annualMeanTemperatureC",
+        "period": "1971–2000",
+        "observations": 1117,
+        "minimum": 3.5,
+        "median": 10.0,
+        "maximum": 18.9
+      }
+    },
+    "nrc-hazel": {
+      "url": "https://planthardiness.gc.ca/index.php?lang=en&m=7&speciesid=2875979",
+      "title": "Corylus avellana bioclimatic profile",
+      "publisher": "Natural Resources Canada",
+      "accessed": "2026-10-27",
+      "observations": {
+        "metric": "annualMeanTemperatureC",
+        "period": "1971–2000",
+        "observations": 246,
+        "minimum": 4.5,
+        "median": 10.4,
+        "maximum": 16.6
+      }
+    },
+    "nrc-hickory": {
+      "url": "https://planthardiness.gc.ca/index.php?lang=en&m=7&speciesid=3054296",
+      "title": "Carya ovata bioclimatic profile",
+      "publisher": "Natural Resources Canada",
+      "accessed": "2026-10-27",
+      "observations": {
+        "metric": "annualMeanTemperatureC",
+        "period": "1971–2000",
+        "observations": 7247,
+        "minimum": 3.4,
+        "median": 11.0,
+        "maximum": 19.5
+      }
+    },
+    "usfs-hickory": {
+      "url": "https://www.srs.fs.usda.gov/pubs/misc/ag_654/volume_2/silvics_v2.pdf",
+      "title": "Silvics of North America, Carya ovata climate section",
+      "publisher": "USDA Forest Service",
+      "accessed": "2026-10-27"
+    },
+    "icraf-coconut": {
+      "url": "https://apps.worldagroforestry.org/treedb/AFTPDFS/Cocos_nucifera.PDF",
+      "title": "Agroforestree Database: Cocos nucifera",
+      "publisher": "World Agroforestry",
+      "accessed": "2026-10-27",
+      "observations": {
+        "metric": "reportedMeanAnnualTemperatureC",
+        "range": [
+          20,
+          28
+        ]
+      }
+    },
+    "nc-london-plane": {
+      "url": "https://plants.ces.ncsu.edu/plants/platanus-x-acerifolia/",
+      "title": "Platanus x acerifolia",
+      "publisher": "NC State Extension",
+      "accessed": "2026-10-27"
+    },
+    "fao-oak": {
+      "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=9138",
+      "title": "Ecocrop: Quercus robur",
+      "publisher": "FAO",
+      "accessed": "2026-10-27",
+      "observations": {
+        "metric": "cropTemperatureRequirementC",
+        "optimal": [
+          10,
+          18
+        ],
+        "absolute": [
+          5,
+          41
+        ],
+        "note": "Not assumed to be mean annual temperature; retained as context, not copied to model endpoints."
+      }
+    },
+    "pine-common-gardens": {
+      "url": "https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.17678",
+      "title": "Adaptive responses to temperature and precipitation variation at the early-life stages of Pinus sylvestris",
+      "publisher": "New Phytologist, Ramirez-Valiente et al., 2021",
+      "accessed": "2026-10-27",
+      "observations": {
+        "metric": "annualMeanTemperatureC",
+        "examples": [
+          {
+            "population": "FI1",
+            "value": -0.3
+          },
+          {
+            "population": "GB1",
+            "value": 7.6
+          },
+          {
+            "population": "IT1",
+            "value": 11.5
+          }
+        ],
+        "note": "Examples from population table, not full species climate bounds."
+      }
+    },
+    "slope-pine-study": {
+      "url": "https://doi.org/10.1016/j.ecoleng.2007.09.002",
+      "title": "Influence of slope on root system anchorage of Pinus yunnanensis",
+      "publisher": "Ecological Engineering, 2008",
+      "accessed": "2026-10-27",
+      "finding": "Study includes established pines at 42–43 degrees; it does not establish a universal maximum slope."
+    },
+    "slope-shrub-study": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2803426/",
+      "title": "The Response of Spartium junceum Roots to Slope: Anchorage and Gene Factors",
+      "publisher": "Annals of Botany",
+      "accessed": "2026-10-27",
+      "finding": "Experiments with a shrub used 45-degree tilted pots; this does not establish a 60-degree survival limit or validate all shrubs."
+    }
+  },
+  "profiles": [
+    {
+      "id": "cs2:AppleTree01",
+      "assetId": "cs2:AppleTree01",
+      "name": "Apple Tree",
+      "kind": "tree",
+      "scientificName": "Malus domestica",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 4.7321,
+      "matureHeightM": 6.3786,
+      "crownRadiusM": 4.23205,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -2,
+        "optimum": 11,
+        "maximum": 25
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "malus-domestica"
+          ],
+          "rationale": "Temperate cultivated apple proxy; cultivar chilling requirements cannot be represented by annual mean temperature.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "commonNameMatch"
+    },
+    {
+      "id": "cs2:BirchTree01",
+      "assetId": "cs2:BirchTree01",
+      "name": "Birch",
+      "kind": "tree",
+      "scientificName": "Betula pendula",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 5.0426,
+      "matureHeightM": 16.2691,
+      "crownRadiusM": 4.54255,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -8,
+        "optimum": 8,
+        "maximum": 22
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "nrc-birch"
+          ],
+          "rationale": "Rounded cool-climate peak, widened beyond sampled occurrences; avoids treating observation extrema as physiological limits.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:CoconutPalmTree01",
+      "assetId": "cs2:CoconutPalmTree01",
+      "name": "Coconut Palm Tree",
+      "kind": "tree",
+      "scientificName": "Cocos nucifera",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 4.2184,
+      "matureHeightM": 13.9718,
+      "crownRadiusM": 3.7184,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 16,
+        "optimum": 26,
+        "maximum": 35
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "icraf-coconut"
+          ],
+          "rationale": "Warm tropical peak near the reported annual-temperature range; 16/35 endpoints are deliberately authored soft limits.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "commonNameMatch"
+    },
+    {
+      "id": "cs2:EU_AlderTree01",
+      "assetId": "cs2:EU_AlderTree01",
+      "name": "Alder",
+      "kind": "tree",
+      "scientificName": "Alnus glutinosa",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 7.8537,
+      "matureHeightM": 19.7829,
+      "crownRadiusM": 7.3537,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 0,
+        "optimum": 10,
+        "maximum": 24
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "nrc-alder"
+          ],
+          "rationale": "Peak near observed median annual climate; widened endpoints. Wet-soil preference is not modelled by temperature.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:EU_ChestnutTree01",
+      "assetId": "cs2:EU_ChestnutTree01",
+      "name": "Chestnut",
+      "kind": "tree",
+      "scientificName": "Aesculus × carnea",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 5.1797,
+      "matureHeightM": 9.1238,
+      "crownRadiusM": 4.6797,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 0,
+        "optimum": 12,
+        "maximum": 26
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "aesculus-x-carnea"
+          ],
+          "rationale": "Broad temperate hybrid proxy; no measured annual-temperature optimum was established.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:EU_PoplarTree01",
+      "assetId": "cs2:EU_PoplarTree01",
+      "name": "Poplar",
+      "kind": "tree",
+      "scientificName": "Populus tremula 'Erecta'",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 2.7085,
+      "matureHeightM": 9.8092,
+      "crownRadiusM": 2.2085,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -8,
+        "optimum": 8,
+        "maximum": 22
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "rhs-aspen-erecta"
+          ],
+          "rationale": "Cool-temperate aspen proxy informed by Swedish cultivar origin; not a conversion of RHS H7.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:EuropeanSpruceTree01",
+      "assetId": "cs2:EuropeanSpruceTree01",
+      "name": "EuropeanSpruceTree01",
+      "kind": "tree",
+      "scientificName": "Picea abies (provisional analogue)",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 7.3829,
+      "matureHeightM": 27.7852,
+      "crownRadiusM": 6.88285,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -8,
+        "optimum": 6,
+        "maximum": 20
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "picea-abies"
+          ],
+          "rationale": "Unconfirmed mesh group uses the same provisional Norway-spruce analogue as SpruceTree01.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "unconfirmedMeshAnalogue"
+    },
+    {
+      "id": "cs2:FloridaPalmTree01",
+      "assetId": "cs2:FloridaPalmTree01",
+      "name": "Florida Palm Tree",
+      "kind": "tree",
+      "scientificName": "Sabal palmetto",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 3.3771,
+      "matureHeightM": 9.7541,
+      "crownRadiusM": 2.87715,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 8,
+        "optimum": 21,
+        "maximum": 33
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "sabal-palmetto"
+          ],
+          "rationale": "Warm subtropical/coastal proxy; ability to tolerate brief frost does not establish an annual-temperature threshold.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:FlowerBushCity01",
+      "assetId": "cs2:FlowerBushCity01",
+      "name": "Cultivated Flower Bush 01",
+      "kind": "shrub",
+      "scientificName": "Dasiphora fruticosa",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 1.3639,
+      "matureHeightM": 1.3046,
+      "crownRadiusM": 0.8639,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -8,
+        "optimum": 8,
+        "maximum": 22
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "static",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "dasiphora-fruticosa"
+          ],
+          "rationale": "Cool-climate shrub proxy reflecting documented preference for cool summers; exact annual bounds are authored.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "static"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:FlowerBushCity02",
+      "assetId": "cs2:FlowerBushCity02",
+      "name": "Cultivated Flower Bush 02",
+      "kind": "shrub",
+      "scientificName": "Spiraea japonica",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 1.6266,
+      "matureHeightM": 1.3884,
+      "crownRadiusM": 1.12665,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -3,
+        "optimum": 12,
+        "maximum": 27
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "static",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "spiraea-japonica"
+          ],
+          "rationale": "Broad temperate ornamental proxy; no quantitative annual-temperature response established.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "static"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:FlowerBushCity03",
+      "assetId": "cs2:FlowerBushCity03",
+      "name": "Cultivated Flower Bush 03",
+      "kind": "shrub",
+      "scientificName": "Hydrangea macrophylla",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 1.4951,
+      "matureHeightM": 1.7493,
+      "crownRadiusM": 0.99515,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 2,
+        "optimum": 15,
+        "maximum": 29
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "static",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "hydrangea-macrophylla"
+          ],
+          "rationale": "Mild-temperate ornamental proxy; shade/moisture requirements remain separate and unmodelled.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "static"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:FlowerBushWild01",
+      "assetId": "cs2:FlowerBushWild01",
+      "name": "Wild Flower Bush 01",
+      "kind": "shrub",
+      "scientificName": "Spiraea × vanhouttei",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 2.5099,
+      "matureHeightM": 1.7771,
+      "crownRadiusM": 2.00985,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -3,
+        "optimum": 12,
+        "maximum": 27
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "spiraea-x-vanhouttei"
+          ],
+          "rationale": "Temperate hybrid proxy; wild-looking game mesh does not confirm native wild species identity.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:FlowerBushWild02",
+      "assetId": "cs2:FlowerBushWild02",
+      "name": "Wild Flower Bush 02",
+      "kind": "shrub",
+      "scientificName": "Spiraea × vanhouttei",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 2.5911,
+      "matureHeightM": 1.5981,
+      "crownRadiusM": 2.0911,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -3,
+        "optimum": 12,
+        "maximum": 27
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "spiraea-x-vanhouttei"
+          ],
+          "rationale": "Same botanical analogue and climate parameters as Wild01; appearance is not evidence for different tolerance.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:GreenBushCity01",
+      "assetId": "cs2:GreenBushCity01",
+      "name": "Cultivated Green Bush 01",
+      "kind": "shrub",
+      "scientificName": "Ilex crenata 'Helleri'",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 1.1892,
+      "matureHeightM": 0.9741,
+      "crownRadiusM": 0.68915,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 0,
+        "optimum": 12,
+        "maximum": 25
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "static",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "ilex-crenata-helleri"
+          ],
+          "rationale": "Temperate proxy with a lower warm endpoint than warm-climate shrubs; source cautions about high heat/humidity.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "static"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:GreenBushCity02",
+      "assetId": "cs2:GreenBushCity02",
+      "name": "Cultivated Green Bush 02",
+      "kind": "shrub",
+      "scientificName": "Buxus microphylla",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 1.1999,
+      "matureHeightM": 1.4395,
+      "crownRadiusM": 0.69985,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 0,
+        "optimum": 13,
+        "maximum": 27
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "static",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "buxus-microphylla"
+          ],
+          "rationale": "Temperate evergreen proxy; cool moist soil preference is not a measured air-temperature optimum.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "static"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:GreenBushCity03",
+      "assetId": "cs2:GreenBushCity03",
+      "name": "Cultivated Green Bush 03",
+      "kind": "shrub",
+      "scientificName": "Taxus × media 'Densiformis'",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 1.548,
+      "matureHeightM": 1.1624,
+      "crownRadiusM": 1.048,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -3,
+        "optimum": 11,
+        "maximum": 25
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "static",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "rhs-yew"
+          ],
+          "rationale": "Broad temperate yew proxy, not numerically derived from RHS H7 or shade tolerance.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "static"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:GreenBushWild01",
+      "assetId": "cs2:GreenBushWild01",
+      "name": "Wild Green Bush 01",
+      "kind": "shrub",
+      "scientificName": "Cornus sanguinea",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 2.313,
+      "matureHeightM": 2.6933,
+      "crownRadiusM": 1.813,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -2,
+        "optimum": 12,
+        "maximum": 27
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "cornus-sanguinea"
+          ],
+          "rationale": "Temperate European dogwood proxy; no quantitative annual-temperature response established.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:GreenBushWild02",
+      "assetId": "cs2:GreenBushWild02",
+      "name": "Wild Green Bush 02",
+      "kind": "shrub",
+      "scientificName": "Corylus avellana",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 3.234,
+      "matureHeightM": 4.4476,
+      "crownRadiusM": 2.73395,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 0,
+        "optimum": 10,
+        "maximum": 23
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 20,
+        "maximum": 80
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 60
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "nrc-hazel"
+          ],
+          "rationale": "Rounded peak near observed annual-temperature median; endpoints widened beyond recorded occurrences.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 60,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:NA_HickoryTree01",
+      "assetId": "cs2:NA_HickoryTree01",
+      "name": "Hickory",
+      "kind": "tree",
+      "scientificName": "Carya ovata",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 6.9032,
+      "matureHeightM": 18.8107,
+      "crownRadiusM": 6.40325,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -1,
+        "optimum": 11,
+        "maximum": 27
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "nrc-hickory",
+            "usfs-hickory"
+          ],
+          "rationale": "Rounded peak near observed annual-temperature median; broad endpoints also encompass USFS reported 4–21 C range.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:NA_LindenTree01",
+      "assetId": "cs2:NA_LindenTree01",
+      "name": "Linden",
+      "kind": "tree",
+      "scientificName": "Tilia cordata 'Rancho'",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 3.7028,
+      "matureHeightM": 8.138,
+      "crownRadiusM": 3.2028,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -2,
+        "optimum": 11,
+        "maximum": 26
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "tilia-cordata"
+          ],
+          "rationale": "Temperate small-leaved lime proxy applied to Rancho; source identity is European even though the game prefab is NA-prefixed.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:NA_LondonPlaneTree01",
+      "assetId": "cs2:NA_LondonPlaneTree01",
+      "name": "London Plane",
+      "kind": "tree",
+      "scientificName": "Platanus × acerifolia (syn. Platanus × hispanica)",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 4.6401,
+      "matureHeightM": 7.7058,
+      "crownRadiusM": 4.1401,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 0,
+        "optimum": 15,
+        "maximum": 30
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "nc-london-plane"
+          ],
+          "rationale": "Broad temperate London-plane hybrid proxy; explicitly supersedes historical Acer campestre runtime interpretation.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "userConfirmedLondonPlaneInterpretation"
+    },
+    {
+      "id": "cs2:OakTree01",
+      "assetId": "cs2:OakTree01",
+      "name": "Oak",
+      "kind": "tree",
+      "scientificName": "Quercus robur",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 8.6126,
+      "matureHeightM": 14.7289,
+      "crownRadiusM": 8.11255,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -2,
+        "optimum": 12,
+        "maximum": 28
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "fao-oak"
+          ],
+          "rationale": "Temperate oak proxy. FAO optimal 10–18 C provides context only; its absolute 41 C entry is not treated as an annual-mean limit.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:PineTree01",
+      "assetId": "cs2:PineTree01",
+      "name": "Pine",
+      "kind": "tree",
+      "scientificName": "Pinus sylvestris",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 6.3186,
+      "matureHeightM": 21.3319,
+      "crownRadiusM": 5.8186,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -10,
+        "optimum": 7,
+        "maximum": 24
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "pine-common-gardens"
+          ],
+          "rationale": "Broad cool-temperate envelope informed by European population climates; not a fitted fitness curve.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:RoyalPalmTree01",
+      "assetId": "cs2:RoyalPalmTree01",
+      "name": "Royal Palm Tree",
+      "kind": "tree",
+      "scientificName": "Roystonea regia",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 3.3611,
+      "matureHeightM": 12.8813,
+      "crownRadiusM": 2.86115,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 16,
+        "optimum": 25,
+        "maximum": 34
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "uf-royal"
+          ],
+          "rationale": "Tropical south Florida/Cuba proxy; published short-term cold hardiness is not used as annual mean.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "commonNameMatch"
+    },
+    {
+      "id": "cs2:SpruceTree01",
+      "assetId": "cs2:SpruceTree01",
+      "name": "Spruce",
+      "kind": "tree",
+      "scientificName": "Picea abies",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 5.1851,
+      "matureHeightM": 21.5699,
+      "crownRadiusM": 4.68505,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": -8,
+        "optimum": 6,
+        "maximum": 20
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "picea-abies"
+          ],
+          "rationale": "Cool-climate proxy reflecting documented dislike of heat and hot dry summers; annual endpoints are authored.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "representative"
+    },
+    {
+      "id": "cs2:SylvesterPalmTree01",
+      "assetId": "cs2:SylvesterPalmTree01",
+      "name": "Sylvester Palm Tree",
+      "kind": "tree",
+      "scientificName": "Phoenix sylvestris",
+      "candidatesPerHectare": 100,
+      "densityPercent": 100,
+      "preferredSpacingRadiusM": 4.8716,
+      "matureHeightM": 11.0059,
+      "crownRadiusM": 4.37155,
+      "exclusionRadiusM": 0,
+      "crownOpacity": 0,
+      "minimumLight": 0,
+      "fullLight": 1,
+      "temperature": {
+        "minimum": 10,
+        "optimum": 24,
+        "maximum": 36
+      },
+      "slope": {
+        "minimum": -1,
+        "optimum": 10,
+        "maximum": 65
+      },
+      "terrain": {
+        "minimumElevation": -10000,
+        "maximumElevation": 10000,
+        "maximumSlopeDegrees": 45
+      },
+      "ages": [
+        {
+          "id": "mature",
+          "weight": 1
+        }
+      ],
+      "parameterBasis": {
+        "temperature": {
+          "status": "authoredClimateProxy",
+          "sourceIds": [
+            "uf-sylvester"
+          ],
+          "rationale": "Warm South Asian proxy; source minimum frost tolerance is not converted to mean annual temperature.",
+          "confidence": "low",
+          "numericEndpointsAreMeasured": false
+        },
+        "slope": {
+          "status": "authoringPolicy",
+          "sourceIds": [
+            "slope-pine-study",
+            "slope-shrub-study"
+          ],
+          "rationale": "Class-level placement preference, not a measured species tolerance. Do not infer soil depth from slope alone.",
+          "confidence": "low"
+        },
+        "hardSlope": {
+          "status": "authoringPolicy",
+          "valueDegrees": 45,
+          "rationale": "Conservative tree limit; more permissive shrub limit. Each profile stores its own editable cap; no universal biological threshold is claimed."
+        },
+        "dimensions": {
+          "source": "base-game-vegetation.v1.json",
+          "stagesConsidered": [
+            "mature"
+          ]
+        },
+        "unmodelled": [
+          "soilMoisture",
+          "soilDepth",
+          "wind",
+          "seasonality",
+          "frostExtremes",
+          "shadeMortality"
+        ],
+        "disabledEffects": "Unknown exclusion radius and opacity remain zero; no new shade or collision calibration."
+      },
+      "mappingStatus": "commonNameMatch"
+    }
+  ]
+}

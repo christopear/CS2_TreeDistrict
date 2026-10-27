@@ -62,7 +62,10 @@ namespace TreeDistrict
         {
             var set = (JObject)record["working"];
             SettingsModel.ValidateSet(set);
-            string prefabName = (string)_catalog["assets"][0]["prefabName"];
+            var enabledAssets = set["assets"].Where(a => (double)a["densityPercent"] > 0).ToArray();
+            if (enabledAssets.Length != 1 || (string)enabledAssets[0]["id"] != "cs2:NA_LondonPlaneTree01")
+                throw new ArgumentException("Multi-asset sets are ready for standalone planning. In-game prefab spawning still needs Windows integration; existing vegetation was retained.");
+            string prefabName = (string)enabledAssets[0]["prefabName"];
             if (!_prefabs.TryGetPrefab(new PrefabID("StaticObjectPrefab", prefabName), out var prefab)
                 || !_prefabs.TryGetEntity(prefab, out var prefabEntity)
                 || !EntityManager.HasComponent<TreeData>(prefabEntity) || !EntityManager.HasComponent<ObjectData>(prefabEntity))

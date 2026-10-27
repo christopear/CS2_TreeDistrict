@@ -8,14 +8,14 @@ try
 {
     var options = new Dictionary<string, string>(StringComparer.Ordinal);
     var flags = new HashSet<string>(StringComparer.Ordinal);
-    var valueOptions = new[] { "--vegetation-set", "--sets", "--asset-catalog", "--botanical-catalog", "--adapter-settings", "--inspect-inputs", "--profiles", "--size", "--seed", "--density", "--species", "--temperature", "--output", "--svg",
-        "--terrain-smoothing", "--terrain-shape", "--environment-cell-size", "--generator", "--scatter-settings", "--spacing", "--attempts-per-point", "--grade-percent", "--elevation", "--reference-elevation", "--cooling-per-km" };
+    var valueOptions = new[] { "--workspace", "--district", "--vegetation-set", "--sets", "--asset-catalog", "--botanical-catalog", "--adapter-settings", "--inspect-inputs", "--profiles", "--size", "--seed", "--density", "--species", "--temperature", "--output", "--svg",
+        "--heightmap", "--terrain-smoothing", "--terrain-shape", "--environment-cell-size", "--generator", "--scatter-settings", "--spacing", "--attempts-per-point", "--grade-percent", "--elevation", "--reference-elevation", "--cooling-per-km" };
     for (int i = 0; i < args.Length; i++)
     {
         string key = args[i];
         if (key == "--help")
         {
-            Console.WriteLine("Standalone foliage planner: --vegetation-set ID --sets FILE --asset-catalog FILE --botanical-catalog FILE --adapter-settings FILE --inspect-inputs REPORT.json --generator original|proton --terrain-smoothing METRES --terrain-shape plane|plateau --environment-cell-size METRES --scatter-settings FILE --spacing METRES --attempts-per-point N --profiles FILE --size METRES --seed UINT64 --density PERCENT --species maple,birch,oak --temperature C --grade-percent GRADE --elevation METRES --reference-elevation METRES --cooling-per-km C --no-competition --no-shade --post-suitability --no-composition --abundance | --no-abundance --output PLAN.json --svg PLOT.svg");
+            Console.WriteLine("Standalone foliage planner (defaults: Proton + authored environment profiles): --workspace EDITOR.json --district ID; --vegetation-set ID --sets FILE --asset-catalog FILE --botanical-catalog FILE --adapter-settings FILE --inspect-inputs REPORT.json --generator original|proton --heightmap FILE --terrain-smoothing METRES --terrain-shape plane|plateau --environment-cell-size METRES --scatter-settings FILE --spacing METRES --attempts-per-point N --profiles FILE --size METRES --seed UINT64 --density PERCENT --species maple,birch,oak --temperature C --grade-percent GRADE --elevation METRES --reference-elevation METRES --cooling-per-km C --no-competition --no-shade --post-suitability --no-composition --abundance | --no-abundance --output PLAN.json --svg PLOT.svg");
             return 0;
         }
         if (key == "--no-competition" || key == "--no-shade" || key == "--post-suitability" || key == "--no-composition" || key == "--no-abundance" || key == "--abundance")
@@ -41,7 +41,7 @@ try
     }
     else
     {
-        string profilePath = Option("--profiles", Path.Combine(AppContext.BaseDirectory, "foliage-model.v1.json"));
+        string profilePath = Option("--profiles", Path.Combine(AppContext.BaseDirectory, "vegetation-environment.v1.json"));
         using var document = JsonDocument.Parse(File.ReadAllText(profilePath));
         if (document.RootElement.GetProperty("schemaVersion").GetInt32() != 1
             || document.RootElement.GetProperty("algorithmVersion").GetString() != FoliageGenerator.AlgorithmVersion)
@@ -52,9 +52,9 @@ try
     VegetationSet? vegetationSet = null;
     if (options.TryGetValue("--vegetation-set", out var setId))
     {
-        if (resolved == null) throw new ArgumentException("Use --asset-catalog with --vegetation-set.");
+
         if (options.ContainsKey("--species")) throw new ArgumentException("Choose --vegetation-set or --species.");
-        vegetationSet = VegetationSetCatalog.Load(Option("--sets", Path.Combine(AppContext.BaseDirectory,"vegetation-sets.v1.json")),setId);
+        vegetationSet = VegetationSetCatalog.Load(Option("--sets", Path.Combine(AppContext.BaseDirectory, "vegetation-sets.v1.json")), setId);
         profiles = vegetationSet.Apply(profiles);
     }
     if (options.TryGetValue("--species", out var selected))
@@ -85,9 +85,23 @@ try
         ResolveShade = !flags.Contains("--no-shade"),
         Boundary = new[] { new Position2(0, 0), new Position2(side, 0), new Position2(side, side), new Position2(0, side) }
     };
+    if (options.TryGetValue("--workspace", out var workspacePath))
+    {
+        if (!options.TryGetValue("--district", out var districtId)) throw new ArgumentException("--workspace requires --district ID.");
+        var conflicting = new[] { "--profiles", "--asset-catalog", "--botanical-catalog", "--adapter-settings", "--vegetation-set", "--sets", "--species", "--density", "--temperature", "--reference-elevation", "--cooling-per-km", "--seed", "--size" };
+        if (conflicting.Any(options.ContainsKey)) throw new ArgumentException("Workspace supplies profiles, boundary, seed, density and climate; remove conflicting options.");
+        if (options.ContainsKey("--generator") && options["--generator"] != "proton") throw new ArgumentException("Workspace planning uses Proton.");
+        var workspace = TreeDistrict.SettingsModel.Parse(File.ReadAllText(workspacePath));
+        if ((int?)workspace["schemaVersion"] != 1) throw new ArgumentException("Unsupported workspace schema.");
+        var district = workspace["districts"]?.OfType<Newtonsoft.Json.Linq.JObject>().SingleOrDefault(d => (string?)d["id"] == districtId)
+            ?? throw new ArgumentException("District not found: " + districtId);
+        request = TreeDistrict.DistrictGenerationAdapter.Create(district, (Newtonsoft.Json.Linq.JObject)workspace["city"]!, (double?)workspace["gameTemperatureC"]);
+        profiles = request.Species.ToArray();
+    }
+    else if (options.ContainsKey("--district")) throw new ArgumentException("--district requires --workspace.");
     using var cancellation = new CancellationTokenSource();
     Console.CancelKeyPress += (_, e) => { e.Cancel = true; cancellation.Cancel(); };
-    string generator = Option("--generator", "original");
+    string generator = Option("--generator", "proton");
     if (generator != "original" && generator != "proton") throw new ArgumentException("Unknown generator.");
     ProtonScatterSettings? scatterSettings = null;
     if (generator == "proton")
@@ -103,9 +117,19 @@ try
         scatterSettings.AttemptsPerPoint = int.Parse(Option("--attempts-per-point",
             scatterSettings.AttemptsPerPoint.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
     }
+    var heightmapPath = options.TryGetValue("--heightmap", out var inputHeightmap) ? inputHeightmap : null;
+    var heightmap = heightmapPath == null ? null : HeightmapTerrain.Load(heightmapPath);
+    if (heightmap != null)
+    {
+        if (options.ContainsKey("--terrain-shape") || options.ContainsKey("--grade-percent")
+            || options.ContainsKey("--terrain-smoothing") || options.ContainsKey("--elevation"))
+            throw new ArgumentException("Heightmap cannot be combined with synthetic terrain options.");
+        foreach (var corner in request.Boundary) heightmap.Sample(corner);
+    }
     var stopwatch = System.Diagnostics.Stopwatch.StartNew();
     GroundSample Sample(Position2 p)
     {
+        if (heightmap != null) return heightmap.Sample(p);
         if (terrainShape == "plane") return new GroundSample(elevation + p.X * grade / 100, slopeDegrees);
         double run = Math.Clamp(p.X - rampStartM, 0, rampEndM - rampStartM);
         double derivative = p.X >= rampStartM && p.X < rampEndM ? 1 : 0;
@@ -149,21 +173,29 @@ try
     {
         var provider = new PlacementEnvironmentProvider(Sample, request.Climate, environment);
         var evaluator = new VegetationSuitabilityEvaluator();
-        var samples = new[] { new Position2(side*.2,side/2), new Position2(side/2,side/2), new Position2(side*.8,side/2) };
-        Save(inspectionPath, JsonSerializer.Serialize(new {
-            schemaVersion = 1, vegetationSet, request.Climate, request.Terrain,
+        var samples = new[] { new Position2(side * .2, side / 2), new Position2(side / 2, side / 2), new Position2(side * .8, side / 2) };
+        Save(inspectionPath, JsonSerializer.Serialize(new
+        {
+            schemaVersion = 1,
+            vegetationSet,
+            request.Climate,
+            request.Terrain,
             note = "Three proposed locations, not existing plants. Unknown inputs remain visible in source records; neutral scores are not proven tolerance.",
-            vegetation = profiles.Select(profile => new {
-                profile, source = resolved?.Single(p => p.Profile.Id == profile.Id),
-                samples = samples.Select(position => new {
-                    position, environment = provider.Sample(position),
-                    suitability = evaluator.Evaluate(profile,provider.Sample(position),request.Terrain)
+            vegetation = profiles.Select(profile => new
+            {
+                profile,
+                source = resolved?.Single(p => p.Profile.Id == profile.Id),
+                samples = samples.Select(position => new
+                {
+                    position,
+                    environment = provider.Sample(position),
+                    suitability = evaluator.Evaluate(profile, provider.Sample(position), request.Terrain)
                 })
             })
-        },json));
+        }, json));
     }
     if (options.TryGetValue("--output", out var output))
-        Save(output, JsonSerializer.Serialize(new { schemaVersion = 1, generator, vegetationSet, scatterSettings, environmentGrid = environment == null ? null : new { environment.CellSizeM, environment.Columns, environment.Rows, environment.SampleCount }, request, terrain = new { shape = terrainShape, baseElevationM = elevation, gradePercent = grade, slopeDegrees, rampStartM, rampEndM, smoothingM }, result }, json));
+        Save(output, JsonSerializer.Serialize(new { schemaVersion = 1, generator, vegetationSet, scatterSettings, environmentGrid = environment == null ? null : new { environment.CellSizeM, environment.Columns, environment.Rows, environment.SampleCount }, request, terrain = new { shape = heightmap == null ? terrainShape : "heightmap", heightmapPath, baseElevationM = elevation, gradePercent = grade, slopeDegrees, rampStartM, rampEndM, smoothingM }, result }, json));
     if (options.TryGetValue("--svg", out var svgPath))
     {
         string F(double n) => n.ToString("0.###", CultureInfo.InvariantCulture);
@@ -172,12 +204,14 @@ try
         var ordered = profiles.OrderBy(p => p.Id, StringComparer.Ordinal).ToArray();
         var colors = ordered.Select((p, i) => (p.Id, Color: palette[i % palette.Length])).ToDictionary(p => p.Id, p => p.Color);
         var profilesById = profiles.ToDictionary(p => p.Id);
-        var svg = new StringBuilder($"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"900\" height=\"960\" viewBox=\"0 0 900 960\"><rect width=\"900\" height=\"960\" fill=\"#f5f3ed\"/><text x=\"30\" y=\"28\" font-family=\"sans-serif\" font-size=\"18\">{Escape(generator == "proton" ? "ProtonScatter port" : "Original generator")} · {F(side)} m square · seed {request.Seed}</text>");
-        double scale = 840 / side;
+        double minX = request.Boundary.Min(p => p.X), minZ = request.Boundary.Min(p => p.Z);
+        double width = request.Boundary.Max(p => p.X) - minX, depth = request.Boundary.Max(p => p.Z) - minZ;
+        var svg = new StringBuilder($"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"900\" height=\"960\" viewBox=\"0 0 900 960\"><rect width=\"900\" height=\"960\" fill=\"#f5f3ed\"/><text x=\"30\" y=\"28\" font-family=\"sans-serif\" font-size=\"18\">{Escape(generator == "proton" ? "ProtonScatter port" : "Original generator")} · {F(width)} × {F(depth)} m bounds · seed {request.Seed}</text>");
+        double scale = 840 / Math.Max(width, depth);
         svg.Append("<defs><clipPath id=\"plot\"><rect x=\"30\" y=\"50\" width=\"840\" height=\"840\"/></clipPath></defs><g clip-path=\"url(#plot)\">");
         foreach (var p in result.Placements.OrderBy(p => profilesById[p.SpeciesId].MatureHeightM))
         {
-            double x = 30 + p.Position.X * scale, y = 50 + p.Position.Z * scale;
+            double x = 30 + (p.Position.X - minX) * scale, y = 50 + (p.Position.Z - minZ) * scale;
             svg.Append($"<circle cx=\"{F(x)}\" cy=\"{F(y)}\" r=\"{F(profilesById[p.SpeciesId].CrownRadiusM * scale)}\" fill=\"{colors[p.SpeciesId]}\" fill-opacity=\"0.25\" stroke=\"{colors[p.SpeciesId]}\" stroke-width=\"0.5\"/><circle cx=\"{F(x)}\" cy=\"{F(y)}\" r=\"1.5\" fill=\"{colors[p.SpeciesId]}\"/>");
         }
         svg.Append("</g><rect x=\"30\" y=\"50\" width=\"840\" height=\"840\" fill=\"none\" stroke=\"#555\"/>");
@@ -188,7 +222,7 @@ try
     return 0;
 }
 catch (Exception error) when (error is ArgumentException || error is InvalidOperationException || error is IOException
-    || error is JsonException || error is FormatException || error is OverflowException || error is OperationCanceledException)
+    || error is Newtonsoft.Json.JsonException || error is JsonException || error is FormatException || error is OverflowException || error is OperationCanceledException)
 {
     Console.Error.WriteLine(error.Message);
     return 1;

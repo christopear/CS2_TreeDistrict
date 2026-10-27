@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <Compile Include="../../tools/TreeDistrict.Foliage.Cli/HeightmapTerrain.cs" Link="HeightmapTerrain.cs" />
     <Compile Include="../../tools/TreeDistrict.Foliage.Cli/VegetationSetCatalog.cs" Link="VegetationSetCatalog.cs" />
     <None Include="../../data/vegetation-sets.v1.json" Link="vegetation-sets.v1.json" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="../../tools/TreeDistrict.Foliage.Cli/VegetationCatalogAdapter.cs" Link="VegetationCatalogAdapter.cs" />

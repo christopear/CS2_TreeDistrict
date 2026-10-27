@@ -34,8 +34,10 @@ namespace TreeDistrict
                 profile["matureSpacingM"] = Math.Max(1, (double)mature["canopyRadiusM"] * 2);
                 asset["profile"] = profile;
                 double total = ages.Sum(a => (bool)a["enabled"] ? (double)a["densityPercent"] : 0);
-                asset["ages"] = new JArray(ages.Select(a => new JObject {
-                    ["id"] = a["id"], ["name"] = a["name"],
+                asset["ages"] = new JArray(ages.Select(a => new JObject
+                {
+                    ["id"] = a["id"],
+                    ["name"] = a["name"],
                     ["proportionPercent"] = total > 0 && (bool)a["enabled"] ? (double)a["densityPercent"] * 100 / total : 0
                 }));
             }

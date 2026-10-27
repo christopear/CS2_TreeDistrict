@@ -24,10 +24,23 @@ const withDistrict = () =>
         boundary,
     });
 describe("editor domain", () => {
-    it("loads Field Maple with one species profile and age proportions", () => {
+    it("adds new built-ins on reload without overwriting saved district profiles", () => {
+        const state = withDistrict();
+        state.library = [state.library[0]];
+        state.districts[0].working.assets[0].profile.matureSpacingM = 8;
+        const loaded = deserialize(serialize(state));
+        expect(loaded.library).toHaveLength(7);
+        expect(loaded.districts[0]).toEqual(state.districts[0]);
+        const nz = loaded.library.find(
+            (entry) => entry.id === "builtin:nz-regenerating-bush",
+        )!;
+        expect(nz.set.assets[0].profile.temperature.optimum).toBe(12);
+        expect(nz.set.assets[0].profile.limits.maxSlopeDegrees).toBe(60);
+    });
+    it("loads London Plane with one species profile and age proportions", () => {
         expect(catalogSchema.safeParse(catalog).success).toBe(true);
         expect(catalog.assets[0].placeholder).toBe(false);
-        expect(catalog.assets[0].profile.matureSpacingM).toBe(8);
+        expect(catalog.assets[0].profile.matureSpacingM).toBe(9.2802);
     });
     it("snapshots settings per district without aliasing", () => {
         const state = withDistrict();
@@ -113,8 +126,13 @@ describe("editor domain", () => {
             name: "My mix",
             newId: "user:mix",
         });
-        expect(next.library[1].set.assets[0].profile.heightM).toBe(7);
-        expect(next.library[1].set.climate).toEqual({ coolingCPerKm: 5 });
+        expect(
+            next.library.find((entry) => entry.id === "user:mix")!.set.assets[0]
+                .profile.heightM,
+        ).toBe(7);
+        expect(
+            next.library.find((entry) => entry.id === "user:mix")!.set.climate,
+        ).toEqual({ coolingCPerKm: 5 });
         expect(modified(next.districts[0])).toBe(false);
     });
     it("updating a library set preserves other district snapshots and baselines", () => {

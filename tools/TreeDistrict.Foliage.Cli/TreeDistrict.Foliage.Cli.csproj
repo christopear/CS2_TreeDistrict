@@ -8,6 +8,10 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <Compile Include="../../game/TreeDistrict/SettingsModel.cs" Link="SettingsModel.cs" />
+    <Compile Include="../../game/TreeDistrict/DistrictGenerationAdapter.cs" Link="DistrictGenerationAdapter.cs" />
+    <None Include="../../data/vegetation-environment.v1.json" Link="vegetation-environment.v1.json" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="../../src/TreeDistrict.Core/TreeDistrict.Core.csproj" />
     <None Include="../../data/foliage-model.v1.json" Link="foliage-model.v1.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

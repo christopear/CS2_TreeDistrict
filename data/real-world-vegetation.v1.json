@@ -9,7 +9,8 @@
     "lightPreference": "Qualitative exposure preference; not a measured shade mortality curve.",
     "crownDensity": "Qualitative source description when available; does not equal canopy opacity.",
     "null": "Not established by the reviewed sources; not zero, unlimited tolerance, or an inferred default.",
-    "quantitativeModelInputs": "Deliberately unset until a defined model and suitable measurements exist. FAO ecological ranges are preserved separately, not coerced into game curves."
+    "quantitativeModelInputs": "Deliberately unset until a defined model and suitable measurements exist. FAO ecological ranges are preserved separately, not coerced into game curves.",
+    "authoredRuntimeProfilesRef": "Separate researched-context/model-default layer. QuantitativeModelInputs here remain empirical unknowns rather than silently being replaced by estimates."
   },
   "sources": {
     "malus-domestica": {
@@ -2268,6 +2269,12 @@
         "matureSpacingM": 8,
         "basis": "User-requested 10 m interpretation; 8 m crown approximates the measured mesh and published spread. Spacing is a provisional planting target, not a measured biological requirement.",
         "runtimeProfile": "london-plane.json"
+      },
+      "runtimeIdentityCorrection": {
+        "scientificName": "Platanus × acerifolia (syn. Platanus × hispanica)",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/platanus-x-acerifolia/",
+        "reason": "User clarified that the CS2 Field Maple label refers to London plane. Historical Acer campestre observations below are retained as legacy research and must not be applied to the London-plane runtime profile.",
+        "authoredProfileRef": "vegetation-environment.v1.json#cs2:NA_LondonPlaneTree01"
       }
     },
     {
@@ -2740,5 +2747,6 @@
       },
       "notes": []
     }
-  ]
+  ],
+  "authoredRuntimeProfilesRef": "vegetation-environment.v1.json"
 }

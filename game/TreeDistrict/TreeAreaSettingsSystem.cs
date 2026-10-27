@@ -43,8 +43,7 @@ namespace TreeDistrict
             base.OnCreate();
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TreeDistrict.Catalog"))
             using (var reader = new StreamReader(stream)) _catalog = SettingsModel.Parse(reader.ReadToEnd());
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TreeDistrict.LondonPlane"))
-            using (var reader = new StreamReader(stream)) _catalog = ProfileMigration.Catalog(_catalog, SettingsModel.Parse(reader.ReadToEnd()));
+
             _prefabs = World.GetOrCreateSystemManaged<PrefabSystem>();
             _tools = World.GetOrCreateSystemManaged<ToolSystem>();
             _selection = World.GetOrCreateSystemManaged<SelectedInfoUISystem>();

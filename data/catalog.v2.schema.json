@@ -143,12 +143,12 @@
                 "properties": {
                   "minElevationM": {
                     "type": "number",
-                    "minimum": -2000,
+                    "minimum": -10000,
                     "maximum": 20000
                   },
                   "maxElevationM": {
                     "type": "number",
-                    "minimum": -2000,
+                    "minimum": -10000,
                     "maximum": 20000
                   },
                   "maxSlopeDegrees": {
@@ -278,12 +278,12 @@
                 "properties": {
                   "minElevationM": {
                     "type": "number",
-                    "minimum": -2000,
+                    "minimum": -10000,
                     "maximum": 20000
                   },
                   "maxElevationM": {
                     "type": "number",
-                    "minimum": -2000,
+                    "minimum": -10000,
                     "maximum": 20000
                   },
                   "maxSlopeDegrees": {
@@ -399,12 +399,12 @@
                           "properties": {
                             "minElevationM": {
                               "type": "number",
-                              "minimum": -2000,
+                              "minimum": -10000,
                               "maximum": 20000
                             },
                             "maxElevationM": {
                               "type": "number",
-                              "minimum": -2000,
+                              "minimum": -10000,
                               "maximum": 20000
                             },
                             "maxSlopeDegrees": {

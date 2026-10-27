@@ -79,16 +79,18 @@ internal static class VegetationCatalogAdapter
                 throw new ArgumentException("Missing preferred spacing for " + asset.Id);
             var limits = input.ElevationSurvivalLimitsM;
             if (limits != null && limits.Length != 2) throw new ArgumentException("Elevation limits require [min,max].");
-            var profile = new SpeciesProfile {
-                Id = asset.Id, CandidatesPerHectare = 100,
+            var profile = new SpeciesProfile
+            {
+                Id = asset.Id,
+                CandidatesPerHectare = 100,
                 PreferredSpacingRadiusM = asset.PlacementDefaults.PreferredSpacingRadiusM,
                 MatureHeightM = measurements.Max(m => m.HeightM),
-                CrownRadiusM = measurements.Max(m => Math.Max(m.WidthM,m.DepthM)/2),
+                CrownRadiusM = measurements.Max(m => Math.Max(m.WidthM, m.DepthM) / 2),
                 Temperature = input.TemperatureSuitabilityCurveC,
                 Slope = input.SlopeSuitabilityCurveDegrees ?? defaults.Slope,
-                Terrain = new TerrainRules(limits?[0] ?? -10000, limits?[1] ?? 10000,90),
-                ExclusionRadiusM = (input.MinimumTrunkSpacingM ?? 0)/2,
-                CrownOpacity = (input.CanopyOpacityPercent ?? 0)/100,
+                Terrain = new TerrainRules(limits?[0] ?? -10000, limits?[1] ?? 10000, 90),
+                ExclusionRadiusM = (input.MinimumTrunkSpacingM ?? 0) / 2,
+                CrownOpacity = (input.CanopyOpacityPercent ?? 0) / 100,
                 Ages = new[] { new AgeWeight { Id = measurements[0].Stage } }
             };
             var decisions = new List<string> {
@@ -100,8 +102,8 @@ internal static class VegetationCatalogAdapter
                 "Shade tolerance is retained for inspection; no automatic mortality conversion. Missing opacity/trunk spacing use 0 (effect disabled)."
             };
             if (botanical == null) decisions.Add("No botanical record matched this asset ID.");
-            resolved.Add(new Resolved(profile,decisions.ToArray(),rawAssets[asset.Id],
-                rawBotany.TryGetValue(asset.Id,out var raw) ? raw : null));
+            resolved.Add(new Resolved(profile, decisions.ToArray(), rawAssets[asset.Id],
+                rawBotany.TryGetValue(asset.Id, out var raw) ? raw : null));
         }
         return resolved;
     }

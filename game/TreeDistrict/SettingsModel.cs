@@ -1,3 +1,4 @@
+#nullable disable
 using System;
 using System.Linq;
 using Newtonsoft.Json;
@@ -138,7 +139,7 @@ namespace TreeDistrict
         private static void Limits(JToken value)
         {
             var obj = Object(value);
-            if (Number(obj["minElevationM"], -2000, 20000) > Number(obj["maxElevationM"], -2000, 20000)) throw new ArgumentException("Inverted elevation limits.");
+            if (Number(obj["minElevationM"], -10000, 20000) > Number(obj["maxElevationM"], -10000, 20000)) throw new ArgumentException("Inverted elevation limits.");
             Number(obj["maxSlopeDegrees"], 0, 90);
         }
         private static void Response(JToken value, bool slope)

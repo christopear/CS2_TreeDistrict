@@ -3,28 +3,49 @@
 A Cities: Skylines II mod in development: draw a vegetation area, choose its tree
 and shrub mix, and populate it according to density, elevation and slope rules.
 
-**Status: native Tree Area, in-game settings editor and manual Field Maple generation.**
-The repository includes a runnable district editor preview, versioned JSON
-species profiles, a CS2 AreaPrefab/settings adapter, and the portable C# core.
-See [what works and the Windows integration contract](docs/ui-scaffold.md).
+**Status: researched profiles, mixed-vegetation presets, editor and portable ProtonScatter-derived solver.**
+The editor now shares a generated catalogue with the game: 26 vegetation assets,
+six regional/low-cover mixes, plus the retained single London Plane preset.
+NZ proxy profiles override the base profiles only inside that set. Saved districts
+retain their existing settings until a new preset is explicitly selected.
 
-Generation creates ordinary native trees and keeps remapped ownership references
-in area records. Regenerate replaces owned trees; remove clears them; deleting an
-area also removes its owned trees. Bake + delete releases the trees and removes
-the area after confirmation. Boundary edits do not automatically regenerate.
-The user has confirmed visible generation after the native update-order fix;
-save/reload, native deletion and the previously reported second-area crash still
-need a complete regression pass before release.
+The native game path still uses the earlier single-London-Plane planner. Mixed
+prefab spawning, real terrain/occupancy integration with the new solver, save/load
+and native deletion need Windows validation. Unsupported game mixes fail before
+replacing existing trees. The portable editor-to-solver bridge is tested on Ubuntu;
+it does not yet replace that native generation path.
 
-[Field Maple data](data/london-plane.json) uses the game's London Plane prefab as
-a user-selected field-maple analogue. Its compact model is 10 m tall with an 8 m
-crown and provisional 8 m spacing. Published botanical observations remain
-separate from those adaptations. The filename, prefab and built-in set IDs remain
-stable for compatibility; existing saved settings keep their previous values.
-The current jittered-grid placement can still look orchard-like.
-The in-game adapter currently supports this one prefab only. The independent
-generator described below now supports mixed species and shade; it has not yet
-been connected to the game adapter or UX.
+
+### Editor-to-solver checkpoint (Ubuntu)
+
+```bash
+python3 scripts/build-editor-catalog.py --check
+npm --prefix ui run dev
+# Export a preview workspace, then choose an ID from its districts array:
+bash scripts/dotnet.sh run --project tools/TreeDistrict.Foliage.Cli -- --workspace /path/to/workspace.json --district DISTRICT_ID --output artifacts/editor-plan.json --svg artifacts/editor-plan.svg
+python3 scripts/demo-noisy-vegetation.py
+python3 scripts/demo-nz-vegetation.py
+```
+
+The workspace command uses the district's actual polygon, seed, species weights,
+profile/age settings, overall density and inherited/overridden city climate.
+Add `--heightmap FILE` to supply sampled terrain; otherwise it uses a flat test
+surface. It creates a plan only, not game entities. Shade filtering stays off;
+nonzero clumping is rejected explicitly. This is the same pure adapter available
+to the future native integration (`DistrictGenerationAdapter`).
+
+Edit the authored profiles/presets, then run `python3 scripts/build-editor-catalog.py`
+to refresh the shared editor/game catalogue. Do not hand-edit the generated file.
+For the noisy demo scripts, create an isolated plotting environment once:
+
+```bash
+python3 -m venv .tools/plot-env
+.tools/plot-env/bin/pip install -r scripts/requirements-plots.txt
+.tools/plot-env/bin/python scripts/demo-nz-vegetation.py
+```
+
+All output goes under ignored `artifacts/` and is reproducible from the committed
+scripts and data.
 
 ## Standalone foliage generator
 
@@ -32,14 +53,17 @@ been connected to the game adapter or UX.
 CS2, Unity, UI or JSON dependency. It plans candidates, terrain/environment
 filtering, physical competition, overhead shade and visual ages, returning native
 C# placements and per-species rejection counts. No game entities are created.
-[Model presets](data/foliage-model.v1.json) provide separate provisional maple,
-birch and oak inputs; they do not overwrite the old runtime defaults.
+The CLI defaults to `ProtonFoliageGenerator` and the authored annual-temperature,
+slope and per-asset hard limits in [environment profiles](data/vegetation-environment.v1.json).
+Composition is enabled; experimental pre-placement abundance remains off.
+The older algorithm and demo profiles remain available explicitly with
+`--generator original --profiles data/foliage-model.v1.json`.
 
 Run the .NET 10 demonstration from the repository root after loading `scripts/env.ps1`:
 
 ```powershell
 dotnet run --project tools/TreeDistrict.Foliage.Cli -c Release -- --seed 42 --output artifacts/foliage/seed42.json --svg artifacts/foliage/seed42.svg
-dotnet run --project tools/TreeDistrict.Foliage.Cli -c Release -- --species maple,birch --density 50 --no-shade
+dotnet run --project tools/TreeDistrict.Foliage.Cli -c Release -- --vegetation-set european-woodland --density 50 --no-shade
 dotnet run --project tools/TreeDistrict.Foliage.Cli -c Release -- --grade-percent 30 --elevation 100 --output artifacts/foliage/slope30.json
 dotnet test tests/TreeDistrict.Core.Tests -c Release --filter FullyQualifiedName~FoliageGeneratorTests --logger "console;verbosity=detailed"
 ```
@@ -48,11 +72,10 @@ The CLI defaults to an empty, flat 200 m square. `--grade-percent` adds a simple
 inclined terrain plane, and `--elevation` sets its starting altitude. Grade is
 percent (rise/run), not degrees: 30% is about 16.7°. `--profiles` accepts a model JSON;
 `--size`, `--seed`, `--density`, `--species` and `--temperature` adjust its scenario.
-`--no-competition` and `--no-shade` isolate stages for testing. The presets omit
-temperature curves, so climate does not thin these example forests. Custom profiles
-can use `--temperature`, `--reference-elevation` and `--cooling-per-km` to apply the
-optional altitude-temperature model. The checks proceed from flat 2D, to slopes
-without climate penalties, to a separately controlled thermal gradient.
+`--no-competition` and `--no-shade` isolate stages for testing. The authored temperature curves use a long-term annual reference; `--temperature`,
+`--reference-elevation` and `--cooling-per-km` control the lapse-rate model.
+`--asset-catalog` remains an explicit raw research/measurement inspection adapter;
+its generic fallbacks are not the authored runtime profiles.
 JSON exports include the inputs, algorithm version, final placements and counts;
 SVG exports show tree positions and model crowns. Library callers can supply any
 simple polygon, terrain callback and existing-tree snapshot, including outside

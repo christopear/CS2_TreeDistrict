@@ -227,7 +227,7 @@ The tree weights remain identical between paired presets; adding smaller bushes 
 change final packing. Low cover means short vegetation, not reduced density.
 No additional ecology curves or culling behaviour are introduced.
 
-Select with `--vegetation-set ID` alongside `--asset-catalog`; optionally use `--sets`
+Select with `--vegetation-set ID` alongside `--asset-catalog` or `--profiles`; optionally use `--sets`
 for an edited preset file. `--density` overrides preset density. `--species` and
 `--vegetation-set` are mutually exclusive. Selected members are copied before weights
 are applied; the input catalogue is not mutated. Both plan and inspection JSON record
@@ -244,3 +244,37 @@ bash scripts/dotnet.sh run --project tools/TreeDistrict.Foliage.Cli --no-restore
 These presets belong to the v0.2.0 standalone pipeline pass. The existing in-game/UI
 catalogue has not been migrated; connecting this preset library to that editor is a
 separate integration step. Existing saved sets remain unchanged.
+
+## NZ regenerating bush and local profile overrides
+
+`nz-regenerating-bush` adds a sixth starter preset. It uses Wild Green Bush 01 (weight
+55), Wild Green Bush 02 (30), and Linden (15) as low scrub, taller scrub and a small
+canopy tree. Kāramū/mānuka/kōhūhū are loose structural references; existing meshes and
+seasonal behaviour remain unchanged. Numerical ecological values are authoring proxies.
+
+Each member's optional `profileOverrides` contains `temperature`, `slope` and/or
+`maximumSlopeDegrees`. Absent fields inherit. Overrides are applied to a deep copy;
+source profiles, other sets, measured dimensions and preferred spacing are preserved.
+Temperature/slope curves must be finite and ordered; hard caps must be in [0,90].
+Both `--profiles` and `--asset-catalog` can now be combined with `--vegetation-set`.
+
+| Member | Annual-temperature min / optimum / max °C | Full slope score through | Hard cap |
+|---|---|---:|---:|
+| Low scrub | -4 / 12 / 27 | 30° | 60° |
+| Taller scrub | -6 / 10 / 25 | 30° | 60° |
+| Small canopy tree | 2 / 14 / 27 | 20° | 45° |
+
+The scrub slope response declines towards zero at 80°, the tree response at 65°;
+hard caps apply first. These are set-local defaults, not changes to the general profiles.
+The preset inherits city/run climate; it does not force a reference temperature.
+
+```sh
+bash scripts/dotnet.sh run --project tools/TreeDistrict.Foliage.Cli --no-restore -- \
+  --generator proton --profiles data/vegetation-environment.v1.json \
+  --vegetation-set nz-regenerating-bush --temperature 12 --no-shade \
+  --output artifacts/nz-regenerating-bush.json
+```
+
+The same preset also works with the measured asset catalogue input, since its own
+environmental overrides supply the required curves and caps. In-game editor integration
+remains separate, as for the other standalone presets.

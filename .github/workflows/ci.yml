@@ -45,6 +45,7 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run check
+      - run: python3 ../scripts/build-editor-catalog.py --check
       - run: npm run schema
       - run: git diff --exit-code -- ../data
       - run: npx playwright install --with-deps chromium

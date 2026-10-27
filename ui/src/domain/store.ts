@@ -1,5 +1,4 @@
-import manifest from "../../../data/catalog.v2.json";
-import londonPlane from "../../../data/london-plane.json";
+import manifest from "../../../data/editor-catalog.v2.json";
 import { migrateLegacyWorkspace } from "./migrate";
 import {
     catalogSchema,
@@ -11,21 +10,7 @@ import {
     type Climate,
 } from "./schema";
 
-export const catalog = catalogSchema.parse({
-    ...manifest,
-    assets: [londonPlane.asset],
-    sets: manifest.sets.map((entry) => ({
-        ...entry,
-        set: {
-            ...entry.set,
-            assets: entry.set.assetIds.map((id) => {
-                if (id !== londonPlane.asset.id)
-                    throw new Error("Unknown catalog asset");
-                return londonPlane.asset;
-            }),
-        },
-    })),
-});
+export const catalog = catalogSchema.parse(manifest);
 export function clone<T>(value: T): T {
     return JSON.parse(JSON.stringify(value)) as T;
 }
@@ -256,7 +241,15 @@ export function serialize(state: Workspace): string {
 export function deserialize(json: string): Workspace {
     if (json.length > 5_000_000)
         throw new Error("Settings document is too large");
-    const state = workspaceSchema.parse(migrateLegacyWorkspace(JSON.parse(json)));
+    const state = workspaceSchema.parse(
+        migrateLegacyWorkspace(JSON.parse(json)),
+    );
+    // Refresh only the library choices. Saved district/draft snapshots and their
+    // baselines stay intact until the user explicitly selects a new preset.
+    state.library = [
+        ...clone(catalog.sets),
+        ...state.library.filter((entry) => !entry.builtIn),
+    ];
     for (const d of state.districts) {
         const error = polygonError(d.boundary);
         if (error) throw new Error(error);

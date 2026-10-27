@@ -48,7 +48,7 @@ namespace TreeDistrict.Core.Foliage
                 if (!Polygon.Finite(radius)) throw new InvalidOperationException("Local spacing radius overflow.");
                 return radius;
             }
-            double diagonal = Math.Sqrt(Math.Pow(domain.MaxX-domain.MinX,2) + Math.Pow(domain.MaxZ-domain.MinZ,2));
+            double diagonal = Math.Sqrt(Math.Pow(domain.MaxX - domain.MinX, 2) + Math.Pow(domain.MaxZ - domain.MinZ, 2));
             bool Valid(Position2 p, double radius)
             {
                 if (!domain.Contains(p)) return false;
@@ -91,7 +91,7 @@ namespace TreeDistrict.Core.Foliage
             int initial = LocalChoice(start, Choose());
             if (initial >= 0) Add(start, initial);
             else if (initial == -1)
-                active.Add(new VegetationPoint { Position = start, Radius = radii.Where((r,i) => weights[i]>0).Min(), Species = -1 });
+                active.Add(new VegetationPoint { Position = start, Radius = radii.Where((r, i) => weights[i] > 0).Min(), Species = -1 });
             int restarts = 0;
             while (active.Count > 0 || (selectLocally != null && encounteredBarrenGround && restarts < 64))
             {
@@ -101,8 +101,8 @@ namespace TreeDistrict.Core.Foliage
                 if (active.Count == 0)
                 {
                     restarts++; Work();
-                    var seed = new Position2(domain.MinX + random.Unit() * (domain.MaxX-domain.MinX),
-                        domain.MinZ + random.Unit() * (domain.MaxZ-domain.MinZ));
+                    var seed = new Position2(domain.MinX + random.Unit() * (domain.MaxX - domain.MinX),
+                        domain.MinZ + random.Unit() * (domain.MaxZ - domain.MinZ));
                     if (!domain.Contains(seed)) continue;
                     int seedSpecies = LocalChoice(seed, Choose());
                     if (seedSpecies >= 0 && Valid(seed, RadiusAt(seed, seedSpecies))) Add(seed, seedSpecies);
