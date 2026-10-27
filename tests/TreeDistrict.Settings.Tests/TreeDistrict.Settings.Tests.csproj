@@ -14,6 +14,7 @@
     <Compile Include="../../game/TreeDistrict/PlacementPlanner.cs" Link="PlacementPlanner.cs" />
     <None Include="../../data/catalog.v2.json" Link="catalog.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../data/london-plane.json" Link="london-plane.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../fixtures/set-population.v1.json" Link="set-population.v1.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../data/placeholder-catalog.v1.json" Link="legacy.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

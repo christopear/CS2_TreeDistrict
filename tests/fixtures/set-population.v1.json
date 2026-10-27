@@ -1,0 +1,401 @@
+{
+  "schemaVersion": 1,
+  "model": "population-contract-v1",
+  "assumptions": [
+    "Main plot: 200 m by 200 m = 40000 square metres = 4 hectares.",
+    "100% means baseline candidate opportunities, not full canopy cover or a species quota.",
+    "Proxy pitch = 1.25 times mature spacing; baseline = 10000 / pitch squared per hectare. Birch/oak spacings are test assumptions, not researched ecological requirements.",
+    "Candidate budgets are pre-competition; uncontested placement isolates density and uniform suitability with competition/shade/clumping disabled.",
+    "Count bands: mean +/- max(10% of mean, 4 sqrt(mean)), rounded outward. A conservative Poisson-scale engineering allowance, not an ecological confidence interval.",
+    "Production 10000-tree cap is not permission to silently truncate larger candidate budgets."
+  ],
+  "profiles": {
+    "maple": {
+      "assetId": "cs2:NA_LondonPlaneTree01",
+      "label": "Compact field maple (game London Plane)",
+      "spacingM": 8,
+      "referencePitchM": 10,
+      "opportunitiesPerHectare": 100
+    },
+    "birch": {
+      "assetId": "cs2:BirchTree01",
+      "label": "Silver birch proxy",
+      "spacingM": 12,
+      "referencePitchM": 15,
+      "opportunitiesPerHectare": 44.44444444444444
+    },
+    "oak": {
+      "assetId": "cs2:OakTree01",
+      "label": "Oak proxy",
+      "spacingM": 16,
+      "referencePitchM": 20,
+      "opportunitiesPerHectare": 25
+    }
+  },
+  "scenarios": [
+    {
+      "id": "maple-full",
+      "status": "currentSingle",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 100,
+      "speciesDensityPercent": {
+        "maple": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 400.0,
+          "minimum": 320,
+          "maximum": 480
+        }
+      }
+    },
+    {
+      "id": "maple-half",
+      "status": "currentSingle",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 50,
+      "speciesDensityPercent": {
+        "maple": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 200.0,
+          "minimum": 143,
+          "maximum": 257
+        }
+      }
+    },
+    {
+      "id": "maple-quarter-species",
+      "status": "currentSingle",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 100,
+      "speciesDensityPercent": {
+        "maple": 25
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 100.0,
+          "minimum": 60,
+          "maximum": 140
+        }
+      }
+    },
+    {
+      "id": "maple-combined-multipliers",
+      "status": "currentSingle",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 60,
+      "speciesDensityPercent": {
+        "maple": 50
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 120.0,
+          "minimum": 76,
+          "maximum": 164
+        }
+      }
+    },
+    {
+      "id": "maple-zero-overall",
+      "status": "currentSingle",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 0,
+      "speciesDensityPercent": {
+        "maple": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 0.0,
+          "minimum": 0,
+          "maximum": 0
+        }
+      }
+    },
+    {
+      "id": "maple-half-suitable",
+      "status": "currentSingle",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 100,
+      "speciesDensityPercent": {
+        "maple": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 0.5,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 200.0,
+          "minimum": 143,
+          "maximum": 257
+        }
+      }
+    },
+    {
+      "id": "maple-half-eligible-area",
+      "status": "currentSingle",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 100,
+      "speciesDensityPercent": {
+        "maple": 100
+      },
+      "eligibleAreaFraction": 0.5,
+      "uniformSuitability": 1,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 200.0,
+          "minimum": 143,
+          "maximum": 257
+        }
+      }
+    },
+    {
+      "id": "maple-quarter-area",
+      "status": "currentSingle",
+      "areaM2": 10000.0,
+      "overallDensityPercent": 100,
+      "speciesDensityPercent": {
+        "maple": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 100.0,
+          "minimum": 60,
+          "maximum": 140
+        }
+      }
+    },
+    {
+      "id": "maple-zero-species",
+      "status": "futureZeroSpecies",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 100,
+      "speciesDensityPercent": {
+        "maple": 0
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 0.0,
+          "minimum": 0,
+          "maximum": 0
+        }
+      }
+    },
+    {
+      "id": "maple-birch-candidates",
+      "status": "futureMixed",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 100,
+      "speciesDensityPercent": {
+        "maple": 100,
+        "birch": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "candidateBudget",
+      "expected": {
+        "maple": {
+          "mean": 400.0,
+          "minimum": 320,
+          "maximum": 480
+        },
+        "birch": {
+          "mean": 177.77777777777777,
+          "minimum": 124,
+          "maximum": 232
+        }
+      }
+    },
+    {
+      "id": "three-species-candidates",
+      "status": "futureMixed",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 100,
+      "speciesDensityPercent": {
+        "maple": 100,
+        "birch": 100,
+        "oak": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "candidateBudget",
+      "expected": {
+        "maple": {
+          "mean": 400.0,
+          "minimum": 320,
+          "maximum": 480
+        },
+        "birch": {
+          "mean": 177.77777777777777,
+          "minimum": 124,
+          "maximum": 232
+        },
+        "oak": {
+          "mean": 100.0,
+          "minimum": 60,
+          "maximum": 140
+        }
+      }
+    },
+    {
+      "id": "three-species-half-overall",
+      "status": "futureMixed",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 50,
+      "speciesDensityPercent": {
+        "maple": 100,
+        "birch": 100,
+        "oak": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "candidateBudget",
+      "expected": {
+        "maple": {
+          "mean": 200.0,
+          "minimum": 143,
+          "maximum": 257
+        },
+        "birch": {
+          "mean": 88.88888888888889,
+          "minimum": 51,
+          "maximum": 127
+        },
+        "oak": {
+          "mean": 50.0,
+          "minimum": 21,
+          "maximum": 79
+        }
+      }
+    },
+    {
+      "id": "independent-species-multipliers",
+      "status": "futureMixed",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 60,
+      "speciesDensityPercent": {
+        "maple": 50,
+        "birch": 25,
+        "oak": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "candidateBudget",
+      "expected": {
+        "maple": {
+          "mean": 120.0,
+          "minimum": 76,
+          "maximum": 164
+        },
+        "birch": {
+          "mean": 26.666666666666664,
+          "minimum": 6,
+          "maximum": 48
+        },
+        "oak": {
+          "mean": 60.0,
+          "minimum": 29,
+          "maximum": 91
+        }
+      }
+    },
+    {
+      "id": "disabled-birch-does-not-redistribute",
+      "status": "futureMixed",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 100,
+      "speciesDensityPercent": {
+        "maple": 100,
+        "birch": 0
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 1,
+      "stage": "candidateBudget",
+      "expected": {
+        "maple": {
+          "mean": 400.0,
+          "minimum": 320,
+          "maximum": 480
+        },
+        "birch": {
+          "mean": 0.0,
+          "minimum": 0,
+          "maximum": 0
+        }
+      }
+    },
+    {
+      "id": "mixed-uncontested-half-suitable",
+      "status": "futureMixed",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 50,
+      "speciesDensityPercent": {
+        "maple": 100,
+        "birch": 100
+      },
+      "eligibleAreaFraction": 1,
+      "uniformSuitability": 0.5,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 100.0,
+          "minimum": 60,
+          "maximum": 140
+        },
+        "birch": {
+          "mean": 44.44444444444444,
+          "minimum": 17,
+          "maximum": 72
+        }
+      }
+    },
+    {
+      "id": "mixed-uncontested-half-eligible",
+      "status": "futureMixed",
+      "areaM2": 40000.0,
+      "overallDensityPercent": 50,
+      "speciesDensityPercent": {
+        "maple": 100,
+        "birch": 100
+      },
+      "eligibleAreaFraction": 0.5,
+      "uniformSuitability": 1,
+      "stage": "uncontestedPlacement",
+      "expected": {
+        "maple": {
+          "mean": 100.0,
+          "minimum": 60,
+          "maximum": 140
+        },
+        "birch": {
+          "mean": 44.44444444444444,
+          "minimum": 17,
+          "maximum": 72
+        }
+      }
+    }
+  ]
+}

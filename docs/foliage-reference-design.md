@@ -230,6 +230,81 @@ settings and asset references, not meshes. Save stable input versions with a pla
 
 ## 6. Proposed generation pipeline
 
+### Population contracts: a 200 m by 200 m test plot
+
+`tests/fixtures/set-population.v1.json` records versioned, hand-calculated
+population scenarios. These are model expectations, not field surveys or Unreal
+output samples. `SetPopulationTests.cs` exercises the actual current planner;
+`test_population_contracts.py` checks fixture arithmetic and independent density
+semantics. Passing fixture checks does **not** mean mixed generation works.
+
+The controlled plot is flat, empty, at the species' optimum temperature, with
+clumping disabled and no shade/competition unless a scenario explicitly says so.
+The main plot is 40,000 m², or 4 hectares. The initial reference normalization is
+`opportunities/ha = 10,000 / pitch²`, where `pitch = 1.25 × matureSpacingM`.
+This matches the prototype's density scale without requiring future placement to
+use a grid. It is not a packing optimum or a claim that crowns cannot overlap.
+The 1.25 allowance is provisional; changing it requires a deliberate contract
+version change, not silently updating expectations to match generator output.
+
+| Test profile | Spacing proxy | Reference pitch | Baseline opportunities/ha | Opportunities in 4 ha |
+|---|---:|---:|---:|---:|
+| Compact field maple (game London Plane) | 8 m | 10 m | 100 | 400 |
+| Silver birch | 12 m | 15 m | 44.44 | 178 |
+| Oak | 16 m | 20 m | 25 | 100 |
+
+Birch and oak spacings are explicit test proxies, not botanical measurements or
+new runtime defaults. Candidate counts are independent: adding birch does not
+halve maple's request. A maple/birch set at 100% requests 400/178 candidates;
+adding oak requests another 100. Halving overall density halves each request.
+At 60% overall, with maple/birch/oak at 50%/25%/100%, requests are 120/27/60.
+Age proportions divide each species' population after placement and do not add
+extra candidate populations.
+
+Fixtures distinguish **candidate budgets** from **uncontested final counts**.
+Uniform 50% suitability or 50% eligible area halves expected uncontested counts.
+With both species at 100% and overall density at 50%, then uniform suitability
+at 50%, the uncontested maple/birch means are 100/44, with engineering bands
+60–140 and 17–72. These are deliberately isolated tests with interactions
+disabled; they are not predictions for a competing mixed forest.
+
+Current planner tests run eight fixed, varied seeds. Each run must fall within
+`mean ± max(10% of mean, 4 × sqrt(mean))`, rounded outward. The eight-seed average
+uses `mean ± max(3% of mean, 4 × sqrt(mean / 8))`. The square-root allowance is a
+conservative Poisson-scale tolerance for small populations; the relative floor
+allows boundary/placement differences. These are engineering bands, not ecological
+confidence intervals. Expected zero is exactly zero. Age counts must be within
+one tree of their requested proportions. Existing containment and spacing tests
+remain complementary. A quarter-area case checks that counts scale with area.
+
+The 200 m plot avoids today's 10,000-tree safety cap. Scaling the three-species
+baseline to 1 km² would request about 16,944 candidates before competition. A
+future planner must expose requested, rejected and accepted counts rather than
+silently truncate or force a quota. All-species-zero currently throws: an
+explicitly skipped contract records the desired empty-plan behaviour. Mixed
+planner tests are explicitly skipped until it supports asset IDs and stage counts,
+never emulated by a toy generator merely to obtain green tests.
+
+When mixed placement is implemented, connect the fixtures through a test adapter
+and enable the skipped tests. Then add shared-space competition experiments:
+
+- Equal-footprint/equal-height species should not gain an advantage from list
+  order; permuting input order must preserve results by stable asset ID.
+- A disabled or entirely unsuitable species must not change another's candidates.
+- Accepted plus rejected counts must reconcile with candidates, by species and
+  rejection reason; rejected candidates must not be redistributed as a quota.
+- Age-only edits must preserve species counts and positions under mature spacing.
+- Test taller-neighbour shade, mixed-footprint exclusion and increasing density
+  separately. Do not demand linear final counts once competition saturates space.
+- Derive final-count bands only after choosing pairwise exclusion, conflict order
+  and the shade response. Compare against analytical bounds or independently
+  derived controlled arrangements, not snapshots of the implementation under test.
+
+This deliberately leaves realistic shared-space final populations undecided:
+spacing alone cannot tell us how many maples survive beneath birch canopy.
+Density normalization is a proposed calibration target; species competition is
+still an open model choice.
+
 This is an original simplification to prototype. It is not the Unreal seed-growth
 algorithm or EcoBrush's statistical synthesis algorithm.
 

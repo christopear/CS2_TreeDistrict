@@ -25,6 +25,15 @@ The current jittered-grid placement can still look orchard-like.
 Shade competition is not implemented; generation currently supports this one prefab
 only. Older design documents describe planned features beyond this prototype.
 
+Population expectations live in [set scenarios](tests/fixtures/set-population.v1.json)
+and the [population contract design](docs/foliage-reference-design.md#population-contracts-a-200-m-by-200-m-test-plot).
+The main plot is 200 m × 200 m. Tests compare the real single-species planner to
+independent count envelopes across eight seeds; mixed-species cases specify future
+candidate budgets and controlled final counts, with unsupported execution tests
+explicitly skipped. They do not claim to predict shared-space competition yet.
+Run the population tests with `dotnet test tests/TreeDistrict.Settings.Tests -c Release --filter FullyQualifiedName~SetPopulationTests --logger "console;verbosity=detailed"`
+and the fixture checks with `py -3 -m unittest discover -s tests -p 'test_population_contracts.py'`.
+
 ## Installed vegetation measurements
 
 [Base-game vegetation catalogue](data/base-game-vegetation.v1.json) contains
