@@ -18,6 +18,12 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <Compile Include="../../tools/TreeDistrict.Foliage.Cli/VegetationSetCatalog.cs" Link="VegetationSetCatalog.cs" />
+    <None Include="../../data/vegetation-sets.v1.json" Link="vegetation-sets.v1.json" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="../../tools/TreeDistrict.Foliage.Cli/VegetationCatalogAdapter.cs" Link="VegetationCatalogAdapter.cs" />
+    <None Include="../../data/base-game-vegetation.v1.json" Link="base-game-vegetation.v1.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/real-world-vegetation.v1.json" Link="real-world-vegetation.v1.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/vegetation-adapter.v1.json" Link="vegetation-adapter.v1.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../data/foliage-model.v1.json" Link="foliage-model.v1.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../fixtures/set-population.v1.json" Link="set-population.v1.json" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="../../src/TreeDistrict.Core/TreeDistrict.Core.csproj" />

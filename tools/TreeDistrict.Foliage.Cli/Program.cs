@@ -8,14 +8,14 @@ try
 {
     var options = new Dictionary<string, string>(StringComparer.Ordinal);
     var flags = new HashSet<string>(StringComparer.Ordinal);
-    var valueOptions = new[] { "--profiles", "--size", "--seed", "--density", "--species", "--temperature", "--output", "--svg",
+    var valueOptions = new[] { "--vegetation-set", "--sets", "--asset-catalog", "--botanical-catalog", "--adapter-settings", "--inspect-inputs", "--profiles", "--size", "--seed", "--density", "--species", "--temperature", "--output", "--svg",
         "--terrain-smoothing", "--terrain-shape", "--environment-cell-size", "--generator", "--scatter-settings", "--spacing", "--attempts-per-point", "--grade-percent", "--elevation", "--reference-elevation", "--cooling-per-km" };
     for (int i = 0; i < args.Length; i++)
     {
         string key = args[i];
         if (key == "--help")
         {
-            Console.WriteLine("Standalone foliage planner: --generator original|proton --terrain-smoothing METRES --terrain-shape plane|plateau --environment-cell-size METRES --scatter-settings FILE --spacing METRES --attempts-per-point N --profiles FILE --size METRES --seed UINT64 --density PERCENT --species maple,birch,oak --temperature C --grade-percent GRADE --elevation METRES --reference-elevation METRES --cooling-per-km C --no-competition --no-shade --post-suitability --no-composition --abundance | --no-abundance --output PLAN.json --svg PLOT.svg");
+            Console.WriteLine("Standalone foliage planner: --vegetation-set ID --sets FILE --asset-catalog FILE --botanical-catalog FILE --adapter-settings FILE --inspect-inputs REPORT.json --generator original|proton --terrain-smoothing METRES --terrain-shape plane|plateau --environment-cell-size METRES --scatter-settings FILE --spacing METRES --attempts-per-point N --profiles FILE --size METRES --seed UINT64 --density PERCENT --species maple,birch,oak --temperature C --grade-percent GRADE --elevation METRES --reference-elevation METRES --cooling-per-km C --no-competition --no-shade --post-suitability --no-composition --abundance | --no-abundance --output PLAN.json --svg PLOT.svg");
             return 0;
         }
         if (key == "--no-competition" || key == "--no-shade" || key == "--post-suitability" || key == "--no-composition" || key == "--no-abundance" || key == "--abundance")
@@ -29,13 +29,34 @@ try
     double Number(string key, double fallback) => options.TryGetValue(key, out var value)
         ? double.Parse(value, CultureInfo.InvariantCulture) : fallback;
     var json = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, WriteIndented = true };
-    string profilePath = Option("--profiles", Path.Combine(AppContext.BaseDirectory, "foliage-model.v1.json"));
-    using var document = JsonDocument.Parse(File.ReadAllText(profilePath));
-    if (document.RootElement.GetProperty("schemaVersion").GetInt32() != 1
-        || document.RootElement.GetProperty("algorithmVersion").GetString() != FoliageGenerator.AlgorithmVersion)
-        throw new ArgumentException("Unsupported profile schema or algorithm version.");
-    var profiles = JsonSerializer.Deserialize<SpeciesProfile[]>(document.RootElement.GetProperty("profiles").GetRawText(), json)
-        ?? throw new ArgumentException("Missing profiles.");
+    IReadOnlyList<VegetationCatalogAdapter.Resolved>? resolved = null;
+    SpeciesProfile[] profiles;
+    if (options.TryGetValue("--asset-catalog", out var assetCatalog))
+    {
+        if (options.ContainsKey("--profiles")) throw new ArgumentException("Choose --asset-catalog or --profiles.");
+        resolved = VegetationCatalogAdapter.Load(assetCatalog,
+            Option("--botanical-catalog", Path.Combine(AppContext.BaseDirectory, "real-world-vegetation.v1.json")),
+            Option("--adapter-settings", Path.Combine(AppContext.BaseDirectory, "vegetation-adapter.v1.json")));
+        profiles = resolved.Select(p => p.Profile).ToArray();
+    }
+    else
+    {
+        string profilePath = Option("--profiles", Path.Combine(AppContext.BaseDirectory, "foliage-model.v1.json"));
+        using var document = JsonDocument.Parse(File.ReadAllText(profilePath));
+        if (document.RootElement.GetProperty("schemaVersion").GetInt32() != 1
+            || document.RootElement.GetProperty("algorithmVersion").GetString() != FoliageGenerator.AlgorithmVersion)
+            throw new ArgumentException("Unsupported profile schema or algorithm version.");
+        profiles = JsonSerializer.Deserialize<SpeciesProfile[]>(document.RootElement.GetProperty("profiles").GetRawText(), json)
+            ?? throw new ArgumentException("Missing profiles.");
+    }
+    VegetationSet? vegetationSet = null;
+    if (options.TryGetValue("--vegetation-set", out var setId))
+    {
+        if (resolved == null) throw new ArgumentException("Use --asset-catalog with --vegetation-set.");
+        if (options.ContainsKey("--species")) throw new ArgumentException("Choose --vegetation-set or --species.");
+        vegetationSet = VegetationSetCatalog.Load(Option("--sets", Path.Combine(AppContext.BaseDirectory,"vegetation-sets.v1.json")),setId);
+        profiles = vegetationSet.Apply(profiles);
+    }
     if (options.TryGetValue("--species", out var selected))
     {
         var ids = selected.Split(',').Select(s => s.Trim()).ToHashSet(StringComparer.Ordinal);
@@ -58,7 +79,7 @@ try
     {
         Seed = ulong.Parse(Option("--seed", "42"), CultureInfo.InvariantCulture),
         Species = profiles,
-        OverallDensityPercent = Number("--density", 100),
+        OverallDensityPercent = Number("--density", vegetationSet?.OverallDensityPercent ?? 100),
         Climate = new ClimateProfile(temperature, Number("--reference-elevation", 0), Number("--cooling-per-km", 6.5)),
         ResolveCompetition = !flags.Contains("--no-competition"),
         ResolveShade = !flags.Contains("--no-shade"),
@@ -101,12 +122,13 @@ try
         return new GroundSample(elevation + run * grade / 100,
             Math.Atan(Math.Abs(derivative * grade / 100)) * 180 / Math.PI);
     }
-    var environment = generator == "proton"
-        ? LocalEnvironmentGrid.FromTerrain(request.Boundary, Sample, request.Climate,
+    var coordinator = generator == "proton"
+        ? new FoliageGenerationCoordinator(request, Sample,
             Number("--environment-cell-size", LocalEnvironmentGrid.DefaultCellSizeM), cancellationToken: cancellation.Token)
         : null;
-    var result = generator == "proton"
-        ? new ProtonFoliageGenerator().Generate(request, Sample, scatterSettings!, cancellation.Token, environment)
+    var environment = coordinator?.Environment;
+    var result = coordinator != null
+        ? coordinator.Generate(scatterSettings!, cancellation.Token)
         : new FoliageGenerator().Generate(request, Sample, cancellation.Token);
     stopwatch.Stop();
     Console.WriteLine($"Planning: {stopwatch.Elapsed.TotalMilliseconds:F1} ms (includes first-call/JIT overhead)");
@@ -123,8 +145,25 @@ try
         File.WriteAllText(absolute, content);
         Console.WriteLine("Wrote " + absolute);
     }
+    if (options.TryGetValue("--inspect-inputs", out var inspectionPath))
+    {
+        var provider = new PlacementEnvironmentProvider(Sample, request.Climate, environment);
+        var evaluator = new VegetationSuitabilityEvaluator();
+        var samples = new[] { new Position2(side*.2,side/2), new Position2(side/2,side/2), new Position2(side*.8,side/2) };
+        Save(inspectionPath, JsonSerializer.Serialize(new {
+            schemaVersion = 1, vegetationSet, request.Climate, request.Terrain,
+            note = "Three proposed locations, not existing plants. Unknown inputs remain visible in source records; neutral scores are not proven tolerance.",
+            vegetation = profiles.Select(profile => new {
+                profile, source = resolved?.Single(p => p.Profile.Id == profile.Id),
+                samples = samples.Select(position => new {
+                    position, environment = provider.Sample(position),
+                    suitability = evaluator.Evaluate(profile,provider.Sample(position),request.Terrain)
+                })
+            })
+        },json));
+    }
     if (options.TryGetValue("--output", out var output))
-        Save(output, JsonSerializer.Serialize(new { schemaVersion = 1, generator, scatterSettings, environmentGrid = environment == null ? null : new { environment.CellSizeM, environment.Columns, environment.Rows, environment.SampleCount }, request, terrain = new { shape = terrainShape, baseElevationM = elevation, gradePercent = grade, slopeDegrees, rampStartM, rampEndM, smoothingM }, result }, json));
+        Save(output, JsonSerializer.Serialize(new { schemaVersion = 1, generator, vegetationSet, scatterSettings, environmentGrid = environment == null ? null : new { environment.CellSizeM, environment.Columns, environment.Rows, environment.SampleCount }, request, terrain = new { shape = terrainShape, baseElevationM = elevation, gradePercent = grade, slopeDegrees, rampStartM, rampEndM, smoothingM }, result }, json));
     if (options.TryGetValue("--svg", out var svgPath))
     {
         string F(double n) => n.ToString("0.###", CultureInfo.InvariantCulture);

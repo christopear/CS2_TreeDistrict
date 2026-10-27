@@ -21,6 +21,10 @@ namespace TreeDistrict.Core.Foliage
     /// No simulation or growth. All clearance and canopy dimensions are mature dimensions.</summary>
     public sealed class ProtonFoliageGenerator
     {
+        private readonly IVegetationSuitabilityEvaluator evaluator;
+        public ProtonFoliageGenerator(IVegetationSuitabilityEvaluator? evaluator = null)
+        { this.evaluator = evaluator ?? new VegetationSuitabilityEvaluator(); }
+
         public const string AlgorithmVersion = "foliage-proton-poisson-v1";
         private sealed class Item
         {
@@ -41,6 +45,7 @@ namespace TreeDistrict.Core.Foliage
             if (!Polygon.Finite(settings.SpacingM) || settings.SpacingM < .001
                 || settings.AttemptsPerPoint < 1 || settings.AttemptsPerPoint > 1000)
                 throw new ArgumentException("Invalid ProtonScatter spacing or attempt limit.");
+            var conditions = new PlacementEnvironmentProvider(sample, request.Climate, environment);
             var region = new Polygon(request.Boundary);
             var profiles = request.Species.OrderBy(p => p.Id, StringComparer.Ordinal).ToArray();
             var counts = profiles.Select(p => new SpeciesCounts { SpeciesId = p.Id }).ToList();
@@ -63,26 +68,15 @@ namespace TreeDistrict.Core.Foliage
             {
                 LocalVegetationResponse Conditions(Position2 position)
                 {
-                    var ground = sample(position);
-                    if (!Polygon.Finite(ground.ElevationM)) return new LocalVegetationResponse(new double[profiles.Length], 0);
-                    double temperature = request.Climate?.TemperatureAt(ground.ElevationM) ?? ground.TemperatureC;
-                    double slope = ground.SlopeDegrees;
-                    if (environment != null)
-                    {
-                        if (!environment.TrySample(position, out var local))
-                            throw new InvalidOperationException("Environment field does not cover a proposed placement.");
-                        temperature = local.TemperatureC; slope = local.SlopeDegrees;
-                    }
+                    var local = conditions.Sample(position);
                     var choiceWeights = new double[profiles.Length];
                     double suitableWeight = 0;
                     for (int i = 0; i < profiles.Length; i++)
                     {
-                        double suitability = VegetationSuitability.Evaluate(request, profiles[i], ground, temperature, slope);
-                        suitableWeight += weights[i] * suitability;
-                        bool eligible = Polygon.Finite(temperature) && Polygon.Finite(slope)
-                            && request.Terrain.Allows(ground.ElevationM, ground.SlopeDegrees, ground.IsWater, ground.IsBlocked)
-                            && profiles[i].Terrain.Allows(ground.ElevationM, ground.SlopeDegrees, ground.IsWater, ground.IsBlocked);
-                        choiceWeights[i] = eligible ? weights[i] * (settings.EnableLocalComposition ? suitability : 1) : 0;
+                        var suitability = evaluator.Evaluate(profiles[i], local, request.Terrain);
+                        suitableWeight += suitability.Allowed ? weights[i] * suitability.Score : 0;
+                        choiceWeights[i] = suitability.Allowed
+                            ? weights[i] * (settings.EnableLocalComposition ? suitability.Score : 1) : 0;
                     }
                     return new LocalVegetationResponse(choiceWeights,
                         settings.EnableLocalAbundance ? suitableWeight / totalWeight : 1);
@@ -116,21 +110,15 @@ namespace TreeDistrict.Core.Foliage
                 while (species < profiles.Length - 1 && ticket >= weights[species]) ticket -= weights[species++];
                 if (vegetationPoints != null) species = vegetationPoints[i].Species;
                 var p = profiles[species]; var count = counts[species]; count.Candidates++;
-                var ground = sample(points[i]);
+                var local = conditions.Sample(points[i]);
+                var ground = local.Ground;
                 if (!request.Terrain.Allows(ground.ElevationM, ground.SlopeDegrees, ground.IsWater, ground.IsBlocked)
                     || !p.Terrain.Allows(ground.ElevationM, ground.SlopeDegrees, ground.IsWater, ground.IsBlocked))
                 { count.TerrainRejected++; continue; }
-                double temperature = request.Climate?.TemperatureAt(ground.ElevationM) ?? ground.TemperatureC;
-                double slope = ground.SlopeDegrees;
-                if (environment != null)
-                {
-                    if (!environment.TrySample(points[i], out var local))
-                        throw new InvalidOperationException("Environment field does not cover a proposed placement.");
-                    temperature = local.TemperatureC;
-                    slope = local.SlopeDegrees;
-                }
-                double suitable = VegetationSuitability.Evaluate(request, p, ground, temperature, slope);
-                if (!settings.UsePrePlacementSuitability && (!Polygon.Finite(temperature) || random.Unit() >= suitable)) { count.EnvironmentRejected++; continue; }
+                var suitability = evaluator.Evaluate(p, local, request.Terrain);
+                if (!suitability.Allowed) { count.EnvironmentRejected++; continue; }
+                if (!settings.UsePrePlacementSuitability && random.Unit() >= suitability.Score)
+                { count.EnvironmentRejected++; continue; }
                 candidates.Add(new Item { Profile = p, Count = count, Position = points[i], Index = i, Elevation = ground.ElevationM });
             }
             double maxRadius = Math.Max(profiles.Select(p => Math.Max(p.CrownRadiusM, p.ExclusionRadiusM)).Max(),

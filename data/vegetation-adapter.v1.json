@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "description": "Prototype mapping policy, not researched species tolerances. Temperature stays neutral when no authored curve exists; cold hardiness and FAO crop observations are retained for inspection only.",
+  "kinds": {
+    "tree": { "slope": { "minimum": -1, "optimum": 10, "maximum": 70 } },
+    "shrub": { "slope": { "minimum": -1, "optimum": 55, "maximum": 90 } }
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "passVersion": "0.2.0",
+  "description": "Prototype solver presets. Relative proposal weights are not final count or coverage percentages. Regions are visual/game themes, not verified native ranges. Existing authored profiles and sampler defaults remain unchanged.",
+  "sets": [
+    {
+      "id": "low-cover",
+      "name": "Bushes & flowers",
+      "description": "Wild green and flowering bushes; low cover means no trees, not low density.",
+      "overallDensityPercent": 100,
+      "members": [
+        {
+          "assetId": "cs2:GreenBushWild01",
+          "weight": 35
+        },
+        {
+          "assetId": "cs2:GreenBushWild02",
+          "weight": 15
+        },
+        {
+          "assetId": "cs2:FlowerBushWild01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:FlowerBushWild02",
+          "weight": 25
+        }
+      ]
+    },
+    {
+      "id": "european-woodland",
+      "name": "European trees + bushes",
+      "description": "Temperate European-themed mixed woodland; broadleaf-led with a smaller conifer component.",
+      "overallDensityPercent": 100,
+      "members": [
+        {
+          "assetId": "cs2:OakTree01",
+          "weight": 30
+        },
+        {
+          "assetId": "cs2:BirchTree01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:EU_AlderTree01",
+          "weight": 10
+        },
+        {
+          "assetId": "cs2:EU_PoplarTree01",
+          "weight": 15
+        },
+        {
+          "assetId": "cs2:PineTree01",
+          "weight": 10
+        },
+        {
+          "assetId": "cs2:SpruceTree01",
+          "weight": 10
+        },
+        {
+          "assetId": "cs2:GreenBushWild01",
+          "weight": 30
+        },
+        {
+          "assetId": "cs2:GreenBushWild02",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "id": "european-trees",
+      "name": "European trees",
+      "description": "Same European tree weights, without an understory.",
+      "overallDensityPercent": 100,
+      "members": [
+        {
+          "assetId": "cs2:OakTree01",
+          "weight": 30
+        },
+        {
+          "assetId": "cs2:BirchTree01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:EU_AlderTree01",
+          "weight": 10
+        },
+        {
+          "assetId": "cs2:EU_PoplarTree01",
+          "weight": 15
+        },
+        {
+          "assetId": "cs2:PineTree01",
+          "weight": 10
+        },
+        {
+          "assetId": "cs2:SpruceTree01",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "id": "american-woodland",
+      "name": "American trees + bushes",
+      "description": "Game North American tree palette with shared wild-bush assets; a visual theme, not a native community.",
+      "overallDensityPercent": 100,
+      "members": [
+        {
+          "assetId": "cs2:NA_HickoryTree01",
+          "weight": 40
+        },
+        {
+          "assetId": "cs2:NA_LindenTree01",
+          "weight": 30
+        },
+        {
+          "assetId": "cs2:NA_LondonPlaneTree01",
+          "weight": 30
+        },
+        {
+          "assetId": "cs2:GreenBushWild01",
+          "weight": 30
+        },
+        {
+          "assetId": "cs2:GreenBushWild02",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "id": "american-trees",
+      "name": "American trees",
+      "description": "Same American-themed tree weights, without an understory.",
+      "overallDensityPercent": 100,
+      "members": [
+        {
+          "assetId": "cs2:NA_HickoryTree01",
+          "weight": 40
+        },
+        {
+          "assetId": "cs2:NA_LindenTree01",
+          "weight": 30
+        },
+        {
+          "assetId": "cs2:NA_LondonPlaneTree01",
+          "weight": 30
+        }
+      ]
+    }
+  ]
+}

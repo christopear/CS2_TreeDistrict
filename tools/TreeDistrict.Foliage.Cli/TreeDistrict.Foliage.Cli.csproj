@@ -12,6 +12,9 @@
     <None Include="../../data/foliage-model.v1.json" Link="foliage-model.v1.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="../../data/real-world-vegetation.v1.json" Link="real-world-vegetation.v1.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/vegetation-sets.v1.json" Link="vegetation-sets.v1.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/vegetation-adapter.v1.json" Link="vegetation-adapter.v1.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../data/proton-scatter.v1.json" Link="proton-scatter.v1.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
