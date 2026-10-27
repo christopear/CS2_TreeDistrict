@@ -102,18 +102,6 @@
       "publisher": "NC State Extension Plant Toolbox",
       "accessed": "2026-10-26"
     },
-    "sa-london-plane": {
-      "url": "https://plantselector.botanicgardens.sa.gov.au/Plants/Details/17914",
-      "title": "Platanus × acerifolia",
-      "publisher": "Botanic Gardens and State Herbarium of South Australia",
-      "accessed": "2026-10-26"
-    },
-    "rhs-london-plane": {
-      "url": "https://www.rhs.org.uk/plants/96764/platanus-%C3%97-hispanica/details",
-      "title": "Platanus × hispanica",
-      "publisher": "Royal Horticultural Society",
-      "accessed": "2026-10-26"
-    },
     "quercus-robur": {
       "url": "https://plants.ces.ncsu.edu/plants/quercus-robur/",
       "title": "quercus robur",
@@ -208,6 +196,24 @@
       "url": "https://plants.ces.ncsu.edu/plants/corylus-avellana/",
       "title": "corylus avellana",
       "publisher": "NC State Extension Plant Toolbox",
+      "accessed": "2026-10-26"
+    },
+    "vdb-field-maple": {
+      "url": "https://www.vdberk.co.uk/trees/acer-campestre/",
+      "title": "Acer campestre",
+      "publisher": "Van den Berk Nurseries",
+      "accessed": "2026-10-26"
+    },
+    "rhs-field-maple": {
+      "url": "https://www.rhs.org.uk/plants/166/acer-campestre/details",
+      "title": "Acer campestre",
+      "publisher": "Royal Horticultural Society",
+      "accessed": "2026-10-26"
+    },
+    "vdb-silver-birch": {
+      "url": "https://www.vdberk.co.uk/trees/betula-pendula/",
+      "title": "Betula pendula",
+      "publisher": "Van den Berk Nurseries",
       "accessed": "2026-10-26"
     }
   },
@@ -316,7 +322,7 @@
         "commonName": "Silver birch",
         "mappingStatus": "representative",
         "gameSpeciesConfirmed": false,
-        "selectionRationale": "European birch reference with a 7–10 m crown matching the narrow asset; published mature height exceeds the game adult mesh.",
+        "selectionRationale": "Silver birch retained: published 15–20 m landscape heights fit the approximately 16 m adult game mesh. Larger specimens remain valid observations.",
         "selectionMeasurement": {
           "catalog": "base-game-vegetation.v1.json",
           "meshName": "BirchTreeAdult01",
@@ -328,6 +334,31 @@
         "fit": "Approximate size/type analogue only; neither dimensions nor appearance prove species identity."
       },
       "sizeObservations": [
+        {
+          "heightM": [
+            15,
+            20
+          ],
+          "crownSpreadM": [
+            8,
+            12
+          ],
+          "original": {
+            "height": [
+              15,
+              20
+            ],
+            "spread": [
+              8,
+              12
+            ],
+            "unit": "m"
+          },
+          "sourceIds": [
+            "vdb-silver-birch"
+          ],
+          "context": "Published landscape height 15–20 m, with 30 m specimens also reported; not a biological maximum."
+        },
         {
           "heightM": [
             22,
@@ -372,7 +403,12 @@
           "kpu-birch"
         ]
       },
-      "growthRate": null,
+      "growthRate": {
+        "value": "fast",
+        "sourceIds": [
+          "vdb-silver-birch"
+        ]
+      },
       "coldHardiness": {
         "value": "Zone 2 (source labels -46 to -40 C)",
         "sourceIds": [
@@ -400,7 +436,8 @@
         "minimumTrunkSpacingM": null
       },
       "notes": [
-        "RHS describes height up to 25 m and spread greater than 8 m; source ranges describe different growing contexts."
+        "RHS describes height up to 25 m and spread greater than 8 m; source ranges describe different growing contexts.",
+        "The 15–20 m landscape reference is preferred for comparison with the game mesh; the earlier 22–30 m reference is retained, not treated as a minimum mature height."
       ]
     },
     {
@@ -2128,11 +2165,11 @@
       "kind": "tree",
       "researchStatus": "sourcedReference",
       "identity": {
-        "scientificName": "Platanus × hispanica",
-        "commonName": "London plane",
-        "mappingStatus": "commonNameMatch",
+        "scientificName": "Acer campestre",
+        "commonName": "Field maple",
+        "mappingStatus": "representative",
         "gameSpeciesConfirmed": false,
-        "selectionRationale": "Specific common name retained despite the much smaller game model; real-world dimensions are not rescaled.",
+        "selectionRationale": "User-selected field maple interpretation of the compact game asset labelled London Plane, based on size and crown appearance. This does not establish a developer labelling error.",
         "selectionMeasurement": {
           "catalog": "base-game-vegetation.v1.json",
           "meshName": "NA_LondonPlaneTreeAdult01",
@@ -2146,63 +2183,68 @@
       "sizeObservations": [
         {
           "heightM": [
-            20,
-            25
+            12,
+            12
           ],
           "crownSpreadM": [
-            18,
-            20
+            7,
+            8
           ],
           "original": {
             "height": [
-              20,
-              25
+              12,
+              12
             ],
             "spread": [
-              18,
-              20
+              7,
+              8
             ],
             "unit": "m"
           },
           "sourceIds": [
-            "sa-london-plane"
+            "vdb-field-maple"
           ],
-          "context": "Published landscape size range; not a biological maximum."
+          "context": "Nursery guidance gives circa 12 m height and 7–8 m width; RHS separately describes height over 12 m and spread 4–8 m. The 10 m model is an explicit adaptation, not a published species limit."
         }
       ],
       "foliage": {
-        "value": "deciduous",
+        "value": "deciduous broadleaf",
         "sourceIds": [
-          "sa-london-plane"
+          "rhs-field-maple"
         ]
       },
       "lightPreference": {
-        "value": "Full sun",
+        "value": "Full sun or partial shade",
         "sourceIds": [
-          "sa-london-plane"
+          "rhs-field-maple"
         ]
       },
       "soilAndMoisture": {
-        "value": "Well-drained soil; broad texture/pH tolerance; drought and pollution tolerant.",
+        "value": "Moist but well-drained; chalk, clay, loam or sand.",
         "sourceIds": [
-          "sa-london-plane"
+          "rhs-field-maple"
         ]
       },
       "growthRate": null,
       "coldHardiness": {
-        "value": "RHS H6 (-20 to -15 C category)",
+        "value": "RHS H6",
         "sourceIds": [
-          "rhs-london-plane"
+          "rhs-field-maple"
         ]
       },
-      "crownDensity": null,
+      "crownDensity": {
+        "value": "dense, irregular crown",
+        "sourceIds": [
+          "vdb-field-maple"
+        ]
+      },
       "timeToMatureSizeYears": {
         "value": [
-          20,
-          50
+          10,
+          20
         ],
         "sourceIds": [
-          "rhs-london-plane"
+          "rhs-field-maple"
         ]
       },
       "lifespanYears": null,
@@ -2215,7 +2257,18 @@
         "elevationSurvivalLimitsM": null,
         "minimumTrunkSpacingM": null
       },
-      "notes": []
+      "notes": [
+        "Game name and prefab ID remain London Plane for asset resolution. Field maple is the chosen botanical analogue.",
+        "The compact model retains field-maple growing preferences; climate and shade tolerances are not scaled with tree height."
+      ],
+      "modelAdaptation": {
+        "label": "Compact field maple",
+        "heightM": 10,
+        "crownDiameterM": 8,
+        "matureSpacingM": 8,
+        "basis": "User-requested 10 m interpretation; 8 m crown approximates the measured mesh and published spread. Spacing is a provisional planting target, not a measured biological requirement.",
+        "runtimeProfile": "london-plane.json"
+      }
     },
     {
       "id": "cs2:OakTree01",

@@ -424,9 +424,8 @@ export function Editor({
                         Add vegetation…
                     </Button>
                     <p className="td-help">
-                        London Plane defaults include sourced dimensions and
-                        estimated placement preferences. Research and actual
-                        game asset selection come later.
+                        Field Maple uses a compact 10 m profile with an 8 m
+                        crown and provisional placement preferences.
                     </p>
                     {set.assets.map((asset) => (
                         <div key={asset.id} className="td-asset">
@@ -688,7 +687,7 @@ export function Editor({
                             <>
                                 <h3>Add vegetation</h3>
                                 <p className="td-help">
-                                    London Plane is the first supported game
+                                    Field Maple is the first supported game
                                     asset.
                                 </p>
                                 <label className="td-field">

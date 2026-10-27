@@ -24,10 +24,10 @@ const withDistrict = () =>
         boundary,
     });
 describe("editor domain", () => {
-    it("loads London Plane with one species profile and age proportions", () => {
+    it("loads Field Maple with one species profile and age proportions", () => {
         expect(catalogSchema.safeParse(catalog).success).toBe(true);
         expect(catalog.assets[0].placeholder).toBe(false);
-        expect(catalog.assets[0].profile.matureSpacingM).toBe(20);
+        expect(catalog.assets[0].profile.matureSpacingM).toBe(8);
     });
     it("snapshots settings per district without aliasing", () => {
         const state = withDistrict();

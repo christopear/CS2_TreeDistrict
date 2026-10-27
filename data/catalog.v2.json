@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
-  "disclaimer": "London Plane: sourced dimensions and growing preferences, with explicitly estimated placement curves. Native game aging remains unchanged.",
+  "disclaimer": "Compact Field Maple: sourced growing preferences with an adapted 10 m height and provisional placement curves. Native game aging remains unchanged.",
   "cityDefaults": { "source": "manual", "referenceTemperatureC": 15, "referenceElevationM": 0, "coolingCPerKm": 6.5 },
   "sets": [{
     "id": "builtin:london-plane",
     "builtIn": true,
     "set": {
-      "name": "London Plane",
+      "name": "Field Maple",
       "overallDensityPercent": 75,
       "clumpingPercent": 0,
       "climate": {},

@@ -21,9 +21,10 @@ namespace TreeDistrict.Tests
             var catalog = Catalog();
             var plan = PlacementPlanner.Plan(Boundary, (JObject)catalog["sets"][0]["set"], (JObject)catalog["cityDefaults"], 1, Flat);
             Assert.NotEmpty(plan);
+            double spacing = (double)catalog["assets"][0]["profile"]["matureSpacingM"];
             foreach (var p in plan) Assert.True(PlacementPlanner.Contains(Boundary, p.X, p.Z));
             for (int i = 0; i < plan.Count; i++) for (int j = i + 1; j < plan.Count; j++)
-                Assert.True(Math.Pow(plan[i].X - plan[j].X, 2) + Math.Pow(plan[i].Z - plan[j].Z, 2) >= 400);
+                Assert.True(Math.Pow(plan[i].X - plan[j].X, 2) + Math.Pow(plan[i].Z - plan[j].Z, 2) >= spacing * spacing);
         }
         [Fact]
         public void AgesHaveCorrectProportionsAndDoNotChangePositionsOrCount()

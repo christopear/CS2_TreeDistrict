@@ -3,7 +3,7 @@
 A Cities: Skylines II mod in development: draw a vegetation area, choose its tree
 and shrub mix, and populate it according to density, elevation and slope rules.
 
-**Status: native Tree Area, in-game settings editor and manual London Plane generation.**
+**Status: native Tree Area, in-game settings editor and manual Field Maple generation.**
 The repository includes a runnable district editor preview, versioned JSON
 species profiles, a CS2 AreaPrefab/settings adapter, and the portable C# core.
 See [what works and the Windows integration contract](docs/ui-scaffold.md).
@@ -16,10 +16,13 @@ The user has confirmed visible generation after the native update-order fix;
 save/reload, native deletion and the previously reported second-area crash still
 need a complete regression pass before release.
 
-[London Plane data](data/london-plane.json) separates botanical evidence from
-provisional simulation values. The current jittered-grid placement and 20 m
-spacing are prototype assumptions and can look sparse and orchard-like.
-Shade competition is not implemented; generation currently supports London Plane
+[Field Maple data](data/london-plane.json) uses the game's London Plane prefab as
+a user-selected field-maple analogue. Its compact model is 10 m tall with an 8 m
+crown and provisional 8 m spacing. Published botanical observations remain
+separate from those adaptations. The filename, prefab and built-in set IDs remain
+stable for compatibility; existing saved settings keep their previous values.
+The current jittered-grid placement can still look orchard-like.
+Shade competition is not implemented; generation currently supports this one prefab
 only. Older design documents describe planned features beyond this prototype.
 
 ## Installed vegetation measurements
@@ -33,7 +36,7 @@ Prefab candidates are matched to locale names, not verified live mesh references
 The coverage report flags unmatched names and unconfirmed mesh groups.
 
 [Real-world reference profiles](data/real-world-vegetation.v1.json) cover the 15
-named trees and 10 shrubs, with 33 sources and per-field source references.
+named trees and 10 shrubs, with 34 sources and per-field source references.
 They record published height/spread, foliage, light, soil/moisture, growth and
 cold hardiness where available. Original units and differing source ranges are
 retained alongside metre conversions. Generic names use explicitly labelled
@@ -70,7 +73,7 @@ npm --prefix ui run dev
 
 Open http://127.0.0.1:5173. Pick a set, draw a district, then edit its settings.
 The preview stores settings in this browser and supports JSON export/import.
-London Plane is the first researched profile; numerical shade and environmental
+Field Maple is the first runtime profile; numerical shade and environmental
 curves remain provisional, as recorded alongside its source references.
 
 ```bash

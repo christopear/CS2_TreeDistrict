@@ -10,49 +10,85 @@
   },
   "asset": {
     "id": "cs2:NA_LondonPlaneTree01",
-    "name": "London Plane",
+    "name": "Field Maple",
     "prefabName": "NA_LondonPlaneTree01",
     "placeholder": false,
     "densityPercent": 100,
     "profile": {
-      "matureSpacingM": 20,
-      "heightM": 25,
-      "canopyRadiusM": 10,
+      "matureSpacingM": 8,
+      "heightM": 10,
+      "canopyRadiusM": 4,
       "canopyOpacityPercent": 60,
       "shadeTolerancePercent": 50,
-      "temperature": { "min": -10, "optimum": 18, "max": 40 },
-      "slope": { "min": 0, "optimum": 1, "max": 45 },
-      "limits": { "minElevationM": -500, "maxElevationM": 2500, "maxSlopeDegrees": 45 }
+      "temperature": {
+        "min": -10,
+        "optimum": 18,
+        "max": 40
+      },
+      "slope": {
+        "min": 0,
+        "optimum": 1,
+        "max": 45
+      },
+      "limits": {
+        "minElevationM": -500,
+        "maxElevationM": 2500,
+        "maxSlopeDegrees": 45
+      }
     },
     "ages": [
-      { "id": "young", "name": "Young", "proportionPercent": 10 },
-      { "id": "teen", "name": "Medium", "proportionPercent": 15 },
-      { "id": "mature", "name": "Mature", "proportionPercent": 70 },
-      { "id": "old", "name": "Old", "proportionPercent": 5 }
+      {
+        "id": "young",
+        "name": "Young",
+        "proportionPercent": 10
+      },
+      {
+        "id": "teen",
+        "name": "Medium",
+        "proportionPercent": 15
+      },
+      {
+        "id": "mature",
+        "name": "Mature",
+        "proportionPercent": 70
+      },
+      {
+        "id": "old",
+        "name": "Old",
+        "proportionPercent": 5
+      }
     ]
   },
   "evidence": {
-    "scientificName": "Platanus × hispanica (syn. Platanus × acerifolia)",
-    "foliage": "Deciduous broadleaf; crown spreads with age. A single year-round opacity is not a botanical constant.",
-    "typicalHeightM": [20, 25],
-    "typicalCrownDiameterM": [18, 20],
-    "timeToMaturityYears": [20, 50],
-    "sizeContext": "20–25 m height and 18–20 m spread are South Australian landscape guidance, not universal maxima. Virginia Tech lists 100 ft height and 80 ft spread (approximately 30.5 m and 24.4 m). Site, cultivar, age and pruning affect dimensions.",
-    "spacingContext": "Published crown spread does not establish a minimum trunk-to-trunk distance or a unique sustainable stand density. The current 20 m placement exclusion is a prototype modelling assumption, not CS2 asset geometry or a measured species requirement.",
+    "scientificName": "Acer campestre",
+    "gameAssetInterpretation": "User-selected field maple analogue for NA_LondonPlaneTree01; game species identity is unverified.",
+    "foliage": "Deciduous broadleaf with a compact, dense, irregular crown.",
+    "publishedSizeContext": "Nursery guidance gives circa 12 m height and 7–8 m width; RHS separately describes height over 12 m and spread 4–8 m. The 10 m model is an explicit adaptation, not a published species limit.",
+    "modelAdaptation": {
+      "label": "Compact field maple",
+      "heightM": 10,
+      "crownDiameterM": 8,
+      "matureSpacingM": 8,
+      "basis": "User-requested 10 m interpretation; 8 m crown approximates the measured mesh and published spread. Spacing is a provisional planting target, not a measured biological requirement.",
+      "runtimeProfile": "london-plane.json"
+    },
+    "timeToMaturityYears": [
+      10,
+      20
+    ],
+    "light": "Full sun or partial shade",
+    "soil": "Moist, well-drained; chalk, clay, loam or sand.",
+    "rhsHardiness": "H6; not a temperature suitability curve",
     "quantitativeShadeEvidence": {
       "canopyOpacityPercent": null,
       "shadeTolerancePercent": null,
-      "note": "The cited sources provide qualitative light preferences, not calibrated light-transmission or survival percentages. Runtime values 60 and 50 remain placeholders pending a defined light model and supporting measurements."
+      "note": "Runtime 60/50 remain provisional model inputs, not measured field-maple percentages."
     },
-    "rhsHardiness": "H6; winter minimum category -20 to -15 C, not an annual-temperature suitability curve",
-    "light": "Full sun preferred; partial shade tolerated",
-    "soil": "Broad soil tolerance; moist, well-drained soil preferred",
     "sources": [
-      "https://plantselector.botanicgardens.sa.gov.au/Plants/Details/17914",
-      "https://www.rhs.org.uk/plants/96764/platanus-%C3%97-hispanica/details",
-      "https://www.pubs.ext.vt.edu/2901/2901-1057/2901-1057.html"
+      "https://www.vdberk.co.uk/trees/acer-campestre/",
+      "https://www.rhs.org.uk/plants/166/acer-campestre/details"
     ],
     "reviewed": "2026-10-26",
-    "estimates": "20 m spacing is a planting choice informed by crown spread. Temperature and slope curves, elevation limits, canopy opacity and shade percentage are provisional authoring estimates, not measured survival thresholds. Native CS2 controls aging and survival; this profile only influences initial placement. Canopy/shade values are descriptive until shading simulation is implemented. Age percentages are user-selected initial proportions, not botanical observations."
+    "estimates": "10 m height is a user-requested compact model. The 8 m crown and 8 m spacing are modelling choices. Temperature/slope curves and elevation limits remain uncalibrated prototype values; they are not field-maple survival thresholds. Native CS2 controls aging and survival. Existing saved profiles are not rewritten."
   }
 }

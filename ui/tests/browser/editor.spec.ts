@@ -20,7 +20,7 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await page.getByLabel("Overall density (%)", { exact: true }).fill("42");
     await expect(
         page.getByRole("heading", {
-            name: "London Plane *",
+            name: "Field Maple *",
             exact: true,
         }),
     ).toBeVisible();
@@ -34,18 +34,18 @@ test("draw, edit, save, reselect, reload and remove district", async ({
         .getByRole("button", { name: "Set settings · 1 vegetation assets" })
         .click();
     await page
-        .getByRole("button", { name: "Remove London Plane" })
+        .getByRole("button", { name: "Remove Field Maple" })
         .click();
     await page
         .getByRole("button", { name: "Add vegetation…", exact: true })
         .click();
     await expect(
         page.getByRole("button", {
-            name: "Add London Plane",
+            name: "Add Field Maple",
         }),
     ).toBeVisible();
     await page
-        .getByRole("button", { name: "Add London Plane" })
+        .getByRole("button", { name: "Add Field Maple" })
         .click();
     await page
         .getByRole("button", { name: "City defaults", exact: true })
@@ -106,7 +106,7 @@ test("saving before replacement preserves edits and custom library survives a ne
     await page.getByLabel("Set name", { exact: true }).fill("Retained mix");
     await page.getByRole("button", { name: "Save new copy" }).click();
     await expect(
-        page.getByRole("heading", { name: "London Plane", exact: true }),
+        page.getByRole("heading", { name: "Field Maple", exact: true }),
     ).toBeVisible();
     await page
         .getByLabel("Vegetation set", { exact: true })
@@ -178,7 +178,7 @@ test("add vegetation remains discoverable when all placeholder assets are includ
     ).toBeVisible();
     await expect(
         picker.getByRole("button", {
-            name: "Add London Plane",
+            name: "Add Field Maple",
             exact: true,
         }),
     ).toBeDisabled();
@@ -189,7 +189,7 @@ test("add vegetation remains discoverable when all placeholder assets are includ
     await picker.getByRole("button", { name: "Cancel", exact: true }).click();
     await expect(
         page.getByRole("heading", {
-            name: "London Plane",
+            name: "Field Maple",
             exact: true,
         }),
     ).toBeVisible();
