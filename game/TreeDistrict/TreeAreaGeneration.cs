@@ -8,6 +8,7 @@ using Game.Simulation;
 using Newtonsoft.Json.Linq;
 using TreeDistrict.Core.Foliage;
 using Unity.Entities;
+using Unity.Collections;
 using Unity.Mathematics;
 
 namespace TreeDistrict
@@ -28,11 +29,17 @@ namespace TreeDistrict
             internal IReadOnlyList<Placement> Plan;
             internal Dictionary<string, NativeVegetation> Native;
             internal PlacementBatchSchedule Schedule;
+            internal string Method, RunId;
+            internal double StartedAt, PreviousBatchStart, PreviousBatchEnd, LastTickEnd, GapMax, GapSum;
+            internal int GapCount, BatchNumber;
         }
         private void CancelPlacement(Entity area, string reason)
         {
             if (_placement == null || _placement.Area != area) return;
             var job = _placement;
+            Mod.Log.Info("Placement cancelled run=" + job.RunId + " method=" + job.Method
+                + " placed=" + job.Schedule.Completed + "/" + job.Schedule.Total
+                + " elapsedMs=" + ((PlacementTime - job.StartedAt) * 1000).ToString("F1") + " reason=" + reason);
             job.Schedule.Cancel();
             _placement = null; // Release the unplaced plan; keep already placed plants owned.
             if (_areaIds.ContainsKey(area))
@@ -60,7 +67,12 @@ namespace TreeDistrict
             string id = SettingsModel.Text(command["districtId"], 160);
             Entity area = EntityFor(id);
             var record = SettingsModel.Target(_state, id);
-            if (type == "generate") { Generate(area, record); return; }
+            if (type == "generate")
+            {
+                string method = (string)command["placementMethod"] ?? "bulk";
+                if (method != "bulk" && method != "perEntity") throw new ArgumentException("Unknown placement method.");
+                Generate(area, record, method); return;
+            }
             if (type == "cancelGeneration") { CancelPlacement(area, "Placement cancelled."); return; }
             if (type == "bakeDelete")
             {
@@ -88,7 +100,7 @@ namespace TreeDistrict
             internal string Name;
         }
 
-        private void Generate(Entity area, JObject record)
+        private void Generate(Entity area, JObject record, string method)
         {
             if (_placement != null) throw new ArgumentException("Wait for placement to finish or cancel it before generating another area.");
             // Capture authoritative native nodes immediately before planning, without mutating saved settings.
@@ -140,11 +152,15 @@ namespace TreeDistrict
             record["generatedRevision"] = plan.Count == 0 ? record["revision"].DeepClone() : JValue.CreateNull();
             record["placementActive"] = plan.Count > 0;
             record["generationStatus"] = "Placing 0 of " + plan.Count + " plants (50,000 per batch, 0.5 seconds between batches).";
+            string runId = Guid.NewGuid().ToString("N").Substring(0, 8);
             if (plan.Count > 0)
                 _placement = new PlacementJob { Area = area, Id = (string)record["id"], Revision = (int)record["revision"],
-                    Plan = plan, Native = native, Schedule = new PlacementBatchSchedule(plan.Count) };
+                    Plan = plan, Native = native, Schedule = new PlacementBatchSchedule(plan.Count),
+                    Method = method, RunId = runId, StartedAt = PlacementTime };
             else record["generationStatus"] = "Placed 0 plants.";
-            Mod.Log.Info("Planned " + plan.Count + " plants in " + planningTimer.Elapsed.TotalMilliseconds.ToString("F1")
+            Mod.Log.Info("Placement run=" + runId + " method=" + method + " area=" + (string)record["id"]
+                + " revision=" + (int)record["revision"] + " seed=" + request.Seed
+                + "; planned=" + plan.Count + " planningMs=" + planningTimer.Elapsed.TotalMilliseconds.ToString("F1")
                 + "ms; stamp cache=" + (_stampGenerator.LastCacheHit ? "hit" : "miss") + "; placement batches=50000, interval=0.5s");
         }
 
@@ -153,17 +169,60 @@ namespace TreeDistrict
         {
             var job = _placement;
             if (job == null) return;
+            double tickStart = PlacementTime;
+            if (job.LastTickEnd > 0)
+            {
+                double gap = tickStart - job.LastTickEnd;
+                job.GapMax = Math.Max(job.GapMax, gap); job.GapSum += gap; job.GapCount++;
+            }
             if (!IsTreeArea(job.Area)) { RemoveOwned(job.Area); return; }
             int batchCount = job.Schedule.NextCount(PlacementTime);
-            if (batchCount == 0) return;
-            var created = new List<Entity>(batchCount);
+            if (batchCount == 0) { job.LastTickEnd = PlacementTime; return; }
+            double batchStart = PlacementTime;
+            double groupingMs = 0, creationMs = 0, setupMs = 0;
+            int creationCalls = 0;
+            var created = new Entity[batchCount];
             try
             {
+                double phase = PlacementTime;
+                if (job.Method == "bulk")
+                {
+                    var groups = new Dictionary<EntityArchetype, List<int>>();
+                    for (int i = 0; i < batchCount; i++)
+                    {
+                        var archetype = job.Native[job.Plan[job.Schedule.Completed + i].SpeciesId].Archetype;
+                        if (!groups.TryGetValue(archetype, out var indices)) groups.Add(archetype, indices = new List<int>());
+                        indices.Add(i);
+                    }
+                    groupingMs = (PlacementTime - phase) * 1000;
+                    phase = PlacementTime;
+                    foreach (var group in groups)
+                    {
+                        using (var entities = new NativeArray<Entity>(group.Value.Count, Allocator.Temp))
+                        {
+                            EntityManager.CreateEntity(group.Key, entities);
+                            creationCalls++;
+                            // Keep original plan order for setup, ownership and deterministic seeds.
+                            for (int i = 0; i < entities.Length; i++) created[group.Value[i]] = entities[i];
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < batchCount; i++)
+                    {
+                        var placement = job.Plan[job.Schedule.Completed + i];
+                        created[i] = EntityManager.CreateEntity(archetype: job.Native[placement.SpeciesId].Archetype);
+                        creationCalls++;
+                    }
+                }
+                creationMs = (PlacementTime - phase) * 1000;
+                phase = PlacementTime;
                 for (int i = 0; i < batchCount; i++)
                 {
                     var placement = job.Plan[job.Schedule.Completed + i];
                     var resolved = job.Native[placement.SpeciesId];
-                    Entity plant = EntityManager.CreateEntity(archetype: resolved.Archetype); created.Add(plant);
+                    Entity plant = created[i];
                     if (!EntityManager.HasComponent<Plant>(plant) || EntityManager.HasComponent<Tree>(plant) != resolved.IsTree)
                         throw new InvalidOperationException("Unexpected native vegetation archetype for " + resolved.Name);
                     EntityManager.SetComponentData(plant, new PrefabRef(resolved.Prefab));
@@ -171,26 +230,29 @@ namespace TreeDistrict
                     var state = VegetationSpawnPolicy.TreeStateCode(resolved.IsTree, placement.AgeId);
                     if (state.HasValue) EntityManager.SetComponentData(plant, new Tree { m_State = (TreeState)state.Value, m_Growth = 0 });
                     if (EntityManager.HasComponent<PseudoRandomSeed>(plant))
-                        EntityManager.SetComponentData(plant, new PseudoRandomSeed((ushort)(((long)job.Schedule.Completed + created.Count) * 7919 % 65535 + 1)));
+                        EntityManager.SetComponentData(plant, new PseudoRandomSeed((ushort)(((long)job.Schedule.Completed + i + 1) * 7919 % 65535 + 1)));
                 }
+                setupMs = (PlacementTime - phase) * 1000;
             }
             catch (Exception ex)
             {
                 // These entities have not left this update; roll back an incomplete creation batch.
-                foreach (var tree in created) if (EntityManager.Exists(tree)) EntityManager.DestroyEntity(tree);
+                foreach (var tree in created) if (tree != Entity.Null && EntityManager.Exists(tree)) EntityManager.DestroyEntity(tree);
                 CancelPlacement(job.Area, "Placement failed; completed batches retained.");
                 _error = ex.Message;
                 Mod.Log.Warn("Placement batch failed: " + ex);
                 return;
             }
+            double ownershipStart = PlacementTime;
             _trees[job.Area].AddRange(created);
+            double ownershipMs = (PlacementTime - ownershipStart) * 1000;
             job.Schedule.CompleteBatch(batchCount, PlacementTime);
             // Settings edits can replace _state; resolve the current record for every batch.
             var current = SettingsModel.Target(_state, job.Id);
             current["generatedCount"] = job.Schedule.Completed;
             bool finished = job.Schedule.Completed == job.Schedule.Total;
             current["placementActive"] = !finished;
-            current["generationStatus"] = (finished ? "Placed " : "Placing ") + job.Schedule.Completed + " of " + job.Schedule.Total + " plants.";
+            current["generationStatus"] = (finished ? "Placed " : "Placing ") + job.Schedule.Completed + " of " + job.Schedule.Total + " plants (" + job.Method + ").";
             if (finished)
             {
                 current["generatedRevision"] = job.Revision;
@@ -198,6 +260,19 @@ namespace TreeDistrict
                 Mod.Log.Info("Finished placing " + job.Schedule.Completed + " plants for area " + job.Id);
             }
             _uiDirty = true;
+            double end = PlacementTime;
+            Mod.Log.Info(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "PlacementBatch run={0} method={1} batch={2} placed={3}/{4} count={5} createCalls={6} groupingMs={7:F2} creationMs={8:F2} setupMs={9:F2} ownershipMs={10:F2} workMs={11:F2} startIntervalMs={12:F2} sincePreviousEndMs={13:F2} updateGapMaxMs={14:F2} updateGapMeanMs={15:F2} elapsedMs={16:F2} managedMB={17:F1} gc0={18} gc1={19} gc2={20}",
+                job.RunId, job.Method, ++job.BatchNumber, job.Schedule.Completed, job.Schedule.Total, batchCount, creationCalls,
+                groupingMs, creationMs, setupMs, ownershipMs, (end-batchStart)*1000,
+                job.PreviousBatchStart > 0 ? (batchStart-job.PreviousBatchStart)*1000 : 0,
+                job.PreviousBatchEnd > 0 ? (batchStart-job.PreviousBatchEnd)*1000 : 0,
+                job.GapMax*1000, job.GapCount > 0 ? job.GapSum/job.GapCount*1000 : 0,
+                (end-job.StartedAt)*1000, GC.GetTotalMemory(false)/1048576.0,
+                GC.CollectionCount(0), GC.CollectionCount(1), GC.CollectionCount(2)));
+            job.PreviousBatchStart = batchStart; job.PreviousBatchEnd = end;
+            job.GapMax = 0; job.GapSum = 0; job.GapCount = 0;
+            job.LastTickEnd = PlacementTime;
         }
     }
 }

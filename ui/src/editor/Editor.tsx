@@ -37,6 +37,7 @@ export interface EditorProps {
             "generate" | "removeGenerated" | "bakeDelete" | "cancelGeneration",
         districtId: string,
         confirmed?: boolean,
+        placementMethod?: "bulk" | "perEntity",
     ) => void;
 }
 const climateFields = [
@@ -215,6 +216,9 @@ export function Editor({
     const resolved = resolveClimate(state, set);
     const entry = state.library.find((s) => s.id === target.libraryId);
     const [query, setQuery] = useState("");
+    const [placementMethod, setPlacementMethod] = useState<
+        "bulk" | "perEntity"
+    >("bulk");
     const [assetQuery, setAssetQuery] = useState("");
     const [dialog, setDialog] = useState<
         "save" | "replace" | "delete" | "bake" | "addVegetation" | null
@@ -622,6 +626,24 @@ export function Editor({
                         </p>
                         <div className="td-actions">
                             <Button
+                                disabled={state.districts.some(
+                                    (d) => d.placementActive,
+                                )}
+                                onSelect={() =>
+                                    setPlacementMethod(
+                                        placementMethod === "bulk"
+                                            ? "perEntity"
+                                            : "bulk",
+                                    )
+                                }
+                            >
+                                Placement:{" "}
+                                {placementMethod === "bulk"
+                                    ? "Bulk upload"
+                                    : "Per entity upload"}{" "}
+                                · Switch
+                            </Button>
+                            <Button
                                 disabled={
                                     !generationAction ||
                                     state.districts.some(
@@ -629,7 +651,12 @@ export function Editor({
                                     )
                                 }
                                 onSelect={() =>
-                                    generationAction?.("generate", district.id)
+                                    generationAction?.(
+                                        "generate",
+                                        district.id,
+                                        undefined,
+                                        placementMethod,
+                                    )
                                 }
                             >
                                 {(district.generatedCount ?? 0) > 0
