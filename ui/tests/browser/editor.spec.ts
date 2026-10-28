@@ -227,6 +227,15 @@ test("NZ preset exposes its three editable proxy profiles", async ({
         .getByLabel("Spacing adjustment (m)", { exact: true })
         .first()
         .fill("-1");
+    await expect(
+        page
+            .getByLabel("Maximum slope for culling (°)", { exact: true })
+            .first(),
+    ).toHaveValue("60");
+    await page
+        .getByLabel("Maximum slope for culling (°)", { exact: true })
+        .first()
+        .fill("25");
     await page.reload();
     await expect(
         page.getByLabel("Density multiplier", { exact: true }),
@@ -244,4 +253,9 @@ test("NZ preset exposes its three editable proxy profiles", async ({
     await expect(
         page.getByLabel("Spacing adjustment (m)", { exact: true }).first(),
     ).toHaveValue("-1");
+    await expect(
+        page
+            .getByLabel("Maximum slope for culling (°)", { exact: true })
+            .first(),
+    ).toHaveValue("25");
 });

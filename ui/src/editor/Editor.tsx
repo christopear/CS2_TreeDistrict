@@ -46,9 +46,11 @@ const climateFields = [
 function Limits({
     value,
     onChange,
+    showSlope = true,
 }: {
     value: VegetationSet["limits"];
     onChange: (v: VegetationSet["limits"]) => void;
+    showSlope?: boolean;
 }) {
     return (
         <>
@@ -66,13 +68,15 @@ function Limits({
                 max={20000}
                 onChange={(v) => onChange({ ...value, maxElevationM: v })}
             />
-            <NumberField
-                label="Maximum slope (°)"
-                value={value.maxSlopeDegrees}
-                min={0}
-                max={90}
-                onChange={(v) => onChange({ ...value, maxSlopeDegrees: v })}
-            />
+            {showSlope && (
+                <NumberField
+                    label="Maximum slope (°)"
+                    value={value.maxSlopeDegrees}
+                    min={0}
+                    max={90}
+                    onChange={(v) => onChange({ ...value, maxSlopeDegrees: v })}
+                />
+            )}
         </>
     );
 }
@@ -110,6 +114,24 @@ function ProfileEditor({
                     onChange={(v) => change({ ...profile, [key]: v })}
                 />
             ))}
+            <NumberField
+                label="Maximum slope for culling (°)"
+                value={profile.limits.maxSlopeDegrees}
+                min={0}
+                max={90}
+                onChange={(maxSlopeDegrees) =>
+                    change({
+                        ...profile,
+                        limits: { ...profile.limits, maxSlopeDegrees },
+                    })
+                }
+            />
+            <p className="td-help">
+                On generation, exclude placements above the lower of this limit
+                and the set maximum slope. This is a hard cutoff, separate from
+                the slope response below; existing plants remain until
+                regeneration.
+            </p>
             {(["temperature", "slope"] as const).map((key) => (
                 <Foldout
                     key={key}
@@ -157,6 +179,7 @@ function ProfileEditor({
             <Foldout title="Hard placement limits">
                 <Limits
                     value={profile.limits}
+                    showSlope={false}
                     onChange={(limits) => change({ ...profile, limits })}
                 />
             </Foldout>

@@ -164,5 +164,27 @@ namespace TreeDistrict.Tests
             profile["spacingAdjustmentM"] = 0; record["working"]["overallDensityPercent"] = 201;
             Assert.Throws<ArgumentException>(() => DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]));
         }
+
+        [Theory]
+        [InlineData(20, 60, 20, true)]
+        [InlineData(20, 60, 20.01, false)]
+        [InlineData(60, 20, 20, true)]
+        [InlineData(60, 20, 20.01, false)]
+        [InlineData(45, 45, 45, true)]
+        [InlineData(45, 45, 45.01, false)]
+        public void CullingUsesLowerOfPlantAndSetSlope(double plantMax, double setMax, double slope, bool allowed)
+        {
+            var catalog = Catalog();
+            var preset = catalog["sets"].Single(s => (string)s["id"] == "builtin:nz-regenerating-bush");
+            var record = District(preset["set"]);
+            record["working"]["limits"]["maxSlopeDegrees"] = setMax;
+            foreach (var asset in record["working"]["assets"])
+                asset["profile"]["limits"]["maxSlopeDegrees"] = plantMax;
+            var request = DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]);
+            var coordinator = new FoliageGenerationCoordinator(request, p => new GroundSample(0, slope));
+            var placements = coordinator.Generate(Scatter()).Placements;
+            if (allowed) Assert.NotEmpty(placements);
+            else Assert.Empty(placements);
+        }
     }
 }
