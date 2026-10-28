@@ -29,15 +29,6 @@ namespace TreeDistrict
         {
             if (_trees.TryGetValue(area, out var trees)) { DeleteTrees(trees); _trees.Remove(area); }
         }
-        private void RefreshTreeCounts()
-        {
-            DeleteTrees(_orphanTrees); _orphanTrees.Clear();
-            foreach (var entry in _trees)
-            {
-                entry.Value.RemoveAll(e => !LivingReference(e));
-                if (_areaIds.TryGetValue(entry.Key, out var id)) SettingsModel.Target(_state, id)["generatedCount"] = entry.Value.Count;
-            }
-        }
         private void GenerationCommand(string type, JObject command)
         {
             string id = SettingsModel.Text(command["districtId"], 160);

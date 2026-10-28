@@ -609,8 +609,8 @@ export function Editor({
                             </p>
                         )}
                         <p className="td-help" role="status">
-                            {district.generatedCount ?? 0} linked trees. Manual
-                            generation only.
+                            {district.generatedCount ?? 0} plants recorded at
+                            generation. Manual deletions do not update this count.
                             {district.generatedRevision != null &&
                             district.generatedRevision !== district.revision
                                 ? " Settings or boundary changed; regenerate to apply."

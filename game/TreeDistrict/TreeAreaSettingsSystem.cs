@@ -131,7 +131,13 @@ namespace TreeDistrict
                 if (_selectedId == id) _selectedId = null;
             }
             _initialScan = false;
-            RefreshTreeCounts();
+            // Loaded references whose area no longer exists need one-time cleanup.
+            // Live areas retain a passive registry; never poll their plants for counts.
+            if (_orphanTrees.Count > 0)
+            {
+                DeleteTrees(_orphanTrees);
+                _orphanTrees.Clear();
+            }
         }
         protected override void OnUpdate()
         {
