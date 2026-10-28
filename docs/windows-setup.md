@@ -94,7 +94,14 @@ plant centres; no species-specific seam reconciliation is performed. The cache
 excludes area boundary and seed, so extensions reuse the library and retain the
 same layout in overlapping regions. Effective settings changes select a different
 entry; the cache is session-only and rebuilt deterministically after restart.
-Logs separate cache build, tiling/terrain and entity creation/replacement timings.
+Logs report planning duration, cache reuse and completed placement jobs.
+Native placement runs in batches of at most 50,000 plants, with at least 0.5 seconds
+of wall-clock time after each batch before the next. Only one placement job runs
+at a time, and missed intervals never cause catch-up bursts. Planning remains
+synchronous. Progress updates once per batch; idle areas do not scan their plants.
+Cancel keeps completed batches linked to the area. Remove/delete also cancels the
+queue; bake cancels it and releases already placed plants. Saving during placement
+saves completed batches only, without resuming the pending plan on reload.
 Current area nodes supply the polygon. Native terrain supplies exact placement
 heights and sampled slope; water deeper than 1 cm is excluded. Each enabled JSON
 asset resolves its existing prefab name before any owned plants are replaced.

@@ -83,6 +83,7 @@ export const districtSchema = z.object({
     generatedCount: number.int().nonnegative().optional(),
     generatedRevision: number.int().nonnegative().nullable().optional(),
     generationStatus: z.string().optional(),
+    placementActive: z.boolean().optional(),
 });
 export const libraryEntrySchema = z.object({
     id,

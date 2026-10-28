@@ -68,6 +68,7 @@ namespace TreeDistrict
         {
             _state = SettingsModel.Initial(_catalog); _areaIds.Clear(); _selectedId = null; _error = null;
             _trees.Clear(); _orphanTrees.Clear();
+            _placement = null;
             _initialScan = true; _lastSelection = Entity.Null; _visible = false; _wasAreaTool = false;
             _uiDirty = true;
             while (_commands.TryDequeue(out _)) { }
@@ -77,6 +78,7 @@ namespace TreeDistrict
         {
             base.OnGamePreload(purpose, mode);
             _ready = false; _visible = false; _binding.Update(""); _lastEnvelope = ""; _uiDirty = true;
+            if (_placement != null) CancelPlacement(_placement.Area, "Placement stopped for loading.");
             while (_commands.TryDequeue(out _)) { }
         }
         protected override void OnGameLoadingComplete(Purpose purpose, GameMode mode)
@@ -191,6 +193,7 @@ namespace TreeDistrict
                 try { Execute(SettingsModel.Parse(json)); _error = null; }
                 catch (Exception ex) { _error = ex.Message; Mod.Log.Warn("Settings command rejected: " + ex.Message); }
             }
+            ProcessPlacement();
         }
         private void SelectNative(Entity entity)
         {
@@ -222,6 +225,7 @@ namespace TreeDistrict
                     _tools.ActivatePrefabTool(Mod.Area); _visible = true; return;
                 case "deleteDistrict":
                 case "generate":
+                case "cancelGeneration":
                 case "removeGenerated":
                 case "bakeDelete":
                     GenerationCommand(type, command); return;
@@ -286,6 +290,11 @@ namespace TreeDistrict
             {
                 writer.Write(pair.Key);
                 var record = (JObject)SettingsModel.Target(_state, pair.Value).DeepClone();
+                if ((bool?)record["placementActive"] == true)
+                {
+                    record["placementActive"] = false;
+                    record["generationStatus"] = "Partial planting saved. Pending placement is not resumed after loading; regenerate to start again.";
+                }
                 record.Remove("boundary"); // Native area nodes are authoritative.
                 writer.Write(record.ToString(Formatting.None));
                 var trees = _trees.TryGetValue(pair.Key, out var owned) ? owned.Where(LivingReference).ToArray() : new Entity[0];
@@ -313,6 +322,7 @@ namespace TreeDistrict
             {
                 reader.Read(out Entity entity); reader.Read(out string json);
                 var record = SettingsModel.Parse(json); ProfileMigration.Working(record); SettingsModel.ValidateRecord(record);
+                record["placementActive"] = false;
                 string id = (string)record["id"];
                 if (!ids.Add(id)) throw new InvalidDataException("Duplicate Tree Area ID in save.");
                 var trees = new List<Entity>();

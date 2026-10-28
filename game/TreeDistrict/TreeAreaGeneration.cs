@@ -18,6 +18,31 @@ namespace TreeDistrict
         // No custom components on plants. A recycled entity index is not ownership.
         private readonly Dictionary<Entity, List<Entity>> _trees = new Dictionary<Entity, List<Entity>>();
         private readonly List<Entity> _orphanTrees = new List<Entity>();
+        private PlacementJob _placement;
+        private static double PlacementTime => (double)System.Diagnostics.Stopwatch.GetTimestamp() / System.Diagnostics.Stopwatch.Frequency;
+        private sealed class PlacementJob
+        {
+            internal Entity Area;
+            internal string Id;
+            internal int Revision;
+            internal IReadOnlyList<Placement> Plan;
+            internal Dictionary<string, NativeVegetation> Native;
+            internal PlacementBatchSchedule Schedule;
+        }
+        private void CancelPlacement(Entity area, string reason)
+        {
+            if (_placement == null || _placement.Area != area) return;
+            var job = _placement;
+            job.Schedule.Cancel();
+            _placement = null; // Release the unplaced plan; keep already placed plants owned.
+            if (_areaIds.ContainsKey(area))
+            {
+                var record = SettingsModel.Target(_state, job.Id);
+                record["placementActive"] = false;
+                record["generationStatus"] = reason + " " + job.Schedule.Completed + " of " + job.Schedule.Total + " plants placed.";
+                _uiDirty = true;
+            }
+        }
         private bool LivingReference(Entity entity) => entity != Entity.Null && EntityManager.Exists(entity)
             && (EntityManager.HasComponent<Tree>(entity) || EntityManager.HasComponent<Plant>(entity))
             && !EntityManager.HasComponent<Deleted>(entity);
@@ -27,6 +52,7 @@ namespace TreeDistrict
         }
         private void RemoveOwned(Entity area)
         {
+            CancelPlacement(area, "Placement stopped.");
             if (_trees.TryGetValue(area, out var trees)) { DeleteTrees(trees); _trees.Remove(area); }
         }
         private void GenerationCommand(string type, JObject command)
@@ -35,10 +61,12 @@ namespace TreeDistrict
             Entity area = EntityFor(id);
             var record = SettingsModel.Target(_state, id);
             if (type == "generate") { Generate(area, record); return; }
+            if (type == "cancelGeneration") { CancelPlacement(area, "Placement cancelled."); return; }
             if (type == "bakeDelete")
             {
                 if (command["confirmed"]?.Type != JTokenType.Boolean || !(bool)command["confirmed"])
                     throw new ArgumentException("Confirm Bake + delete first.");
+                CancelPlacement(area, "Placement stopped for baking.");
                 _trees.Remove(area); // Release ownership BEFORE deleting the wrapper.
             }
             else RemoveOwned(area);
@@ -62,6 +90,7 @@ namespace TreeDistrict
 
         private void Generate(Entity area, JObject record)
         {
+            if (_placement != null) throw new ArgumentException("Wait for placement to finish or cancel it before generating another area.");
             // Capture authoritative native nodes immediately before planning, without mutating saved settings.
             var snapshot = (JObject)record.DeepClone();
             var nodes = EntityManager.GetBuffer<Game.Areas.Node>(area, true);
@@ -105,44 +134,70 @@ namespace TreeDistrict
             }, _scatterSettings, DistrictGenerationAdapter.StampSettingsKey(request, _scatterSettings));
             planningTimer.Stop();
             var plan = result.Placements;
-            var creationTimer = System.Diagnostics.Stopwatch.StartNew();
-            var created = new List<Entity>(plan.Count);
+            RemoveOwned(area);
+            _trees[area] = new List<Entity>();
+            record["generatedCount"] = 0;
+            record["generatedRevision"] = plan.Count == 0 ? record["revision"].DeepClone() : JValue.CreateNull();
+            record["placementActive"] = plan.Count > 0;
+            record["generationStatus"] = "Placing 0 of " + plan.Count + " plants (50,000 per batch, 0.5 seconds between batches).";
+            if (plan.Count > 0)
+                _placement = new PlacementJob { Area = area, Id = (string)record["id"], Revision = (int)record["revision"],
+                    Plan = plan, Native = native, Schedule = new PlacementBatchSchedule(plan.Count) };
+            else record["generationStatus"] = "Placed 0 plants.";
+            Mod.Log.Info("Planned " + plan.Count + " plants in " + planningTimer.Elapsed.TotalMilliseconds.ToString("F1")
+                + "ms; stamp cache=" + (_stampGenerator.LastCacheHit ? "hit" : "miss") + "; placement batches=50000, interval=0.5s");
+        }
+
+        // Called once per MainLoop, before native initialization. Never catch up multiple batches.
+        private void ProcessPlacement()
+        {
+            var job = _placement;
+            if (job == null) return;
+            if (!IsTreeArea(job.Area)) { RemoveOwned(job.Area); return; }
+            int batchCount = job.Schedule.NextCount(PlacementTime);
+            if (batchCount == 0) return;
+            var created = new List<Entity>(batchCount);
             try
             {
-                foreach (var placement in plan)
+                for (int i = 0; i < batchCount; i++)
                 {
-                    var resolved = native[placement.SpeciesId];
+                    var placement = job.Plan[job.Schedule.Completed + i];
+                    var resolved = job.Native[placement.SpeciesId];
                     Entity plant = EntityManager.CreateEntity(archetype: resolved.Archetype); created.Add(plant);
                     if (!EntityManager.HasComponent<Plant>(plant) || EntityManager.HasComponent<Tree>(plant) != resolved.IsTree)
-                        throw new InvalidOperationException("Unexpected native vegetation archetype for " + resolved.Name + ". Existing plants were retained.");
+                        throw new InvalidOperationException("Unexpected native vegetation archetype for " + resolved.Name);
                     EntityManager.SetComponentData(plant, new PrefabRef(resolved.Prefab));
                     EntityManager.SetComponentData(plant, new Transform(new float3((float)placement.Position.X, (float)placement.ElevationM, (float)placement.Position.Z), quaternion.RotateY((float)placement.RotationRadians)));
                     var state = VegetationSpawnPolicy.TreeStateCode(resolved.IsTree, placement.AgeId);
                     if (state.HasValue) EntityManager.SetComponentData(plant, new Tree { m_State = (TreeState)state.Value, m_Growth = 0 });
                     if (EntityManager.HasComponent<PseudoRandomSeed>(plant))
-                        EntityManager.SetComponentData(plant, new PseudoRandomSeed((ushort)(created.Count * 7919 % 65535 + 1)));
+                        EntityManager.SetComponentData(plant, new PseudoRandomSeed((ushort)(((long)job.Schedule.Completed + created.Count) * 7919 % 65535 + 1)));
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 // These entities have not left this update; roll back an incomplete creation batch.
                 foreach (var tree in created) if (EntityManager.Exists(tree)) EntityManager.DestroyEntity(tree);
-                throw;
+                CancelPlacement(job.Area, "Placement failed; completed batches retained.");
+                _error = ex.Message;
+                Mod.Log.Warn("Placement batch failed: " + ex);
+                return;
             }
-            RemoveOwned(area);
-            _trees[area] = created;
-            record["generatedCount"] = created.Count;
-            record["generatedRevision"] = record["revision"].DeepClone();
-            int trees = plan.Count(p => native[p.SpeciesId].IsTree);
-            record["generationStatus"] = "Placed " + created.Count + " plants (" + trees + " trees, " + (created.Count - trees) + " static plants).";
-            creationTimer.Stop();
-            Mod.Log.Info("Stamp cache=" + (_stampGenerator.LastCacheHit ? "hit" : "miss")
-                + "; build=" + _stampGenerator.LastBuildMilliseconds.ToString("F1")
-                + "ms; terrain/tiling=" + _stampGenerator.LastTileMilliseconds.ToString("F1")
-                + "ms; plan=" + planningTimer.Elapsed.TotalMilliseconds.ToString("F1")
-                + "ms; entity creation/replacement=" + creationTimer.Elapsed.TotalMilliseconds.ToString("F1") + "ms");
-            Mod.Log.Info("Generated " + created.Count + " plants for area " + (string)record["id"] + " using " + result.AlgorithmVersion
-                + ": " + string.Join(", ", result.Counts.Select(c => native[c.SpeciesId].Name + "=" + c.Accepted)));
+            _trees[job.Area].AddRange(created);
+            job.Schedule.CompleteBatch(batchCount, PlacementTime);
+            // Settings edits can replace _state; resolve the current record for every batch.
+            var current = SettingsModel.Target(_state, job.Id);
+            current["generatedCount"] = job.Schedule.Completed;
+            bool finished = job.Schedule.Completed == job.Schedule.Total;
+            current["placementActive"] = !finished;
+            current["generationStatus"] = (finished ? "Placed " : "Placing ") + job.Schedule.Completed + " of " + job.Schedule.Total + " plants.";
+            if (finished)
+            {
+                current["generatedRevision"] = job.Revision;
+                _placement = null;
+                Mod.Log.Info("Finished placing " + job.Schedule.Completed + " plants for area " + job.Id);
+            }
+            _uiDirty = true;
         }
     }
 }

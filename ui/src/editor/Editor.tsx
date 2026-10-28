@@ -33,7 +33,8 @@ export interface EditorProps {
     nativeAreaTools?: boolean;
     topContent?: React.ReactNode;
     generationAction?: (
-        type: "generate" | "removeGenerated" | "bakeDelete",
+        type:
+            "generate" | "removeGenerated" | "bakeDelete" | "cancelGeneration",
         districtId: string,
         confirmed?: boolean,
     ) => void;
@@ -604,13 +605,15 @@ export function Editor({
                             <p className="td-help" role="status">
                                 Large area ({(areaM2 / 1_000_000).toFixed(1)}{" "}
                                 km²). Generation may place millions of plants
-                                and freeze the game while it finishes. There is
-                                no TreeDistrict population cap.
+                                and freeze the game during planning. Placement
+                                then runs in batches. There is no TreeDistrict
+                                population cap.
                             </p>
                         )}
                         <p className="td-help" role="status">
                             {district.generatedCount ?? 0} plants recorded at
-                            generation. Manual deletions do not update this count.
+                            generation. Manual deletions do not update this
+                            count.
                             {district.generatedRevision != null &&
                             district.generatedRevision !== district.revision
                                 ? " Settings or boundary changed; regenerate to apply."
@@ -619,7 +622,12 @@ export function Editor({
                         </p>
                         <div className="td-actions">
                             <Button
-                                disabled={!generationAction}
+                                disabled={
+                                    !generationAction ||
+                                    state.districts.some(
+                                        (d) => d.placementActive,
+                                    )
+                                }
                                 onSelect={() =>
                                     generationAction?.("generate", district.id)
                                 }
@@ -628,6 +636,18 @@ export function Editor({
                                     ? "Regenerate"
                                     : "Generate"}
                             </Button>
+                            {district.placementActive && (
+                                <Button
+                                    onSelect={() =>
+                                        generationAction?.(
+                                            "cancelGeneration",
+                                            district.id,
+                                        )
+                                    }
+                                >
+                                    Cancel placement (keep placed plants)
+                                </Button>
+                            )}
                             <Button
                                 disabled={
                                     !generationAction ||
