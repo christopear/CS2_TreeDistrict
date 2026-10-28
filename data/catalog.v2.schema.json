@@ -78,6 +78,11 @@
                 "minimum": 1,
                 "maximum": 200
               },
+              "spacingAdjustmentM": {
+                "type": "number",
+                "minimum": -1,
+                "maximum": 1
+              },
               "heightM": {
                 "type": "number",
                 "exclusiveMinimum": 0,
@@ -245,7 +250,7 @@
               "overallDensityPercent": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 100
+                "maximum": 200
               },
               "clumpingPercent": {
                 "type": "number",
@@ -333,6 +338,11 @@
                           "type": "number",
                           "minimum": 1,
                           "maximum": 200
+                        },
+                        "spacingAdjustmentM": {
+                          "type": "number",
+                          "minimum": -1,
+                          "maximum": 1
                         },
                         "heightM": {
                           "type": "number",

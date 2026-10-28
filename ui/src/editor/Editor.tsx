@@ -86,13 +86,14 @@ function ProfileEditor({
     return (
         <Foldout title="Species profile · shared across ages">
             <p className="td-help">
-                Spacing uses mature size. Height, canopy and shade values are
-                reference data; native growth and survival are unchanged. Shade
-                filtering is not yet simulated.
+                Normal centre spacing is canopy diameter plus spacing
+                adjustment. Negative adjustment allows foliage overlap; minimum
+                spacing is 0.1 m. Density scales this spacing. Native growth is
+                unchanged.
             </p>
             {(
                 [
-                    ["matureSpacingM", "Mature spacing (m)", 1, 200],
+                    ["spacingAdjustmentM", "Spacing adjustment (m)", -1, 1],
                     ["heightM", "Height (m)", 0.01, 200],
                     ["canopyRadiusM", "Canopy radius (m)", 0, 100],
                     ["canopyOpacityPercent", "Canopy opacity (%)", 0, 100],
@@ -102,7 +103,7 @@ function ProfileEditor({
                 <NumberField
                     key={key}
                     label={label}
-                    value={profile[key]}
+                    value={profile[key] ?? 0}
                     min={min}
                     max={max}
                     step={0.1}
@@ -323,12 +324,19 @@ export function Editor({
                     </Button>
                 </div>
                 <NumberField
-                    label="Overall density (%)"
-                    value={set.overallDensityPercent}
+                    label="Density multiplier"
+                    value={set.overallDensityPercent / 100}
                     min={0}
-                    max={100}
-                    onChange={(v) => edit({ ...set, overallDensityPercent: v })}
+                    max={2}
+                    step={0.1}
+                    onChange={(v) =>
+                        edit({ ...set, overallDensityPercent: v * 100 })
+                    }
                 />
+                <p className="td-help">
+                    0 = empty; 1 = normal; 2 = twice the target density. Spacing
+                    scales by 1 / √multiplier.
+                </p>
                 <div className="td-actions">
                     <Button
                         disabled={drawing}

@@ -11,7 +11,7 @@ def asset(p):
     raw=measured[p['id']]
     def curve(c,slope=False): return dict(min=max(0,c['minimum']) if slope else c['minimum'],optimum=c['optimum'],max=c['maximum'])
     return dict(id=p['id'],name=p['name'],prefabName=raw['prefabNameCandidate'] if 'prefabNameCandidate' in raw else p['id'].split(':')[1],placeholder=p.get('mappingStatus')=='unconfirmedMeshAnalogue',densityPercent=100,
-      profile=dict(matureSpacingM=2*p['preferredSpacingRadiusM'],heightM=p['matureHeightM'],canopyRadiusM=p['crownRadiusM'],
+      profile=dict(matureSpacingM=2*p['preferredSpacingRadiusM'],spacingAdjustmentM=0,heightM=p['matureHeightM'],canopyRadiusM=p['crownRadiusM'],
         canopyOpacityPercent=p['crownOpacity']*100,shadeTolerancePercent=0,temperature=curve(p['temperature']),slope=curve(p['slope'],True),
         limits=dict(minElevationM=p['terrain']['minimumElevation'],maxElevationM=p['terrain']['maximumElevation'],maxSlopeDegrees=p['terrain']['maximumSlopeDegrees'])),
       ages=[dict(id=a['id'],name=a['id'].capitalize(),proportionPercent=a['weight']/sum(v['weight'] for v in p['ages'])*100) for a in p['ages']])

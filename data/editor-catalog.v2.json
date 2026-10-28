@@ -16,6 +16,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 9.2802,
+        "spacingAdjustmentM": 0,
         "heightM": 7.7058,
         "canopyRadiusM": 4.1401,
         "canopyOpacityPercent": 0,
@@ -52,6 +53,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 9.4642,
+        "spacingAdjustmentM": 0,
         "heightM": 6.3786,
         "canopyRadiusM": 4.23205,
         "canopyOpacityPercent": 0,
@@ -88,6 +90,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 10.0852,
+        "spacingAdjustmentM": 0,
         "heightM": 16.2691,
         "canopyRadiusM": 4.54255,
         "canopyOpacityPercent": 0,
@@ -124,6 +127,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 8.4368,
+        "spacingAdjustmentM": 0,
         "heightM": 13.9718,
         "canopyRadiusM": 3.7184,
         "canopyOpacityPercent": 0,
@@ -160,6 +164,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 15.7074,
+        "spacingAdjustmentM": 0,
         "heightM": 19.7829,
         "canopyRadiusM": 7.3537,
         "canopyOpacityPercent": 0,
@@ -196,6 +201,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 10.3594,
+        "spacingAdjustmentM": 0,
         "heightM": 9.1238,
         "canopyRadiusM": 4.6797,
         "canopyOpacityPercent": 0,
@@ -232,6 +238,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 5.417,
+        "spacingAdjustmentM": 0,
         "heightM": 9.8092,
         "canopyRadiusM": 2.2085,
         "canopyOpacityPercent": 0,
@@ -268,6 +275,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 14.7658,
+        "spacingAdjustmentM": 0,
         "heightM": 27.7852,
         "canopyRadiusM": 6.88285,
         "canopyOpacityPercent": 0,
@@ -304,6 +312,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 6.7542,
+        "spacingAdjustmentM": 0,
         "heightM": 9.7541,
         "canopyRadiusM": 2.87715,
         "canopyOpacityPercent": 0,
@@ -340,6 +349,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 2.7278,
+        "spacingAdjustmentM": 0,
         "heightM": 1.3046,
         "canopyRadiusM": 0.8639,
         "canopyOpacityPercent": 0,
@@ -376,6 +386,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 3.2532,
+        "spacingAdjustmentM": 0,
         "heightM": 1.3884,
         "canopyRadiusM": 1.12665,
         "canopyOpacityPercent": 0,
@@ -412,6 +423,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 2.9902,
+        "spacingAdjustmentM": 0,
         "heightM": 1.7493,
         "canopyRadiusM": 0.99515,
         "canopyOpacityPercent": 0,
@@ -448,6 +460,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 5.0198,
+        "spacingAdjustmentM": 0,
         "heightM": 1.7771,
         "canopyRadiusM": 2.00985,
         "canopyOpacityPercent": 0,
@@ -484,6 +497,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 5.1822,
+        "spacingAdjustmentM": 0,
         "heightM": 1.5981,
         "canopyRadiusM": 2.0911,
         "canopyOpacityPercent": 0,
@@ -520,6 +534,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 2.3784,
+        "spacingAdjustmentM": 0,
         "heightM": 0.9741,
         "canopyRadiusM": 0.68915,
         "canopyOpacityPercent": 0,
@@ -556,6 +571,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 2.3998,
+        "spacingAdjustmentM": 0,
         "heightM": 1.4395,
         "canopyRadiusM": 0.69985,
         "canopyOpacityPercent": 0,
@@ -592,6 +608,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 3.096,
+        "spacingAdjustmentM": 0,
         "heightM": 1.1624,
         "canopyRadiusM": 1.048,
         "canopyOpacityPercent": 0,
@@ -628,6 +645,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 4.626,
+        "spacingAdjustmentM": 0,
         "heightM": 2.6933,
         "canopyRadiusM": 1.813,
         "canopyOpacityPercent": 0,
@@ -664,6 +682,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 6.468,
+        "spacingAdjustmentM": 0,
         "heightM": 4.4476,
         "canopyRadiusM": 2.73395,
         "canopyOpacityPercent": 0,
@@ -700,6 +719,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 13.8064,
+        "spacingAdjustmentM": 0,
         "heightM": 18.8107,
         "canopyRadiusM": 6.40325,
         "canopyOpacityPercent": 0,
@@ -736,6 +756,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 7.4056,
+        "spacingAdjustmentM": 0,
         "heightM": 8.138,
         "canopyRadiusM": 3.2028,
         "canopyOpacityPercent": 0,
@@ -772,6 +793,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 17.2252,
+        "spacingAdjustmentM": 0,
         "heightM": 14.7289,
         "canopyRadiusM": 8.11255,
         "canopyOpacityPercent": 0,
@@ -808,6 +830,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 12.6372,
+        "spacingAdjustmentM": 0,
         "heightM": 21.3319,
         "canopyRadiusM": 5.8186,
         "canopyOpacityPercent": 0,
@@ -844,6 +867,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 6.7222,
+        "spacingAdjustmentM": 0,
         "heightM": 12.8813,
         "canopyRadiusM": 2.86115,
         "canopyOpacityPercent": 0,
@@ -880,6 +904,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 10.3702,
+        "spacingAdjustmentM": 0,
         "heightM": 21.5699,
         "canopyRadiusM": 4.68505,
         "canopyOpacityPercent": 0,
@@ -916,6 +941,7 @@
       "densityPercent": 100,
       "profile": {
         "matureSpacingM": 9.7432,
+        "spacingAdjustmentM": 0,
         "heightM": 11.0059,
         "canopyRadiusM": 4.37155,
         "canopyOpacityPercent": 0,
@@ -968,6 +994,7 @@
             "densityPercent": 100,
             "profile": {
               "matureSpacingM": 9.2802,
+              "spacingAdjustmentM": 0,
               "heightM": 7.7058,
               "canopyRadiusM": 4.1401,
               "canopyOpacityPercent": 0,
@@ -1021,6 +1048,7 @@
             "densityPercent": 35,
             "profile": {
               "matureSpacingM": 4.626,
+              "spacingAdjustmentM": 0,
               "heightM": 2.6933,
               "canopyRadiusM": 1.813,
               "canopyOpacityPercent": 0,
@@ -1057,6 +1085,7 @@
             "densityPercent": 15,
             "profile": {
               "matureSpacingM": 6.468,
+              "spacingAdjustmentM": 0,
               "heightM": 4.4476,
               "canopyRadiusM": 2.73395,
               "canopyOpacityPercent": 0,
@@ -1093,6 +1122,7 @@
             "densityPercent": 25,
             "profile": {
               "matureSpacingM": 5.0198,
+              "spacingAdjustmentM": 0,
               "heightM": 1.7771,
               "canopyRadiusM": 2.00985,
               "canopyOpacityPercent": 0,
@@ -1129,6 +1159,7 @@
             "densityPercent": 25,
             "profile": {
               "matureSpacingM": 5.1822,
+              "spacingAdjustmentM": 0,
               "heightM": 1.5981,
               "canopyRadiusM": 2.0911,
               "canopyOpacityPercent": 0,
@@ -1182,6 +1213,7 @@
             "densityPercent": 30,
             "profile": {
               "matureSpacingM": 17.2252,
+              "spacingAdjustmentM": 0,
               "heightM": 14.7289,
               "canopyRadiusM": 8.11255,
               "canopyOpacityPercent": 0,
@@ -1218,6 +1250,7 @@
             "densityPercent": 25,
             "profile": {
               "matureSpacingM": 10.0852,
+              "spacingAdjustmentM": 0,
               "heightM": 16.2691,
               "canopyRadiusM": 4.54255,
               "canopyOpacityPercent": 0,
@@ -1254,6 +1287,7 @@
             "densityPercent": 10,
             "profile": {
               "matureSpacingM": 15.7074,
+              "spacingAdjustmentM": 0,
               "heightM": 19.7829,
               "canopyRadiusM": 7.3537,
               "canopyOpacityPercent": 0,
@@ -1290,6 +1324,7 @@
             "densityPercent": 15,
             "profile": {
               "matureSpacingM": 5.417,
+              "spacingAdjustmentM": 0,
               "heightM": 9.8092,
               "canopyRadiusM": 2.2085,
               "canopyOpacityPercent": 0,
@@ -1326,6 +1361,7 @@
             "densityPercent": 10,
             "profile": {
               "matureSpacingM": 12.6372,
+              "spacingAdjustmentM": 0,
               "heightM": 21.3319,
               "canopyRadiusM": 5.8186,
               "canopyOpacityPercent": 0,
@@ -1362,6 +1398,7 @@
             "densityPercent": 10,
             "profile": {
               "matureSpacingM": 10.3702,
+              "spacingAdjustmentM": 0,
               "heightM": 21.5699,
               "canopyRadiusM": 4.68505,
               "canopyOpacityPercent": 0,
@@ -1398,6 +1435,7 @@
             "densityPercent": 30,
             "profile": {
               "matureSpacingM": 4.626,
+              "spacingAdjustmentM": 0,
               "heightM": 2.6933,
               "canopyRadiusM": 1.813,
               "canopyOpacityPercent": 0,
@@ -1434,6 +1472,7 @@
             "densityPercent": 10,
             "profile": {
               "matureSpacingM": 6.468,
+              "spacingAdjustmentM": 0,
               "heightM": 4.4476,
               "canopyRadiusM": 2.73395,
               "canopyOpacityPercent": 0,
@@ -1487,6 +1526,7 @@
             "densityPercent": 30,
             "profile": {
               "matureSpacingM": 17.2252,
+              "spacingAdjustmentM": 0,
               "heightM": 14.7289,
               "canopyRadiusM": 8.11255,
               "canopyOpacityPercent": 0,
@@ -1523,6 +1563,7 @@
             "densityPercent": 25,
             "profile": {
               "matureSpacingM": 10.0852,
+              "spacingAdjustmentM": 0,
               "heightM": 16.2691,
               "canopyRadiusM": 4.54255,
               "canopyOpacityPercent": 0,
@@ -1559,6 +1600,7 @@
             "densityPercent": 10,
             "profile": {
               "matureSpacingM": 15.7074,
+              "spacingAdjustmentM": 0,
               "heightM": 19.7829,
               "canopyRadiusM": 7.3537,
               "canopyOpacityPercent": 0,
@@ -1595,6 +1637,7 @@
             "densityPercent": 15,
             "profile": {
               "matureSpacingM": 5.417,
+              "spacingAdjustmentM": 0,
               "heightM": 9.8092,
               "canopyRadiusM": 2.2085,
               "canopyOpacityPercent": 0,
@@ -1631,6 +1674,7 @@
             "densityPercent": 10,
             "profile": {
               "matureSpacingM": 12.6372,
+              "spacingAdjustmentM": 0,
               "heightM": 21.3319,
               "canopyRadiusM": 5.8186,
               "canopyOpacityPercent": 0,
@@ -1667,6 +1711,7 @@
             "densityPercent": 10,
             "profile": {
               "matureSpacingM": 10.3702,
+              "spacingAdjustmentM": 0,
               "heightM": 21.5699,
               "canopyRadiusM": 4.68505,
               "canopyOpacityPercent": 0,
@@ -1720,6 +1765,7 @@
             "densityPercent": 40,
             "profile": {
               "matureSpacingM": 13.8064,
+              "spacingAdjustmentM": 0,
               "heightM": 18.8107,
               "canopyRadiusM": 6.40325,
               "canopyOpacityPercent": 0,
@@ -1756,6 +1802,7 @@
             "densityPercent": 30,
             "profile": {
               "matureSpacingM": 7.4056,
+              "spacingAdjustmentM": 0,
               "heightM": 8.138,
               "canopyRadiusM": 3.2028,
               "canopyOpacityPercent": 0,
@@ -1792,6 +1839,7 @@
             "densityPercent": 30,
             "profile": {
               "matureSpacingM": 9.2802,
+              "spacingAdjustmentM": 0,
               "heightM": 7.7058,
               "canopyRadiusM": 4.1401,
               "canopyOpacityPercent": 0,
@@ -1828,6 +1876,7 @@
             "densityPercent": 30,
             "profile": {
               "matureSpacingM": 4.626,
+              "spacingAdjustmentM": 0,
               "heightM": 2.6933,
               "canopyRadiusM": 1.813,
               "canopyOpacityPercent": 0,
@@ -1864,6 +1913,7 @@
             "densityPercent": 10,
             "profile": {
               "matureSpacingM": 6.468,
+              "spacingAdjustmentM": 0,
               "heightM": 4.4476,
               "canopyRadiusM": 2.73395,
               "canopyOpacityPercent": 0,
@@ -1917,6 +1967,7 @@
             "densityPercent": 40,
             "profile": {
               "matureSpacingM": 13.8064,
+              "spacingAdjustmentM": 0,
               "heightM": 18.8107,
               "canopyRadiusM": 6.40325,
               "canopyOpacityPercent": 0,
@@ -1953,6 +2004,7 @@
             "densityPercent": 30,
             "profile": {
               "matureSpacingM": 7.4056,
+              "spacingAdjustmentM": 0,
               "heightM": 8.138,
               "canopyRadiusM": 3.2028,
               "canopyOpacityPercent": 0,
@@ -1989,6 +2041,7 @@
             "densityPercent": 30,
             "profile": {
               "matureSpacingM": 9.2802,
+              "spacingAdjustmentM": 0,
               "heightM": 7.7058,
               "canopyRadiusM": 4.1401,
               "canopyOpacityPercent": 0,
@@ -2042,6 +2095,7 @@
             "densityPercent": 55,
             "profile": {
               "matureSpacingM": 4.626,
+              "spacingAdjustmentM": 0,
               "heightM": 2.6933,
               "canopyRadiusM": 1.813,
               "canopyOpacityPercent": 0,
@@ -2078,6 +2132,7 @@
             "densityPercent": 30,
             "profile": {
               "matureSpacingM": 6.468,
+              "spacingAdjustmentM": 0,
               "heightM": 4.4476,
               "canopyRadiusM": 2.73395,
               "canopyOpacityPercent": 0,
@@ -2114,6 +2169,7 @@
             "densityPercent": 15,
             "profile": {
               "matureSpacingM": 7.4056,
+              "spacingAdjustmentM": 0,
               "heightM": 8.138,
               "canopyRadiusM": 3.2028,
               "canopyOpacityPercent": 0,

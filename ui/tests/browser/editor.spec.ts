@@ -17,7 +17,7 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await expect(page.getByLabel("District name")).toHaveValue(
         "Vegetation district 1",
     );
-    await page.getByLabel("Overall density (%)", { exact: true }).fill("42");
+    await page.getByLabel("Density multiplier", { exact: true }).fill("0.42");
     await expect(
         page.getByRole("heading", {
             name: "London Plane *",
@@ -57,8 +57,8 @@ test("draw, edit, save, reselect, reload and remove district", async ({
         .getByRole("button", { name: "Vegetation district 1", exact: true })
         .click();
     await expect(
-        page.getByLabel("Overall density (%)", { exact: true }),
-    ).toHaveValue("42");
+        page.getByLabel("Density multiplier", { exact: true }),
+    ).toHaveValue("0.42");
     await page
         .getByRole("button", { name: "Delete district", exact: true })
         .click();
@@ -72,8 +72,8 @@ test("invalid input stays local and cancellation keeps district untouched", asyn
     page,
 }) => {
     await page.goto("/");
-    await page.getByLabel("Overall density (%)", { exact: true }).fill("150");
-    await expect(page.getByRole("alert")).toContainText("≤ 100");
+    await page.getByLabel("Density multiplier", { exact: true }).fill("2.1");
+    await expect(page.getByRole("alert")).toContainText("≤ 2");
     await page
         .getByRole("button", { name: "Draw district", exact: true })
         .click();
@@ -83,8 +83,8 @@ test("invalid input stays local and cancellation keeps district untouched", asyn
     await page.getByRole("button", { name: "Cancel drawing" }).click();
     await page.reload();
     await expect(
-        page.getByLabel("Overall density (%)", { exact: true }),
-    ).toHaveValue("75");
+        page.getByLabel("Density multiplier", { exact: true }),
+    ).toHaveValue("0.75");
     await expect(
         page.getByText("No districts yet.", { exact: true }),
     ).toBeVisible();
@@ -94,7 +94,7 @@ test("saving before replacement preserves edits and custom library survives a ne
     page,
 }) => {
     await page.goto("/");
-    await page.getByLabel("Overall density (%)", { exact: true }).fill("30");
+    await page.getByLabel("Density multiplier", { exact: true }).fill("0.3");
     await page
         .getByLabel("Vegetation set", { exact: true })
         .selectOption("builtin:london-plane");
@@ -108,8 +108,8 @@ test("saving before replacement preserves edits and custom library survives a ne
         .getByLabel("Vegetation set", { exact: true })
         .selectOption({ label: "My sets · Retained mix" });
     await expect(
-        page.getByLabel("Overall density (%)", { exact: true }),
-    ).toHaveValue("30");
+        page.getByLabel("Density multiplier", { exact: true }),
+    ).toHaveValue("0.3");
     page.once("dialog", (d) => d.accept());
     await page
         .getByRole("button", { name: "New preview city", exact: true })
@@ -118,8 +118,8 @@ test("saving before replacement preserves edits and custom library survives a ne
         .getByLabel("Vegetation set", { exact: true })
         .selectOption({ label: "My sets · Retained mix" });
     await expect(
-        page.getByLabel("Overall density (%)", { exact: true }),
-    ).toHaveValue("30");
+        page.getByLabel("Density multiplier", { exact: true }),
+    ).toHaveValue("0.3");
 });
 
 test("redraw cancellation and undo restore the existing district", async ({
@@ -146,11 +146,11 @@ test("redraw cancellation and undo restore the existing district", async ({
     await canvas.click({ position: { x: 300, y: 400 } });
     await page.getByRole("button", { name: "Cancel drawing" }).click();
     await expect(polygon).toHaveAttribute("points", original!);
-    await page.getByLabel("Overall density (%)", { exact: true }).fill("20");
+    await page.getByLabel("Density multiplier", { exact: true }).fill("0.2");
     await page.getByRole("button", { name: "Undo preview edit" }).click();
     await expect(
-        page.getByLabel("Overall density (%)", { exact: true }),
-    ).toHaveValue("75");
+        page.getByLabel("Density multiplier", { exact: true }),
+    ).toHaveValue("0.75");
 });
 
 test("picker offers researched vegetation while preventing duplicates", async ({
@@ -216,4 +216,32 @@ test("NZ preset exposes its three editable proxy profiles", async ({
         path: "../artifacts/editor-nz-checkpoint.png",
         fullPage: true,
     });
+    await expect(
+        page.getByLabel("Density multiplier", { exact: true }),
+    ).toHaveValue("1");
+    await page.getByLabel("Density multiplier", { exact: true }).fill("2");
+    await expect(
+        page.getByLabel("Spacing adjustment (m)", { exact: true }).first(),
+    ).toHaveValue("0");
+    await page
+        .getByLabel("Spacing adjustment (m)", { exact: true })
+        .first()
+        .fill("-1");
+    await page.reload();
+    await expect(
+        page.getByLabel("Density multiplier", { exact: true }),
+    ).toHaveValue("2");
+    await page
+        .getByRole("button", { name: "Set settings · 3 vegetation assets" })
+        .click();
+    await page
+        .getByRole("button", {
+            name: "Species profile · shared across ages",
+            exact: true,
+        })
+        .first()
+        .click();
+    await expect(
+        page.getByLabel("Spacing adjustment (m)", { exact: true }).first(),
+    ).toHaveValue("-1");
 });

@@ -97,7 +97,7 @@ namespace TreeDistrict.Tests
             Assert.Equal(12, shrub.Temperature.Optimum);
             Assert.Equal(60, shrub.Terrain.MaximumSlopeDegrees);
             Assert.Equal(55, shrub.DensityPercent);
-            Assert.Equal((double)record["working"]["assets"][0]["profile"]["matureSpacingM"] / 2, shrub.PreferredSpacingRadiusM);
+            Assert.Equal((double)record["working"]["assets"][0]["profile"]["canopyRadiusM"], shrub.PreferredSpacingRadiusM);
             Assert.Equal(45, request.Species.Single(p => p.Id == "cs2:NA_LindenTree01").Terrain.MaximumSlopeDegrees);
             var coordinator = new FoliageGenerationCoordinator(request, p => new GroundSample(0, 50));
             var result = coordinator.Generate(new ProtonScatterSettings());
@@ -116,6 +116,53 @@ namespace TreeDistrict.Tests
             record["working"]["clumpingPercent"] = 0;
             record["working"]["assets"][0]["ages"][0]["proportionPercent"] = 0;
             Assert.Throws<ArgumentException>(() => DistrictGenerationAdapter.Create(record, city));
+        }
+
+        [Theory]
+        [InlineData(1, 0)]
+        [InlineData(2, 0)]
+        [InlineData(1, 1)]
+        [InlineData(2, 1)]
+        [InlineData(1, -1)]
+        public void DensityScalesCrownPlusGapSpacing(double multiplier, double gap)
+        {
+            var catalog = Catalog();
+            var preset = catalog["sets"].Single(s => (string)s["id"] == "builtin:nz-regenerating-bush");
+            var record = District(preset["set"]);
+            record["working"]["overallDensityPercent"] = multiplier * 100;
+            foreach (var asset in record["working"]["assets"]) asset["profile"]["spacingAdjustmentM"] = gap;
+            var request = DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]);
+            foreach (var profile in request.Species)
+                Assert.Equal(profile.CrownRadiusM + gap / 2, profile.PreferredSpacingRadiusM);
+            var plan = new FoliageGenerationCoordinator(request, p => new GroundSample(0)).Generate(Scatter()).Placements;
+            Assert.NotEmpty(plan);
+            var radii = request.Species.ToDictionary(s => s.Id, s => s.PreferredSpacingRadiusM.Value);
+            for (int i = 0; i < plan.Count; i++)
+                for (int j = 0; j < i; j++)
+                {
+                    double dx = plan[i].Position.X - plan[j].Position.X, dz = plan[i].Position.Z - plan[j].Position.Z;
+                    double required = (radii[plan[i].SpeciesId] + radii[plan[j].SpeciesId]) / Math.Sqrt(multiplier);
+                    Assert.True(dx * dx + dz * dz >= required * required - 1e-8);
+                }
+            record["working"]["overallDensityPercent"] = 0;
+            request = DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]);
+            Assert.Empty(new FoliageGenerationCoordinator(request, p => new GroundSample(0)).Generate(Scatter()).Placements);
+        }
+
+        [Fact]
+        public void MissingGapDefaultsToZeroAndNegativeGapCannotProduceNonpositiveSpacing()
+        {
+            var catalog = Catalog(); var record = District(catalog["sets"][0]["set"]);
+            var profile = (JObject)record["working"]["assets"][0]["profile"];
+            profile.Remove("spacingAdjustmentM");
+            var request = DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]);
+            Assert.Equal((double)profile["canopyRadiusM"], request.Species[0].PreferredSpacingRadiusM);
+            profile["canopyRadiusM"] = .2; profile["spacingAdjustmentM"] = -1;
+            Assert.Equal(.05, DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]).Species[0].PreferredSpacingRadiusM);
+            profile["spacingAdjustmentM"] = 1.1;
+            Assert.Throws<ArgumentException>(() => DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]));
+            profile["spacingAdjustmentM"] = 0; record["working"]["overallDensityPercent"] = 201;
+            Assert.Throws<ArgumentException>(() => DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]));
         }
     }
 }

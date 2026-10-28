@@ -29,6 +29,7 @@ export const limitsSchema = z
     );
 export const profileSchema = z.object({
     matureSpacingM: number.min(1).max(200),
+    spacingAdjustmentM: number.min(-1).max(1).optional(),
     heightM: number.positive().max(200),
     canopyRadiusM: number.min(0).max(100),
     canopyOpacityPercent: percent,
@@ -58,7 +59,7 @@ export const assetSchema = z
 export const setSchema = z
     .object({
         name,
-        overallDensityPercent: percent,
+        overallDensityPercent: number.min(0).max(200),
         clumpingPercent: percent,
         climate: overridesSchema,
         limits: limitsSchema,

@@ -153,7 +153,7 @@ namespace TreeDistrict
         public static void ValidateSet(JToken value)
         {
             var set = Object(value); Text(set["name"], 80);
-            Number(set["overallDensityPercent"], 0, 100); Number(set["clumpingPercent"], 0, 100);
+            Number(set["overallDensityPercent"], 0, 200); Number(set["clumpingPercent"], 0, 100);
             ValidateClimate(set["climate"], true); Limits(set["limits"]);
             var assets = Array(set["assets"], 0, 128); Unique(assets);
             foreach (var asset in assets)
@@ -161,6 +161,7 @@ namespace TreeDistrict
                 Text(asset["name"], 80); Boolean(asset["placeholder"]); Number(asset["densityPercent"], 0, 100);
                 var profile = Object(asset["profile"]);
                 Number(profile["matureSpacingM"], 1, 200);
+                if (profile["spacingAdjustmentM"] != null) Number(profile["spacingAdjustmentM"], -1, 1);
                 if (Number(profile["heightM"], 0, 200) <= 0) throw new ArgumentException("Height must be positive.");
                 Number(profile["canopyRadiusM"], 0, 100);
                 Number(profile["canopyOpacityPercent"], 0, 100); Number(profile["shadeTolerancePercent"], 0, 100);

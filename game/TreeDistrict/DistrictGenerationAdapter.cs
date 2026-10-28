@@ -41,7 +41,10 @@ namespace TreeDistrict
                     Id = (string)a["id"],
                     CandidatesPerHectare = 100,
                     DensityPercent = (double)a["densityPercent"],
-                    PreferredSpacingRadiusM = (double)p["matureSpacingM"] / 2,
+                    // Full centre spacing = crown diameter plus authored edge gap.
+                    // Negative gaps allow overlapping foliage; keep tiny plants' spacing positive.
+                    PreferredSpacingRadiusM = Math.Max(.1, (double)p["canopyRadiusM"] * 2
+                        + ((double?)p["spacingAdjustmentM"] ?? 0)) / 2,
                     MatureHeightM = (double)p["heightM"],
                     CrownRadiusM = (double)p["canopyRadiusM"],
                     CrownOpacity = (double)p["canopyOpacityPercent"] / 100,

@@ -18,6 +18,19 @@ The official Windows build is staged for in-game testing; mixed spawning,
 save/load, native deletion and bake/delete still need that runtime verification.
 See [Windows staging and test steps](docs/windows-setup.md#mixed-vegetation-integration).
 
+The editor's density multiplier spans 0–2 (1 = normal, 0 = empty). Storage retains
+`overallDensityPercent` for compatibility: 100 = 1×, 200 = 2×. Vegetation profiles
+have `spacingAdjustmentM` from −1 to +1, default 0. Normal centre spacing is canopy
+diameter plus that adjustment, floored at 0.1 m for tiny plants. The solver scales
+spacing by `1 / sqrt(multiplier)`; 2× targets twice the population, not half the
+centre distance. Mixed pairs use the mean of their individual centre spacings.
+The old `matureSpacingM` field remains for legacy data/planner compatibility but
+is no longer used by the editor-to-solver bridge. Missing adjustment fields in
+saved profiles mean zero on regeneration; existing plants are unchanged until then.
+Raw standalone profile mode still accepts explicit solver spacing radii. Use
+workspace mode to reproduce these editor controls, as in
+`scripts/plot-nz-density.py` (four flat-ground NZ comparisons).
+
 
 ### Editor-to-solver checkpoint (Ubuntu)
 
