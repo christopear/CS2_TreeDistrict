@@ -5,13 +5,13 @@ namespace TreeDistrict
     // Native TreeState values; kept independent of game assemblies for adapter tests.
     public static class VegetationSpawnPolicy
     {
-        public const int MaxOwnedPlants = 1000000;
-
-        public static void ConfigureLargeAreaTest(TreeDistrict.Core.Foliage.GenerationRequest request)
+        public static void ConfigureStampGeneration(TreeDistrict.Core.Foliage.GenerationRequest request)
         {
-            request.MaxPlacements = MaxOwnedPlants;
-            request.MaxCandidates = MaxOwnedPlants;
-            request.MaxPositionAttempts = 100000000;
+            // No product population cap; collections and native entity indices use Int32.
+            request.MaxPlacements = int.MaxValue;
+            // Candidate budget applies to each 198m template, not the tiled area.
+            request.MaxCandidates = 1000000;
+            request.MaxPositionAttempts = int.MaxValue;
             request.MaxNeighbourChecks = 1000000000L;
         }
 

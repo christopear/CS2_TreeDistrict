@@ -53,7 +53,7 @@ namespace TreeDistrict.Tests
             foreach (var preset in catalog["sets"])
             {
                 var request = DistrictGenerationAdapter.Create(District(preset["set"]), (JObject)catalog["cityDefaults"]);
-                request.MaxPlacements = VegetationSpawnPolicy.MaxOwnedPlants;
+                request.MaxPlacements = int.MaxValue;
                 var result = new FoliageGenerationCoordinator(request,
                     p => new GroundSample(p.X * .3, Math.Atan(.3) * 180 / Math.PI, isWater: p.Z < 30)).Generate(Scatter());
                 Assert.NotEmpty(result.Placements);
@@ -188,21 +188,21 @@ namespace TreeDistrict.Tests
         }
 
         [Fact]
-        public void NativeTestBudgetAllowsMoreThanTenThousandPlants()
+        public void NativeStampBudgetHasNoMillionPlantCap()
         {
             var catalog = Catalog();
             var preset = catalog["sets"].Single(s => (string)s["id"] == "builtin:nz-regenerating-bush");
             var record = District(preset["set"]);
-            record["boundary"] = JArray.Parse("[{x:0,z:0},{x:600,z:0},{x:600,z:600},{x:0,z:600}]");
+            record["boundary"] = JArray.Parse("[{x:0,z:0},{x:5000,z:0},{x:5000,z:5000},{x:0,z:5000}]");
             record["working"]["overallDensityPercent"] = 200;
             var request = DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]);
-            VegetationSpawnPolicy.ConfigureLargeAreaTest(request);
-            Assert.Equal(1000000, request.MaxPlacements);
-            Assert.Equal(request.MaxPlacements, request.MaxCandidates);
+            VegetationSpawnPolicy.ConfigureStampGeneration(request);
+            Assert.Equal(int.MaxValue, request.MaxPlacements);
+            Assert.Equal(1000000, request.MaxCandidates);
             var scatter = Scatter();
             var plan = new StampFoliageGenerator().Generate(request, p => new GroundSample(0), scatter,
                 DistrictGenerationAdapter.StampSettingsKey(request, scatter));
-            Assert.InRange(plan.Placements.Count, 10001, request.MaxPlacements);
+            Assert.InRange(plan.Placements.Count, 1000001, request.MaxPlacements);
         }
 
         [Fact]

@@ -79,7 +79,7 @@ namespace TreeDistrict
             if (boundary.Count > 3 && JToken.DeepEquals(boundary[0], boundary[boundary.Count - 1])) boundary.RemoveAt(boundary.Count - 1);
             snapshot["boundary"] = boundary;
             var request = DistrictGenerationAdapter.Create(snapshot, (JObject)_state["city"]);
-            VegetationSpawnPolicy.ConfigureLargeAreaTest(request);
+            VegetationSpawnPolicy.ConfigureStampGeneration(request);
             // No existing-vegetation query: all interaction with manually placed/baked/other-area plants is deferred.
             var native = new Dictionary<string, NativeVegetation>(StringComparer.Ordinal);
             var assets = snapshot["working"]["assets"].ToDictionary(a => (string)a["id"], StringComparer.Ordinal);

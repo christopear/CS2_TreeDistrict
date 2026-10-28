@@ -149,7 +149,7 @@
     },
     {
       "id": "nz-regenerating-bush",
-      "name": "New Zealand regenerating bush",
+      "name": "Scrub",
       "description": "Low and tall scrub with occasional small canopy trees. Existing game meshes are structural proxies; no NZ species or evergreen seasonal behaviour is claimed.",
       "overallDensityPercent": 100,
       "sources": [

@@ -81,7 +81,7 @@ use Draw district to activate the native area tool directly; it does not depend
 on the gameplay district menu. Settings bindings run in GameOrEditor mode, and
 editor selection uses ToolSystem instead of the gameplay-only selected-info UI.
 Editor drawing, generation and saved/exported map behaviour need in-game testing.
-The portable test verifies a 600 m square can produce more than 10,000 plants;
+The portable test verifies a 5 km square can produce more than 1,000,000 plants;
 it does not establish that creating a million native entities performs acceptably.
 The stamp path samples each copied plant directly; it does not build the full-area
 environment grid previously used by native generation.
@@ -109,7 +109,8 @@ are culled, but positive suitability does not thin or remix the cached distribut
 Additional shade/competition passes remain off. Clumping
 must be zero. Climate uses the authored city reference and set overrides with
 altitude cooling; no live seasonal temperature is read. Generation is synchronous,
-manual and temporarily limited to 1,000,000 owned plants per area for large-area testing.
+manual, with no TreeDistrict population cap. Areas over 25 km² show a non-blocking
+warning before generation; native game limits and available memory still apply.
 Candidate/attempt/neighbour budgets are raised alongside ownership/save-load limits;
 this does not make planning or spawning asynchronous. Oversized plans fail rather
 than silently truncating. Saved areas retain their settings; choose a new preset

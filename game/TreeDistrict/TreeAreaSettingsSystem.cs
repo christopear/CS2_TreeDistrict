@@ -291,7 +291,7 @@ namespace TreeDistrict
                 if (version >= 2)
                 {
                     reader.Read(out int treeCount);
-                    if (treeCount < 0 || treeCount > VegetationSpawnPolicy.MaxOwnedPlants) throw new InvalidDataException("Invalid owned vegetation count.");
+                    if (treeCount < 0) throw new InvalidDataException("Invalid owned vegetation count.");
                     for (int j = 0; j < treeCount; j++) { reader.Read(out Entity tree); if (tree != Entity.Null) trees.Add(tree); }
                 }
                 if (entity == Entity.Null) { _orphanTrees.AddRange(trees); continue; }
@@ -301,7 +301,7 @@ namespace TreeDistrict
             if (version >= 2)
             {
                 reader.Read(out int orphanCount);
-                if (orphanCount < 0 || orphanCount > 2048 * VegetationSpawnPolicy.MaxOwnedPlants) throw new InvalidDataException("Invalid pending cleanup count.");
+                if (orphanCount < 0) throw new InvalidDataException("Invalid pending cleanup count.");
                 for (int j = 0; j < orphanCount; j++) { reader.Read(out Entity tree); if (tree != Entity.Null) _orphanTrees.Add(tree); }
             }
             Mod.Log.Info("Loaded settings for " + _areaIds.Count + " Tree Areas.");

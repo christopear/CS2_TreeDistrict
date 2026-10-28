@@ -17,6 +17,18 @@ namespace TreeDistrict
             // Native UI group buffers are rebuilt during city loading.
             Enabled = true;
             OnUpdate();
+            if (Mod.Area != null && _prefabs.TryGetEntity(Mod.Area, out var areaEntity)
+                && EntityManager.HasComponent<AreaGeometryData>(areaEntity))
+            {
+                // Native districts use this flag to permit boundaries crossing water.
+                // Tree placement still filters submerged ground independently.
+                var geometry = EntityManager.GetComponentData<AreaGeometryData>(areaEntity);
+                if ((mode & GameMode.Editor) != 0)
+                    geometry.m_Flags |= Game.Areas.GeometryFlags.OnWaterSurface;
+                else
+                    geometry.m_Flags &= ~Game.Areas.GeometryFlags.OnWaterSurface;
+                EntityManager.SetComponentData(areaEntity, geometry);
+            }
         }
         protected override void OnCreate()
         {

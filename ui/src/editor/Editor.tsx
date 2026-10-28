@@ -202,6 +202,14 @@ export function Editor({
     const target = targetOf(state, selectedId),
         set = target.working;
     const district = state.districts.find((d) => d.id === selectedId);
+    const areaM2 = district
+        ? Math.abs(
+              district.boundary.reduce((sum, point, i, points) => {
+                  const next = points[(i + 1) % points.length];
+                  return sum + point.x * next.z - next.x * point.z;
+              }, 0),
+          ) / 2
+        : 0;
     const changed = modified(target);
     const resolved = resolveClimate(state, set);
     const entry = state.library.find((s) => s.id === target.libraryId);
@@ -457,7 +465,7 @@ export function Editor({
                     <p className="td-help">
                         Profiles use measured mature footprints and estimated
                         temperature/slope responses. Preset overrides stay with
-                        the set; NZ plants are visual proxies.
+                        the set; scrub plants are visual proxies.
                     </p>
                     {set.assets.map((asset) => (
                         <div key={asset.id} className="td-asset">
@@ -592,6 +600,14 @@ export function Editor({
                 </Foldout>
                 {district && (
                     <Foldout title="District actions" initial>
+                        {areaM2 > 25_000_000 && (
+                            <p className="td-help" role="status">
+                                Large area ({(areaM2 / 1_000_000).toFixed(1)}{" "}
+                                km²). Generation may place millions of plants
+                                and freeze the game while it finishes. There is
+                                no TreeDistrict population cap.
+                            </p>
+                        )}
                         <p className="td-help" role="status">
                             {district.generatedCount ?? 0} linked trees. Manual
                             generation only.

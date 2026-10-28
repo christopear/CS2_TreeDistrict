@@ -2077,7 +2077,7 @@
       "id": "builtin:nz-regenerating-bush",
       "builtIn": true,
       "set": {
-        "name": "New Zealand regenerating bush",
+        "name": "Scrub",
         "overallDensityPercent": 100,
         "clumpingPercent": 0,
         "climate": {},
