@@ -195,7 +195,7 @@ namespace TreeDistrict
             mesh.SetVertices(vertices); mesh.SetNormals(normals); mesh.SetUVs(0, uv); mesh.SetTriangles(indices, 0); mesh.RecalculateBounds();
             mesh.UploadMeshData(true);
             // Bake cheap hollow shading/colour into a texture; HDRP/Lit doesn't consume vertex colours.
-            const int size = 97;
+            const int size = 193; // 25 cm colour samples across a 48 m chunk.
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, true) {
                 name = "TreeCanopy colour", wrapMode = TextureWrapMode.Clamp, hideFlags = HideFlags.HideAndDontSave
             };
@@ -204,8 +204,9 @@ namespace TreeDistrict
             for (int z = 0; z < size; z++)
                 for (int x = 0; x < size; x++)
                 {
-                    float shade = (float)CanopyGeometry.Shade(x0 + x, z0 + z);
-                    pixels[z * size + x] = new Color(.22f * shade, .37f * shade, .13f * shade, 1);
+                    double step = CanopyGeometry.TileSize / (size - 1);
+                    var colour = CanopyGeometry.Colour(x0 + x * step, z0 + z * step);
+                    pixels[z * size + x] = new Color((float)colour.R, (float)colour.G, (float)colour.B, 1);
                 }
             texture.SetPixels(pixels); texture.Apply(true, true);
             var material = new Material(shader) { name = "TreeCanopy material", hideFlags = HideFlags.HideAndDontSave };
@@ -213,7 +214,7 @@ namespace TreeDistrict
             material.SetColor("_BaseColor", Color.white); material.SetTexture("_BaseColorMap", texture);
             if (material.HasProperty("_UnlitColor")) material.SetColor("_UnlitColor", Color.white);
             if (material.HasProperty("_UnlitColorMap")) material.SetTexture("_UnlitColorMap", texture);
-            if (material.HasProperty("_Smoothness")) material.SetFloat("_Smoothness", .15f);
+            if (material.HasProperty("_Smoothness")) material.SetFloat("_Smoothness", .05f);
             if (material.HasProperty("_Metallic")) material.SetFloat("_Metallic", 0);
             material.renderQueue = (int)RenderQueue.Geometry;
             UnityEngine.Rendering.HighDefinition.HDMaterial.ValidateMaterial(material);

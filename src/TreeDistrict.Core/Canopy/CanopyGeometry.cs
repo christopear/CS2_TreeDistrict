@@ -12,8 +12,8 @@ namespace TreeDistrict.Core.Canopy
     // not an implementation of Heuser's unpublished constrained triangulator.
     public sealed class CanopyGeometry
     {
-        public const double TileSize = 96;
-        public const double Spacing = 6;
+        public const double TileSize = 48;
+        public const double Spacing = 2;
         private const double Epsilon = 1e-8;
         private readonly Position2[] boundary;
         private readonly List<Face> outline;
@@ -134,8 +134,29 @@ namespace TreeDistrict.Core.Canopy
         }
 
         // Shared world-space fields make edits stable and adjacent chunks agree.
-        public static double Height(double x, double z) => 10 + 7 * Noise(x / 14, z / 14, 31) + 2 * Noise(x / 4, z / 4, 71);
-        public static double Shade(double x, double z) => .55 + .32 * Noise(x / 14, z / 14, 31) + .13 * Noise(x / 2, z / 2, 19);
+        // Rotate/warp the fields so the canopy does not reveal a square noise lattice.
+        private static double Crown(double x, double z)
+        {
+            double u = .8 * x + .6 * z + 5 * Noise(x / 27, z / 27, 101);
+            double v = -.6 * x + .8 * z + 5 * Noise(x / 27, z / 27, 113);
+            return Noise(u / 9, v / 9, 31);
+        }
+        public static double Height(double x, double z) => 10 + 6.3 * Crown(x, z)
+            + 2 * Noise((.6 * x - .8 * z) / 4, (.8 * x + .6 * z) / 4, 71)
+            + .7 * Noise(x / 1.8, z / 1.8, 53);
+        public static double Shade(double x, double z) => .55 + .3 * Crown(x, z)
+            + .1 * Noise(x / 1.3, z / 1.3, 19) + .05 * Noise(x / .3, z / .3, 83);
+
+        // Muted olive/sage variation and fine foliage mottling, independent of mesh resolution.
+        // RGB values are sRGB, for a colour texture (not a data/linear texture).
+        public static (double R, double G, double B) Colour(double x, double z)
+        {
+            double patch = Noise((.8 * x + .6 * z) / 18, (-.6 * x + .8 * z) / 18, 137);
+            double detail = .86 + .14 * Noise(x / .45, z / .45, 149);
+            double shade = Shade(x, z) * detail;
+            return ((.18 + .05 * patch) * shade, (.25 + .025 * patch) * shade,
+                (.16 - .025 * patch) * shade);
+        }
         private static double Noise(double x, double z, int seed)
         {
             int ix = (int)Math.Floor(x), iz = (int)Math.Floor(z);

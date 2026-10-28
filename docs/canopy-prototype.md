@@ -16,12 +16,15 @@ hollows. Reference: https://julianh.dev/portfolio/graphics/#professional-work
 This is our implementation of that broad approach, not Diamond Visionics code
 or a reproduction of its unpublished renderer.
 
-The standalone `CanopyGeometry` class builds 96 m chunks with jittered samples
-roughly 6 m apart. It clips Delaunay triangles against a triangulated native area
+The standalone `CanopyGeometry` class builds 48 m chunks with jittered samples
+roughly 2 m apart. It clips Delaunay triangles against a triangulated native area
 outline rather than implementing constrained Delaunay insertion. Shared samples
 and continuous world-space height/colour fields join adjacent chunks. The top is
 10–19 m above sampled terrain. Exterior skirts extend down to the terrain. A
-baked colour texture darkens hollows; HDRP provides surface lighting and shadows.
+baked colour texture sampled every 25 cm darkens hollows and adds fine foliage
+mottling with muted olive/sage variation; HDRP provides surface lighting and shadows.
+Rotated, warped height fields break up the underlying noise grid, with smaller
+lobes layered onto the broad canopy. A 200 m square has roughly 20,000 top triangles.
 The fallback HDRP Unlit shader has baked colour only if Lit is unavailable. A
 missing supported shader logs an error rather than silently placing tree assets.
 

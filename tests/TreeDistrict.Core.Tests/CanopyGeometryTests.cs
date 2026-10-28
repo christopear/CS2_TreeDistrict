@@ -68,7 +68,7 @@ public class CanopyGeometryTests
     {
         var g = new CanopyGeometry(new[] { P(5, 13), P(185, 27), P(180, 182), P(10, 170) });
         var left = g.BuildTile(0, 0); var right = g.BuildTile(1, 0);
-        double[] Rim(CanopyGeometry.Tile t) => t.Points.Where(p => Math.Abs(p.X - 96) < 1e-6)
+        double[] Rim(CanopyGeometry.Tile t) => t.Points.Where(p => Math.Abs(p.X - CanopyGeometry.TileSize) < 1e-6)
             .Select(p => Math.Round(p.Z, 6)).Distinct().OrderBy(z => z).ToArray();
         Assert.Equal(Rim(left), Rim(right));
         Assert.NotEmpty(Rim(left));
@@ -82,6 +82,21 @@ public class CanopyGeometryTests
         Assert.InRange(Math.Abs(CanopyGeometry.Height(-1e-6, 0) - CanopyGeometry.Height(1e-6, 0)), 0, 1e-4);
         foreach (var p in a.Points)
         { Assert.InRange(CanopyGeometry.Height(p.X, p.Z), 10, 19); Assert.InRange(CanopyGeometry.Shade(p.X, p.Z), .55, 1); }
+    }
+    [Fact]
+    public void TwoHundredMetrePlotHasFineGeometryAndBoundedColour()
+    {
+        var g = new CanopyGeometry(new[] { P(0, 0), P(200, 0), P(200, 200), P(0, 200) });
+        var tiles = Tiles(g).ToArray();
+        Assert.Equal(40000, tiles.Sum(Area), 5);
+        Assert.InRange(tiles.Sum(t => t.Indices.Count / 3), 19000, 25000);
+        foreach (var p in tiles.SelectMany(t => t.Points))
+        {
+            var colour = CanopyGeometry.Colour(p.X, p.Z);
+            Assert.InRange(colour.R, .08, .24);
+            Assert.InRange(colour.G, .11, .28);
+            Assert.InRange(colour.B, .06, .17);
+        }
     }
     [Fact]
     public void InvalidBoundaryFailsWithoutProducingNonFiniteGeometry()
