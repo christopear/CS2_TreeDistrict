@@ -158,8 +158,8 @@ function GamePanel() {
                             />
                         </>
                     }
-                    generationAction={(type, districtId, confirmed) =>
-                        send({ type, districtId, confirmed })
+                    generationAction={(type, districtId, confirmed, placementMethod) =>
+                        send({ type, districtId, confirmed, placementMethod })
                     }
                     nativeAreaTools
                     key={envelope.selectedId ?? "draft"}
