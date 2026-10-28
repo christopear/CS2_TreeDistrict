@@ -5,7 +5,15 @@ namespace TreeDistrict
     // Native TreeState values; kept independent of game assemblies for adapter tests.
     public static class VegetationSpawnPolicy
     {
-        public const int MaxOwnedPlants = 10000;
+        public const int MaxOwnedPlants = 1000000;
+
+        public static void ConfigureLargeAreaTest(TreeDistrict.Core.Foliage.GenerationRequest request)
+        {
+            request.MaxPlacements = MaxOwnedPlants;
+            request.MaxCandidates = MaxOwnedPlants;
+            request.MaxPositionAttempts = 100000000;
+            request.MaxNeighbourChecks = 1000000000L;
+        }
 
         public static byte? TreeStateCode(bool nativeTree, string ageId)
         {

@@ -34,10 +34,10 @@ namespace TreeDistrict
         private ValueBinding<string> _binding;
         private string _selectedId, _error, _lastEnvelope, _libraryError;
         private Entity _lastSelection;
-        private bool _ready, _visible, _initialScan = true, _wasAreaTool;
+        private bool _ready, _visible, _initialScan = true, _wasAreaTool, _editorMode;
         private int _frame;
         private string LibraryPath => Path.Combine(UnityEngine.Application.persistentDataPath, "ModsSettings", "TreeDistrict", "sets.v1.json");
-        public override GameMode gameMode => GameMode.Game;
+        public override GameMode gameMode => GameMode.GameOrEditor;
 
         protected override void OnCreate()
         {
@@ -78,7 +78,7 @@ namespace TreeDistrict
         protected override void OnGameLoadingComplete(Purpose purpose, GameMode mode)
         {
             base.OnGameLoadingComplete(purpose, mode);
-            _ready = mode == GameMode.Game; _initialScan = true;
+            _ready = (mode & GameMode.GameOrEditor) != 0; _editorMode = (mode & GameMode.Editor) != 0; _initialScan = true;
             _selectedId = null; _lastSelection = Entity.Null; _wasAreaTool = false;
             if (_ready) Publish();
         }
@@ -149,7 +149,7 @@ namespace TreeDistrict
             _wasAreaTool = active;
             // Scan while the tool is active; otherwise only four times a second at 60fps.
             if (active || ++_frame % 15 == 0 || !_commands.IsEmpty) ScanAreas();
-            var selected = _selection.selectedEntity;
+            var selected = _editorMode ? _tools.selected : _selection.selectedEntity;
             if (selected == Entity.Null) selected = _tools.selected;
             if (selected != _lastSelection)
             {
@@ -162,6 +162,12 @@ namespace TreeDistrict
                 try { Execute(SettingsModel.Parse(json)); _error = null; }
                 catch (Exception ex) { _error = ex.Message; Mod.Log.Warn("Settings command rejected: " + ex.Message); }
             }
+        }
+        private void SelectNative(Entity entity)
+        {
+            // SelectedInfoUISystem is gameplay-only; editor selection belongs to ToolSystem.
+            if (!_editorMode) _selection.SetSelection(entity);
+            _tools.selected = entity;
         }
         private Entity EntityFor(string id)
         {
@@ -178,13 +184,12 @@ namespace TreeDistrict
                     string requestedId = command["id"]?.Type == JTokenType.Null ? null : SettingsModel.Text(command["id"], 160);
                     Entity requestedEntity = requestedId == null ? Entity.Null : EntityFor(requestedId);
                     _selectedId = requestedId;
-                    if (_selectedId != null) _selection.SetSelection(requestedEntity);
-                    else { _selection.SetSelection(Entity.Null); _tools.selected = Entity.Null; }
+                    SelectNative(requestedEntity);
                     _visible = true; return;
                 case "beginDrawing":
                     if (command["edit"]?.Type != JTokenType.Boolean) throw new ArgumentException("Invalid drawing mode.");
                     if ((bool)command["edit"] && _selectedId == null) throw new ArgumentException("Select a Tree Area first.");
-                    if (!(bool)command["edit"]) { _selectedId = null; _selection.SetSelection(Entity.Null); _tools.selected = Entity.Null; }
+                    if (!(bool)command["edit"]) { _selectedId = null; SelectNative(Entity.Null); }
                     _tools.ActivatePrefabTool(Mod.Area); _visible = true; return;
                 case "deleteDistrict":
                 case "generate":

@@ -186,5 +186,21 @@ namespace TreeDistrict.Tests
             if (allowed) Assert.NotEmpty(placements);
             else Assert.Empty(placements);
         }
+
+        [Fact]
+        public void NativeTestBudgetAllowsMoreThanTenThousandPlants()
+        {
+            var catalog = Catalog();
+            var preset = catalog["sets"].Single(s => (string)s["id"] == "builtin:nz-regenerating-bush");
+            var record = District(preset["set"]);
+            record["boundary"] = JArray.Parse("[{x:0,z:0},{x:600,z:0},{x:600,z:600},{x:0,z:600}]");
+            record["working"]["overallDensityPercent"] = 200;
+            var request = DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]);
+            VegetationSpawnPolicy.ConfigureLargeAreaTest(request);
+            Assert.Equal(1000000, request.MaxPlacements);
+            Assert.Equal(request.MaxPlacements, request.MaxCandidates);
+            var plan = new FoliageGenerationCoordinator(request, p => new GroundSample(0)).Generate(Scatter());
+            Assert.InRange(plan.Placements.Count, 10001, request.MaxPlacements);
+        }
     }
 }

@@ -214,6 +214,12 @@
     align-items: center;
     padding: 6px 10px;
 }
+.td-editor-entry {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    z-index: 10;
+}
 .td-game-scroll {
     max-height: 68vh;
 }

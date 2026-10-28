@@ -58,7 +58,7 @@ namespace TreeDistrict
             {
                 EntityManager.AddComponent<Deleted>(area);
                 _areaIds.Remove(area); record.Remove();
-                if (_selectedId == id) { _selectedId = null; _selection.SetSelection(Entity.Null); _tools.selected = Entity.Null; }
+                if (_selectedId == id) { _selectedId = null; SelectNative(Entity.Null); }
             }
         }
         private sealed class NativeVegetation
@@ -79,7 +79,7 @@ namespace TreeDistrict
             if (boundary.Count > 3 && JToken.DeepEquals(boundary[0], boundary[boundary.Count - 1])) boundary.RemoveAt(boundary.Count - 1);
             snapshot["boundary"] = boundary;
             var request = DistrictGenerationAdapter.Create(snapshot, (JObject)_state["city"]);
-            request.MaxPlacements = VegetationSpawnPolicy.MaxOwnedPlants;
+            VegetationSpawnPolicy.ConfigureLargeAreaTest(request);
             // No existing-vegetation query: all interaction with manually placed/baked/other-area plants is deferred.
             var native = new Dictionary<string, NativeVegetation>(StringComparer.Ordinal);
             var assets = snapshot["working"]["assets"].ToDictionary(a => (string)a["id"], StringComparer.Ordinal);

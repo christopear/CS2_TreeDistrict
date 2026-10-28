@@ -173,6 +173,14 @@ const register: ModRegistrar = (registry) => {
     try {
         registry.append("GameTopLeft", Entry);
         registry.append("Game", GamePanel);
+        registry.append("Editor", () => (
+            <>
+                <div className="td-editor-entry">
+                    <Entry />
+                </div>
+                <GamePanel />
+            </>
+        ));
     } catch (error) {
         console.error("TreeDistrict UI registration failed", error);
     }

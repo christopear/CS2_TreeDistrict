@@ -75,6 +75,17 @@ assemblies are copied into the deployed output.
 
 ## Mixed-vegetation integration
 
+Experimental map-editor access: the UI also registers on the official `Editor`
+hook, with a **Tree Areas** button near the top centre. Open it, choose a set and
+use Draw district to activate the native area tool directly; it does not depend
+on the gameplay district menu. Settings bindings run in GameOrEditor mode, and
+editor selection uses ToolSystem instead of the gameplay-only selected-info UI.
+Editor drawing, generation and saved/exported map behaviour need in-game testing.
+The portable test verifies a 600 m square can produce more than 10,000 plants;
+it does not establish that creating a million native entities performs acceptably.
+The environment grid still has a one-million-sample budget (5 m spacing), so a
+single area spanning more than approximately 5 km per side needs smaller areas.
+
 The native Generate action now calls `DistrictGenerationAdapter` and
 `FoliageGenerationCoordinator`, using the embedded `data/proton-scatter.v1.json`.
 Current area nodes supply the polygon. Native terrain supplies exact placement
@@ -89,7 +100,9 @@ obstacles in this pass either. Local species composition is enabled, experimenta
 abundance thinning and additional shade/competition passes remain off. Clumping
 must be zero. Climate uses the authored city reference and set overrides with
 altitude cooling; no live seasonal temperature is read. Generation is synchronous,
-manual and limited to 10,000 owned plants per area. Oversized plans fail rather
+manual and temporarily limited to 1,000,000 owned plants per area for large-area testing.
+Candidate/attempt/neighbour budgets are raised alongside ownership/save-load limits;
+this does not make planning or spawning asynchronous. Oversized plans fail rather
 than silently truncating. Saved areas retain their settings; choose a new preset
 explicitly to try the newer mixtures.
 
