@@ -39,7 +39,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Game UI build failed.' }
     if ($StageOnly) {
         $files = Get-ChildItem -LiteralPath $stageMod -File -Recurse
-        foreach ($required in @('TreeDistrict.dll', 'TreeDistrict.Core.dll', 'TreeDistrict.mjs', 'TreeDistrict.css', 'Icons/TreeArea.svg')) {
+        foreach ($required in @('TreeDistrict.dll', 'TreeDistrict.Core.dll', 'TreeDistrict.mjs', 'TreeDistrict.css', 'Icons/TreeArea.svg', 'Icons/TreeCanopy.svg')) {
             if (-not (Test-Path -LiteralPath (Join-Path $stageMod $required))) { throw "Missing staged output: $required" }
         }
         if ($files | Where-Object { $_.Name -match '^(Game|Unity\.|UnityEngine\.|Colossal\.).*\.dll$' }) {

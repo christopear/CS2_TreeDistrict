@@ -211,6 +211,9 @@ namespace TreeDistrict
             string type = SettingsModel.Text(command["type"], 40);
             switch (type)
             {
+                case "beginCanopy":
+                    _selectedId = null; SelectNative(Entity.Null); _visible = false;
+                    _tools.ActivatePrefabTool(Mod.CanopyArea); return;
                 case "togglePanel": _visible = !_visible; return;
                 case "selectDistrict":
                     string requestedId = command["id"]?.Type == JTokenType.Null ? null : SettingsModel.Text(command["id"], 160);

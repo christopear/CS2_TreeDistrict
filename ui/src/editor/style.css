@@ -216,6 +216,7 @@
     padding: 6px 10px;
 }
 .td-editor-entry {
+    display: flex;
     position: absolute;
     /* Editor extensions inherit pointer-events:none from the game's UI root. */
     pointer-events: auto;
