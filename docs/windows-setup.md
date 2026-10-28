@@ -115,11 +115,12 @@ weights. At world placements, hard limits and zero temperature/slope suitability
 are culled, but positive suitability does not thin or remix the cached distribution.
 Additional shade/competition passes remain off. Clumping
 must be zero. Climate uses the authored city reference and set overrides with
-altitude cooling; no live seasonal temperature is read. Generation is synchronous,
-manual, with no TreeDistrict population cap. Areas over 25 km² show a non-blocking
+altitude cooling; no live seasonal temperature is read. Planning is synchronous;
+placement is paced across updates. Generation is manual, with no TreeDistrict
+population cap. Areas over 25 km² show a non-blocking
 warning before generation; native game limits and available memory still apply.
 Candidate/attempt/neighbour budgets are raised alongside ownership/save-load limits;
-this does not make planning or spawning asynchronous. Oversized plans fail rather
+planning and individual placement batches still execute on the main thread. Oversized plans fail rather
 than silently truncating. Saved areas retain their settings; choose a new preset
 explicitly to try the newer mixtures.
 
