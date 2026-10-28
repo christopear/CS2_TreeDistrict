@@ -29,7 +29,7 @@ describe("editor domain", () => {
         state.library = [state.library[0]];
         state.districts[0].working.assets[0].profile.matureSpacingM = 8;
         const loaded = deserialize(serialize(state));
-        expect(loaded.library).toHaveLength(7);
+        expect(loaded.library).toHaveLength(10);
         expect(loaded.districts[0]).toEqual(state.districts[0]);
         const nz = loaded.library.find(
             (entry) => entry.id === "builtin:nz-regenerating-bush",

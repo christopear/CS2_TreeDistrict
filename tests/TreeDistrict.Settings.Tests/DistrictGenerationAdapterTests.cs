@@ -28,7 +28,7 @@ namespace TreeDistrict.Tests
         public void EveryPresetProducesDeterministicPlanWithoutMutatingEditorState()
         {
             var catalog = Catalog();
-            Assert.Equal(7, catalog["sets"].Count());
+            Assert.Equal(10, catalog["sets"].Count());
             Assert.Equal(26, catalog["assets"].Count());
             foreach (var preset in catalog["sets"])
             {

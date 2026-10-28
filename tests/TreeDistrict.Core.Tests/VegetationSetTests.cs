@@ -12,6 +12,10 @@ namespace TreeDistrict.Core.Tests
         [InlineData("european-trees", 6)]
         [InlineData("american-woodland", 5)]
         [InlineData("american-trees", 3)]
+        [InlineData("london-plane", 3)]
+        [InlineData("palms-woodland", 6)]
+        [InlineData("palms-trees", 4)]
+        [InlineData("european-02-woodland", 8)]
         public void PresetsResolveAndGenerateWithoutMutatingSourceProfiles(string id, int count)
         {
             string Data(string name) => Path.Combine(AppContext.BaseDirectory, name);
@@ -40,7 +44,7 @@ namespace TreeDistrict.Core.Tests
         public void TreeWeightsMatchWithAndWithoutBushes()
         {
             string path = Path.Combine(AppContext.BaseDirectory, "vegetation-sets.v1.json");
-            foreach (string region in new[] { "european", "american" })
+            foreach (string region in new[] { "european", "american", "palms" })
             {
                 var trees = VegetationSetCatalog.Load(path, region + "-trees");
                 var woodland = VegetationSetCatalog.Load(path, region + "-woodland");

@@ -976,7 +976,7 @@
       "id": "builtin:london-plane",
       "builtIn": true,
       "set": {
-        "name": "London Plane",
+        "name": "Farmland set",
         "overallDensityPercent": 75,
         "clumpingPercent": 0,
         "climate": {},
@@ -991,7 +991,7 @@
             "name": "London Plane",
             "prefabName": "NA_LondonPlaneTree01",
             "placeholder": false,
-            "densityPercent": 100,
+            "densityPercent": 33.333333333333336,
             "profile": {
               "matureSpacingM": 9.2802,
               "spacingAdjustmentM": 0,
@@ -1003,6 +1003,80 @@
                 "min": 0,
                 "optimum": 15,
                 "max": 30
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:EU_ChestnutTree01",
+            "name": "Chestnut",
+            "prefabName": "EU_ChestnutTree01",
+            "placeholder": false,
+            "densityPercent": 33.333333333333336,
+            "profile": {
+              "matureSpacingM": 10.3594,
+              "spacingAdjustmentM": 0,
+              "heightM": 9.1238,
+              "canopyRadiusM": 4.6797,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 0,
+                "optimum": 12,
+                "max": 26
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:AppleTree01",
+            "name": "Apple Tree",
+            "prefabName": "AppleTree01",
+            "placeholder": false,
+            "densityPercent": 33.333333333333336,
+            "profile": {
+              "matureSpacingM": 9.4642,
+              "spacingAdjustmentM": 0,
+              "heightM": 6.3786,
+              "canopyRadiusM": 4.23205,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -2,
+                "optimum": 11,
+                "max": 25
               },
               "slope": {
                 "min": 0,
@@ -2188,6 +2262,723 @@
                 "minElevationM": -10000,
                 "maxElevationM": 10000,
                 "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "builtin:palms-woodland",
+      "builtIn": true,
+      "set": {
+        "name": "Palms + bushes",
+        "overallDensityPercent": 100,
+        "clumpingPercent": 0,
+        "climate": {},
+        "limits": {
+          "minElevationM": -10000,
+          "maxElevationM": 10000,
+          "maxSlopeDegrees": 60
+        },
+        "assets": [
+          {
+            "id": "cs2:CoconutPalmTree01",
+            "name": "Coconut Palm Tree",
+            "prefabName": "CoconutPalmTree01",
+            "placeholder": false,
+            "densityPercent": 25,
+            "profile": {
+              "matureSpacingM": 8.4368,
+              "spacingAdjustmentM": 0,
+              "heightM": 13.9718,
+              "canopyRadiusM": 3.7184,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 16,
+                "optimum": 26,
+                "max": 35
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:FloridaPalmTree01",
+            "name": "Florida Palm Tree",
+            "prefabName": "FloridaPalmTree01",
+            "placeholder": false,
+            "densityPercent": 25,
+            "profile": {
+              "matureSpacingM": 6.7542,
+              "spacingAdjustmentM": 0,
+              "heightM": 9.7541,
+              "canopyRadiusM": 2.87715,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 8,
+                "optimum": 21,
+                "max": 33
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:RoyalPalmTree01",
+            "name": "Royal Palm Tree",
+            "prefabName": "RoyalPalmTree01",
+            "placeholder": false,
+            "densityPercent": 25,
+            "profile": {
+              "matureSpacingM": 6.7222,
+              "spacingAdjustmentM": 0,
+              "heightM": 12.8813,
+              "canopyRadiusM": 2.86115,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 16,
+                "optimum": 25,
+                "max": 34
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:SylvesterPalmTree01",
+            "name": "Sylvester Palm Tree",
+            "prefabName": "SylvesterPalmTree01",
+            "placeholder": false,
+            "densityPercent": 25,
+            "profile": {
+              "matureSpacingM": 9.7432,
+              "spacingAdjustmentM": 0,
+              "heightM": 11.0059,
+              "canopyRadiusM": 4.37155,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 10,
+                "optimum": 24,
+                "max": 36
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:GreenBushWild01",
+            "name": "Wild Green Bush 01",
+            "prefabName": "GreenBushWild01",
+            "placeholder": false,
+            "densityPercent": 30,
+            "profile": {
+              "matureSpacingM": 4.626,
+              "spacingAdjustmentM": 0,
+              "heightM": 2.6933,
+              "canopyRadiusM": 1.813,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -2,
+                "optimum": 12,
+                "max": 27
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 20,
+                "max": 80
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 60
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:GreenBushWild02",
+            "name": "Wild Green Bush 02",
+            "prefabName": "GreenBushWild02",
+            "placeholder": false,
+            "densityPercent": 10,
+            "profile": {
+              "matureSpacingM": 6.468,
+              "spacingAdjustmentM": 0,
+              "heightM": 4.4476,
+              "canopyRadiusM": 2.73395,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 0,
+                "optimum": 10,
+                "max": 23
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 20,
+                "max": 80
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 60
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "builtin:palms-trees",
+      "builtIn": true,
+      "set": {
+        "name": "Palms",
+        "overallDensityPercent": 100,
+        "clumpingPercent": 0,
+        "climate": {},
+        "limits": {
+          "minElevationM": -10000,
+          "maxElevationM": 10000,
+          "maxSlopeDegrees": 45
+        },
+        "assets": [
+          {
+            "id": "cs2:CoconutPalmTree01",
+            "name": "Coconut Palm Tree",
+            "prefabName": "CoconutPalmTree01",
+            "placeholder": false,
+            "densityPercent": 25,
+            "profile": {
+              "matureSpacingM": 8.4368,
+              "spacingAdjustmentM": 0,
+              "heightM": 13.9718,
+              "canopyRadiusM": 3.7184,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 16,
+                "optimum": 26,
+                "max": 35
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:FloridaPalmTree01",
+            "name": "Florida Palm Tree",
+            "prefabName": "FloridaPalmTree01",
+            "placeholder": false,
+            "densityPercent": 25,
+            "profile": {
+              "matureSpacingM": 6.7542,
+              "spacingAdjustmentM": 0,
+              "heightM": 9.7541,
+              "canopyRadiusM": 2.87715,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 8,
+                "optimum": 21,
+                "max": 33
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:RoyalPalmTree01",
+            "name": "Royal Palm Tree",
+            "prefabName": "RoyalPalmTree01",
+            "placeholder": false,
+            "densityPercent": 25,
+            "profile": {
+              "matureSpacingM": 6.7222,
+              "spacingAdjustmentM": 0,
+              "heightM": 12.8813,
+              "canopyRadiusM": 2.86115,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 16,
+                "optimum": 25,
+                "max": 34
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:SylvesterPalmTree01",
+            "name": "Sylvester Palm Tree",
+            "prefabName": "SylvesterPalmTree01",
+            "placeholder": false,
+            "densityPercent": 25,
+            "profile": {
+              "matureSpacingM": 9.7432,
+              "spacingAdjustmentM": 0,
+              "heightM": 11.0059,
+              "canopyRadiusM": 4.37155,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 10,
+                "optimum": 24,
+                "max": 36
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "builtin:european-02-woodland",
+      "builtIn": true,
+      "set": {
+        "name": "European 02 + bushes",
+        "overallDensityPercent": 100,
+        "clumpingPercent": 0,
+        "climate": {},
+        "limits": {
+          "minElevationM": -10000,
+          "maxElevationM": 10000,
+          "maxSlopeDegrees": 60
+        },
+        "assets": [
+          {
+            "id": "cs2:EuropeanSpruceTree01",
+            "name": "EuropeanSpruceTree01",
+            "prefabName": "EuropeanSpruceTree01",
+            "placeholder": true,
+            "densityPercent": 60,
+            "profile": {
+              "matureSpacingM": 14.7658,
+              "spacingAdjustmentM": 0,
+              "heightM": 27.7852,
+              "canopyRadiusM": 6.88285,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -8,
+                "optimum": 6,
+                "max": 20
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:OakTree01",
+            "name": "Oak",
+            "prefabName": "OakTree01",
+            "placeholder": false,
+            "densityPercent": 12,
+            "profile": {
+              "matureSpacingM": 17.2252,
+              "spacingAdjustmentM": 0,
+              "heightM": 14.7289,
+              "canopyRadiusM": 8.11255,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -2,
+                "optimum": 12,
+                "max": 28
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:BirchTree01",
+            "name": "Birch",
+            "prefabName": "BirchTree01",
+            "placeholder": false,
+            "densityPercent": 10,
+            "profile": {
+              "matureSpacingM": 10.0852,
+              "spacingAdjustmentM": 0,
+              "heightM": 16.2691,
+              "canopyRadiusM": 4.54255,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -8,
+                "optimum": 8,
+                "max": 22
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:EU_AlderTree01",
+            "name": "Alder",
+            "prefabName": "EU_AlderTree01",
+            "placeholder": false,
+            "densityPercent": 5,
+            "profile": {
+              "matureSpacingM": 15.7074,
+              "spacingAdjustmentM": 0,
+              "heightM": 19.7829,
+              "canopyRadiusM": 7.3537,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 0,
+                "optimum": 10,
+                "max": 24
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:EU_PoplarTree01",
+            "name": "Poplar",
+            "prefabName": "EU_PoplarTree01",
+            "placeholder": false,
+            "densityPercent": 8,
+            "profile": {
+              "matureSpacingM": 5.417,
+              "spacingAdjustmentM": 0,
+              "heightM": 9.8092,
+              "canopyRadiusM": 2.2085,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -8,
+                "optimum": 8,
+                "max": 22
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:PineTree01",
+            "name": "Pine",
+            "prefabName": "PineTree01",
+            "placeholder": false,
+            "densityPercent": 5,
+            "profile": {
+              "matureSpacingM": 12.6372,
+              "spacingAdjustmentM": 0,
+              "heightM": 21.3319,
+              "canopyRadiusM": 5.8186,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -10,
+                "optimum": 7,
+                "max": 24
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:GreenBushWild01",
+            "name": "Wild Green Bush 01",
+            "prefabName": "GreenBushWild01",
+            "placeholder": false,
+            "densityPercent": 30,
+            "profile": {
+              "matureSpacingM": 4.626,
+              "spacingAdjustmentM": 0,
+              "heightM": 2.6933,
+              "canopyRadiusM": 1.813,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -2,
+                "optimum": 12,
+                "max": 27
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 20,
+                "max": 80
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 60
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:GreenBushWild02",
+            "name": "Wild Green Bush 02",
+            "prefabName": "GreenBushWild02",
+            "placeholder": false,
+            "densityPercent": 10,
+            "profile": {
+              "matureSpacingM": 6.468,
+              "spacingAdjustmentM": 0,
+              "heightM": 4.4476,
+              "canopyRadiusM": 2.73395,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 0,
+                "optimum": 10,
+                "max": 23
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 20,
+                "max": 80
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 60
               }
             },
             "ages": [

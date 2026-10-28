@@ -19,8 +19,8 @@ assets={p['id']:asset(p) for p in profiles}
 plane='cs2:NA_LondonPlaneTree01'
 def make_set(name,members,density=100):
     return dict(name=name,overallDensityPercent=density,clumpingPercent=0,climate={},limits=dict(minElevationM=-10000,maxElevationM=10000,maxSlopeDegrees=max(a['profile']['limits']['maxSlopeDegrees'] for a in members)),assets=members)
-# Preserve the old single-asset library ID for existing workflows, using the new default profile.
-sets=[dict(id='builtin:london-plane',builtIn=True,set=make_set('London Plane',[copy.deepcopy(assets[plane])],75))]
+# The farmland preset retains the legacy london-plane ID; saved area snapshots stay intact.
+sets=[]
 for preset in presets:
     members=[]
     for m in preset['members']:

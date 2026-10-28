@@ -4,6 +4,26 @@
   "description": "Prototype solver presets. Relative proposal weights are not final count or coverage percentages. Regions are visual/game themes, not verified native ranges. Per-member profileOverrides apply only to that set and do not modify source profiles.",
   "sets": [
     {
+      "id": "london-plane",
+      "name": "Farmland set",
+      "description": "Equal proposal weights for London Plane, Chestnut and Apple; a visual farmland mix, not orchard rows.",
+      "overallDensityPercent": 75,
+      "members": [
+        {
+          "assetId": "cs2:NA_LondonPlaneTree01",
+          "weight": 33.333333333333336
+        },
+        {
+          "assetId": "cs2:EU_ChestnutTree01",
+          "weight": 33.333333333333336
+        },
+        {
+          "assetId": "cs2:AppleTree01",
+          "weight": 33.333333333333336
+        }
+      ]
+    },
+    {
       "id": "low-cover",
       "name": "Bushes & flowers",
       "description": "Wild green and flowering bushes; low cover means no trees, not low density.",
@@ -155,18 +175,18 @@
       "sources": [
         {
           "url": "https://www.doc.govt.nz/nature/native-plants/manuka-kahikatoa-and-kanuka/",
-          "basis": "Mānuka is a widespread, hardy pioneer across varied habitats; supports the hardy-scrub role, not these exact numerical curves."
+          "basis": "M\u0101nuka is a widespread, hardy pioneer across varied habitats; supports the hardy-scrub role, not these exact numerical curves."
         },
         {
           "url": "https://www.nzplants.auckland.ac.nz/en/about/seed-plants-flowering/pittosporaceae/pittosporum-tenuifolium.html",
-          "basis": "Kōhūhū provides a small-tree structural reference; its reported form does not validate the chosen temperature/slope parameters."
+          "basis": "K\u014dh\u016bh\u016b provides a small-tree structural reference; its reported form does not validate the chosen temperature/slope parameters."
         }
       ],
       "members": [
         {
           "assetId": "cs2:GreenBushWild01",
           "weight": 55,
-          "proxyRole": "Dense low scrub; loosely kāramū-like",
+          "proxyRole": "Dense low scrub; loosely k\u0101ram\u016b-like",
           "profileBasis": "Authored NZ scrub proxy, not a measured species tolerance. Temperature is long-term annual mean, not frost minimum. Mesh footprint and preferred spacing are inherited.",
           "profileOverrides": {
             "temperature": {
@@ -185,7 +205,7 @@
         {
           "assetId": "cs2:GreenBushWild02",
           "weight": 30,
-          "proxyRole": "Hardy taller scrub; loosely mānuka-like",
+          "proxyRole": "Hardy taller scrub; loosely m\u0101nuka-like",
           "profileBasis": "Authored NZ scrub proxy, not a measured species tolerance. Temperature is long-term annual mean, not frost minimum. Mesh footprint and preferred spacing are inherited.",
           "profileOverrides": {
             "temperature": {
@@ -204,7 +224,7 @@
         {
           "assetId": "cs2:NA_LindenTree01",
           "weight": 15,
-          "proxyRole": "Occasional small canopy tree; loosely kōhūhū-like",
+          "proxyRole": "Occasional small canopy tree; loosely k\u014dh\u016bh\u016b-like",
           "profileBasis": "Authored NZ scrub proxy, not a measured species tolerance. Temperature is long-term annual mean, not frost minimum. Mesh footprint and preferred spacing are inherited.",
           "profileOverrides": {
             "temperature": {
@@ -219,6 +239,102 @@
             },
             "maximumSlopeDegrees": 45
           }
+        }
+      ]
+    },
+    {
+      "id": "palms-woodland",
+      "name": "Palms + bushes",
+      "description": "Four palm assets with a shared wild-bush understory; a visual theme, not a native community.",
+      "overallDensityPercent": 100,
+      "members": [
+        {
+          "assetId": "cs2:CoconutPalmTree01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:FloridaPalmTree01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:RoyalPalmTree01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:SylvesterPalmTree01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:GreenBushWild01",
+          "weight": 30
+        },
+        {
+          "assetId": "cs2:GreenBushWild02",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "id": "palms-trees",
+      "name": "Palms",
+      "description": "Same palm weights without bushes.",
+      "overallDensityPercent": 100,
+      "members": [
+        {
+          "assetId": "cs2:CoconutPalmTree01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:FloridaPalmTree01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:RoyalPalmTree01",
+          "weight": 25
+        },
+        {
+          "assetId": "cs2:SylvesterPalmTree01",
+          "weight": 25
+        }
+      ]
+    },
+    {
+      "id": "european-02-woodland",
+      "name": "European 02 + bushes",
+      "description": "European spruce receives 60% of tree proposal weight, with mixed European trees and wild bushes. Final counts depend on spacing and terrain.",
+      "overallDensityPercent": 100,
+      "members": [
+        {
+          "assetId": "cs2:EuropeanSpruceTree01",
+          "weight": 60
+        },
+        {
+          "assetId": "cs2:OakTree01",
+          "weight": 12
+        },
+        {
+          "assetId": "cs2:BirchTree01",
+          "weight": 10
+        },
+        {
+          "assetId": "cs2:EU_AlderTree01",
+          "weight": 5
+        },
+        {
+          "assetId": "cs2:EU_PoplarTree01",
+          "weight": 8
+        },
+        {
+          "assetId": "cs2:PineTree01",
+          "weight": 5
+        },
+        {
+          "assetId": "cs2:GreenBushWild01",
+          "weight": 30
+        },
+        {
+          "assetId": "cs2:GreenBushWild02",
+          "weight": 10
         }
       ]
     }

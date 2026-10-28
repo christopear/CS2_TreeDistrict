@@ -20,7 +20,7 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await page.getByLabel("Density multiplier", { exact: true }).fill("0.42");
     await expect(
         page.getByRole("heading", {
-            name: "London Plane *",
+            name: "Farmland set *",
             exact: true,
         }),
     ).toBeVisible();
@@ -31,7 +31,7 @@ test("draw, edit, save, reselect, reload and remove district", async ({
         page.getByRole("heading", { name: "My test mix", exact: true }),
     ).toBeVisible();
     await page
-        .getByRole("button", { name: "Set settings · 1 vegetation assets" })
+        .getByRole("button", { name: "Set settings · 3 vegetation assets" })
         .click();
     await page.getByRole("button", { name: "Remove London Plane" }).click();
     await page
@@ -102,7 +102,7 @@ test("saving before replacement preserves edits and custom library survives a ne
     await page.getByLabel("Set name", { exact: true }).fill("Retained mix");
     await page.getByRole("button", { name: "Save new copy" }).click();
     await expect(
-        page.getByRole("heading", { name: "London Plane", exact: true }),
+        page.getByRole("heading", { name: "Farmland set", exact: true }),
     ).toBeVisible();
     await page
         .getByLabel("Vegetation set", { exact: true })
@@ -158,7 +158,7 @@ test("picker offers researched vegetation while preventing duplicates", async ({
 }) => {
     await page.goto("/");
     await page
-        .getByRole("button", { name: "Set settings · 1 vegetation assets" })
+        .getByRole("button", { name: "Set settings · 3 vegetation assets" })
         .click();
     await page
         .getByRole("button", { name: "Add vegetation…", exact: true })
@@ -186,7 +186,7 @@ test("picker offers researched vegetation while preventing duplicates", async ({
     await picker.getByRole("button", { name: "Cancel", exact: true }).click();
     await expect(
         page.getByRole("heading", {
-            name: "London Plane",
+            name: "Farmland set",
             exact: true,
         }),
     ).toBeVisible();
