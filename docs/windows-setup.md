@@ -73,7 +73,63 @@ Entities 1.3.10, official template 1.0.0, SDK 8.0.427, postprocessor runtime
 6.0.36. Official build and postprocessing succeed with no warnings. No game
 assemblies are copied into the deployed output.
 
-The original integration checklist follows:
+## Mixed-vegetation integration
+
+The native Generate action now calls `DistrictGenerationAdapter` and
+`FoliageGenerationCoordinator`, using the embedded `data/proton-scatter.v1.json`.
+Current area nodes supply the polygon. Native terrain supplies exact placement
+heights and sampled slope; water deeper than 1 cm is excluded. Each enabled JSON
+asset resolves its existing prefab name before any owned plants are replaced.
+Native TreeData determines whether to apply growth state; static shrubs remain
+ordinary plants without a Tree component. Both use the existing area-owned,
+remapped entity-reference save layout (version 2).
+
+Existing vegetation is ignored. Roads/buildings are not supplied as solver
+obstacles in this pass either. Local species composition is enabled, experimental
+abundance thinning and additional shade/competition passes remain off. Clumping
+must be zero. Climate uses the authored city reference and set overrides with
+altitude cooling; no live seasonal temperature is read. Generation is synchronous,
+manual and limited to 10,000 owned plants per area. Oversized plans fail rather
+than silently truncating. Saved areas retain their settings; choose a new preset
+explicitly to try the newer mixtures.
+
+Build safely while the game is open:
+
+```powershell
+./scripts/build-game.ps1 -StageOnly
+```
+
+This redirects both official C# deployment and UI output to
+`artifacts/game-stage/TreeDistrict`, verifies required files/no game DLLs, and
+writes a SHA-256 manifest alongside it. The manifest records source commit and
+uncommitted changes. A failed staged build removes the previous ready manifest.
+The usual build without `-StageOnly` still installs locally and refuses to run
+while CS2 is open. Close the game before deploying; do not publish to Paradox Mods
+as part of this test handoff.
+
+Windows verification: official post-processing, core DLL packaging and native UI
+build succeeded. Portable tests cover shipped presets, a 30% grade, water
+exclusion and native age mapping. NuGet audit connectivity emitted NU1900 warnings
+on the staged build; the SDK helper also printed its existing root-SDK lookup
+diagnostic, but compilation and all post-processing completed successfully.
+The running installation was hashed before and after staging and was unchanged.
+These checks do not establish native runtime correctness. Test in a disposable
+city after deployment:
+
+1. Choose a mixed preset, draw an area on flat and sloping ground, then Generate.
+   Confirm multiple species, shrubs, terrain alignment and the status count.
+2. Change a mix/age distribution, add boundary nodes, then regenerate. Edits alone
+   must not regenerate. Only previously owned plants should be replaced.
+3. Manually remove some generated plants, then regenerate and remove generated.
+   Existing unowned plants should remain untouched.
+4. Save/reload a planted area; confirm count and ownership, then test both UI area
+   deletion and native deletion. Both must remove owned trees and shrubs.
+5. Cancel the bake confirmation; then confirm Bake + delete. Plants must remain,
+   and deleting another area must not affect them.
+6. Disable all species and regenerate to empty the owned planting. An unavailable
+   prefab or invalid setting must instead report an error and retain it.
+
+The original integration checklist follows (historical initial area-only phase):
 
 1. Start CS2 and install/update the official toolchain in **Options → Modding**.
    Let it select Unity, Burst/Entities, SDK and Node dependencies. Do not substitute

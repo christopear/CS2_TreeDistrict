@@ -66,6 +66,7 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="../../data/editor-catalog.v2.json" LogicalName="TreeDistrict.Catalog" />
+		<EmbeddedResource Include="../../data/proton-scatter.v1.json" LogicalName="TreeDistrict.ScatterSettings" />
 		<EmbeddedResource Include="../../data/london-plane.json" LogicalName="TreeDistrict.LondonPlane" />
 		<None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
 		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />

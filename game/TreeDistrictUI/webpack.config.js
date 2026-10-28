@@ -10,7 +10,7 @@ if (!CSII_USERDATAPATH) {
   throw "CSII_USERDATAPATH environment variable is not set, ensure the CSII Modding Toolchain is installed correctly";
 }
 
-const OUTPUT_DIR = `${CSII_USERDATAPATH}\\Mods\\${MOD.id}`;
+const OUTPUT_DIR = process.env.TREEDISTRICT_OUTPUT_DIR || `${CSII_USERDATAPATH}\\Mods\\${MOD.id}`;
 
 const banner = `
  * Cities: Skylines II UI Module

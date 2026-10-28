@@ -10,6 +10,8 @@ namespace TreeDistrict.Tests
     public class DistrictGenerationAdapterTests
     {
         private static JObject Catalog() => SettingsModel.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "editor-catalog.json")));
+        private static ProtonScatterSettings Scatter() => Newtonsoft.Json.JsonConvert.DeserializeObject<ProtonScatterSettings>(
+            File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "proton-scatter.json")));
         private static JObject District(JToken set) => new JObject
         {
             ["id"] = "test",
@@ -34,14 +36,42 @@ namespace TreeDistrict.Tests
                 var before = record.ToString();
                 var request = DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]);
                 var coordinator = new FoliageGenerationCoordinator(request, p => new GroundSample(0));
-                var a = coordinator.Generate(new ProtonScatterSettings());
-                var b = coordinator.Generate(new ProtonScatterSettings());
+                var a = coordinator.Generate(Scatter());
+                var b = coordinator.Generate(Scatter());
                 Assert.NotEmpty(a.Placements);
                 Assert.Equal(a.Placements.Select(p => (p.SpeciesId, p.Position.X, p.Position.Z)),
                     b.Placements.Select(p => (p.SpeciesId, p.Position.X, p.Position.Z)));
                 Assert.Equal(before, record.ToString());
                 Assert.False(request.ResolveShade);
+                Assert.False(request.ResolveCompetition);
             }
+        }
+        [Fact]
+        public void ShippedPresetsUseTerrainHeightAndAvoidWaterOnThirtyPercentGrade()
+        {
+            var catalog = Catalog();
+            foreach (var preset in catalog["sets"])
+            {
+                var request = DistrictGenerationAdapter.Create(District(preset["set"]), (JObject)catalog["cityDefaults"]);
+                request.MaxPlacements = VegetationSpawnPolicy.MaxOwnedPlants;
+                var result = new FoliageGenerationCoordinator(request,
+                    p => new GroundSample(p.X * .3, Math.Atan(.3) * 180 / Math.PI, isWater: p.Z < 30)).Generate(Scatter());
+                Assert.NotEmpty(result.Placements);
+                Assert.All(result.Placements, p => {
+                    Assert.Equal(p.Position.X * .3, p.ElevationM, 8);
+                    Assert.True(p.Position.Z >= 30);
+                    Assert.Contains(p.AgeId, request.Species.Single(s => s.Id == p.SpeciesId).Ages.Select(a => a.Id));
+                });
+            }
+        }
+        [Fact]
+        public void DisabledMixProducesEmptyReplacementPlan()
+        {
+            var catalog = Catalog();
+            var record = District(catalog["sets"][0]["set"]);
+            foreach (var asset in record["working"]["assets"]) asset["densityPercent"] = 0;
+            var request = DistrictGenerationAdapter.Create(record, (JObject)catalog["cityDefaults"]);
+            Assert.Empty(new FoliageGenerationCoordinator(request, p => new GroundSample(0)).Generate(Scatter()).Placements);
         }
         [Fact]
         public void ClimateInheritsCityOrGameBaselineWithPerSetOverrides()

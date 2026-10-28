@@ -38,7 +38,7 @@ namespace TreeDistrict
             updateSystem.UpdateAt<TreeDistrictRegistrationSystem>(SystemUpdatePhase.MainLoop);
             updateSystem.UpdateAt<TreeAreaSettingsSystem>(SystemUpdatePhase.UIUpdate);
             updateSystem.UpdateBefore<TreeAreaCommandSystem, Game.Tools.ToolSystem>(SystemUpdatePhase.MainLoop);
-            Log.Info("Registered TreeDistrict.Area.v1 with manual London Plane generation.");
+            Log.Info("Registered TreeDistrict.Area.v1 with manual mixed-vegetation generation (Proton solver).");
         }
         public void OnDispose() { Log.Info("TreeDistrict disposed."); }
     }

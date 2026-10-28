@@ -27,6 +27,7 @@ namespace TreeDistrict
         private readonly Dictionary<Entity, string> _areaIds = new Dictionary<Entity, string>();
         private JObject _catalog, _state;
         private PrefabSystem _prefabs;
+        private TreeDistrict.Core.Foliage.ProtonScatterSettings _scatterSettings;
         private ToolSystem _tools;
         private SelectedInfoUISystem _selection;
         private EntityQuery _areas;
@@ -43,6 +44,9 @@ namespace TreeDistrict
             base.OnCreate();
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TreeDistrict.Catalog"))
             using (var reader = new StreamReader(stream)) _catalog = SettingsModel.Parse(reader.ReadToEnd());
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TreeDistrict.ScatterSettings"))
+            using (var reader = new StreamReader(stream))
+                _scatterSettings = JsonConvert.DeserializeObject<TreeDistrict.Core.Foliage.ProtonScatterSettings>(reader.ReadToEnd());
 
             _prefabs = World.GetOrCreateSystemManaged<PrefabSystem>();
             _tools = World.GetOrCreateSystemManaged<ToolSystem>();
@@ -281,7 +285,7 @@ namespace TreeDistrict
                 if (version >= 2)
                 {
                     reader.Read(out int treeCount);
-                    if (treeCount < 0 || treeCount > PlacementPlanner.MaxTrees) throw new InvalidDataException("Invalid owned tree count.");
+                    if (treeCount < 0 || treeCount > VegetationSpawnPolicy.MaxOwnedPlants) throw new InvalidDataException("Invalid owned vegetation count.");
                     for (int j = 0; j < treeCount; j++) { reader.Read(out Entity tree); if (tree != Entity.Null) trees.Add(tree); }
                 }
                 if (entity == Entity.Null) { _orphanTrees.AddRange(trees); continue; }
@@ -291,7 +295,7 @@ namespace TreeDistrict
             if (version >= 2)
             {
                 reader.Read(out int orphanCount);
-                if (orphanCount < 0 || orphanCount > 2048 * PlacementPlanner.MaxTrees) throw new InvalidDataException("Invalid pending cleanup count.");
+                if (orphanCount < 0 || orphanCount > 2048 * VegetationSpawnPolicy.MaxOwnedPlants) throw new InvalidDataException("Invalid pending cleanup count.");
                 for (int j = 0; j < orphanCount; j++) { reader.Read(out Entity tree); if (tree != Entity.Null) _orphanTrees.Add(tree); }
             }
             Mod.Log.Info("Loaded settings for " + _areaIds.Count + " Tree Areas.");

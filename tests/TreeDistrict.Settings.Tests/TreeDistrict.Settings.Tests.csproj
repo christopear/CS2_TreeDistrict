@@ -7,7 +7,9 @@
   <ItemGroup>
     <ProjectReference Include="../../src/TreeDistrict.Core/TreeDistrict.Core.csproj" />
     <Compile Include="../../game/TreeDistrict/DistrictGenerationAdapter.cs" Link="DistrictGenerationAdapter.cs" />
+    <Compile Include="../../game/TreeDistrict/VegetationSpawnPolicy.cs" Link="VegetationSpawnPolicy.cs" />
     <None Include="../../data/editor-catalog.v2.json" Link="editor-catalog.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/proton-scatter.v1.json" Link="proton-scatter.json" CopyToOutputDirectory="PreserveNewest" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />

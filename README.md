@@ -9,11 +9,14 @@ six regional/low-cover mixes, plus the retained single London Plane preset.
 NZ proxy profiles override the base profiles only inside that set. Saved districts
 retain their existing settings until a new preset is explicitly selected.
 
-The native game path still uses the earlier single-London-Plane planner. Mixed
-prefab spawning, real terrain/occupancy integration with the new solver, save/load
-and native deletion need Windows validation. Unsupported game mixes fail before
-replacing existing trees. The portable editor-to-solver bridge is tested on Ubuntu;
-it does not yet replace that native generation path.
+The native game path now uses the same editor-to-solver bridge and Proton settings
+as the portable pipeline. It reads the area's current boundary and game terrain,
+resolves each enabled asset's prefab, and creates native trees or static plants.
+Area ownership covers both. Existing vegetation is ignored; regenerate replaces
+only the area's owned plants, after successfully preparing their replacements.
+The official Windows build is staged for in-game testing; mixed spawning,
+save/load, native deletion and bake/delete still need that runtime verification.
+See [Windows staging and test steps](docs/windows-setup.md#mixed-vegetation-integration).
 
 
 ### Editor-to-solver checkpoint (Ubuntu)
@@ -32,7 +35,7 @@ profile/age settings, overall density and inherited/overridden city climate.
 Add `--heightmap FILE` to supply sampled terrain; otherwise it uses a flat test
 surface. It creates a plan only, not game entities. Shade filtering stays off;
 nonzero clumping is rejected explicitly. This is the same pure adapter available
-to the future native integration (`DistrictGenerationAdapter`).
+to the native integration (`DistrictGenerationAdapter`).
 
 Edit the authored profiles/presets, then run `python3 scripts/build-editor-catalog.py`
 to refresh the shared editor/game catalogue. Do not hand-edit the generated file.
