@@ -36,7 +36,8 @@ namespace TreeDistrict
         private string _selectedId, _error, _lastEnvelope, _libraryError;
         private Entity _lastSelection;
         private bool _ready, _visible, _initialScan = true, _wasAreaTool, _editorMode;
-        private int _frame;
+        private bool _uiDirty = true;
+        private int _areaOrderVersion;
         private string LibraryPath => Path.Combine(UnityEngine.Application.persistentDataPath, "ModsSettings", "TreeDistrict", "sets.v1.json");
         public override GameMode gameMode => GameMode.GameOrEditor;
 
@@ -52,10 +53,11 @@ namespace TreeDistrict
             _prefabs = World.GetOrCreateSystemManaged<PrefabSystem>();
             _tools = World.GetOrCreateSystemManaged<ToolSystem>();
             _selection = World.GetOrCreateSystemManaged<SelectedInfoUISystem>();
-            _areas = GetEntityQuery(new EntityQueryDesc {
+            var areaQuery = new EntityQueryDesc {
                 All = new[] { ComponentType.ReadOnly<Game.Areas.Area>(), ComponentType.ReadOnly<PrefabRef>(), ComponentType.ReadOnly<Game.Areas.Node>() },
                 None = new[] { ComponentType.ReadOnly<Temp>(), ComponentType.ReadOnly<Deleted>() }
-            });
+            };
+            _areas = GetEntityQuery(areaQuery);
             AddBinding(_binding = new ValueBinding<string>("TreeDistrict", "editor", ""));
             AddBinding(new TriggerBinding<string>("TreeDistrict", "command", json => {
                 if (_commands.Count < 128 && json != null && json.Length <= 1000000) _commands.Enqueue(json);
@@ -67,13 +69,14 @@ namespace TreeDistrict
             _state = SettingsModel.Initial(_catalog); _areaIds.Clear(); _selectedId = null; _error = null;
             _trees.Clear(); _orphanTrees.Clear();
             _initialScan = true; _lastSelection = Entity.Null; _visible = false; _wasAreaTool = false;
+            _uiDirty = true;
             while (_commands.TryDequeue(out _)) { }
             LoadLibrary();
         }
         protected override void OnGamePreload(Purpose purpose, GameMode mode)
         {
             base.OnGamePreload(purpose, mode);
-            _ready = false; _visible = false; _binding.Update("");
+            _ready = false; _visible = false; _binding.Update(""); _lastEnvelope = ""; _uiDirty = true;
             while (_commands.TryDequeue(out _)) { }
         }
         protected override void OnGameLoadingComplete(Purpose purpose, GameMode mode)
@@ -81,7 +84,7 @@ namespace TreeDistrict
             base.OnGameLoadingComplete(purpose, mode);
             _ready = (mode & GameMode.GameOrEditor) != 0; _editorMode = (mode & GameMode.Editor) != 0; _initialScan = true;
             _selectedId = null; _lastSelection = Entity.Null; _wasAreaTool = false;
-            if (_ready) Publish();
+            _uiDirty = true;
         }
         private bool IsTreeArea(Entity entity)
         {
@@ -102,25 +105,35 @@ namespace TreeDistrict
                     live.Add(entity);
                     if (!_areaIds.TryGetValue(entity, out string id))
                     {
-                        if (_areaIds.Count >= 2048) { _error = "Tree Area settings limit reached (2048)."; continue; }
+                        if (_areaIds.Count >= 2048) { _error = "Tree Area settings limit reached (2048)."; _uiDirty = true; continue; }
                         id = Guid.NewGuid().ToString("N"); _areaIds.Add(entity, id);
                         var record = (JObject)_state["draft"].DeepClone();
                         record["id"] = id; record["name"] = "Tree Area " + _areaIds.Count;
                         record["seed"] = 1; record["generationMode"] = "onDemand"; record["revision"] = 0;
                         ((JArray)_state["districts"]).Add(record);
+                        _uiDirty = true;
                         if (!_initialScan) { _selectedId = id; _visible = true; }
                         Mod.Log.Info("Attached settings to Tree Area " + id);
                     }
                     var target = SettingsModel.Target(_state, id);
+                    int nodeCount = nodes.Length;
+                    if (nodeCount > 3 && nodes[0].m_Position.x == nodes[nodeCount - 1].m_Position.x
+                        && nodes[0].m_Position.z == nodes[nodeCount - 1].m_Position.z) nodeCount--;
+                    var previous = target["boundary"] as JArray;
+                    bool same = previous != null && previous.Count == nodeCount;
+                    for (int i = 0; same && i < nodeCount; i++)
+                        same = (double)previous[i]["x"] == nodes[i].m_Position.x
+                            && (double)previous[i]["z"] == nodes[i].m_Position.z;
+                    if (same) continue;
                     var boundary = new JArray();
-                    foreach (var node in nodes) boundary.Add(new JObject { ["x"] = node.m_Position.x, ["z"] = node.m_Position.z });
-                    if (boundary.Count > 3 && JToken.DeepEquals(boundary[0], boundary[boundary.Count - 1])) boundary.RemoveAt(boundary.Count - 1);
+                    for (int i = 0; i < nodeCount; i++) boundary.Add(new JObject { ["x"] = nodes[i].m_Position.x, ["z"] = nodes[i].m_Position.z });
                     if (target["boundary"] != null && !JToken.DeepEquals(target["boundary"], boundary))
                     {
                         target["revision"] = checked((int)target["revision"] + 1);
                         if (!_initialScan && _tools.activePrefab == Mod.Area) { _selectedId = id; _visible = true; }
                     }
                     target["boundary"] = boundary;
+                    _uiDirty = true;
                 }
             }
             foreach (var entity in _areaIds.Keys.Where(e => !live.Contains(e)).ToArray())
@@ -129,8 +142,10 @@ namespace TreeDistrict
                 string id = _areaIds[entity]; _areaIds.Remove(entity);
                 SettingsModel.Target(_state, id).Remove();
                 if (_selectedId == id) _selectedId = null;
+                _uiDirty = true;
             }
             _initialScan = false;
+            _areaOrderVersion = EntityManager.GetComponentOrderVersion<Game.Areas.Area>();
             // Loaded references whose area no longer exists need one-time cleanup.
             // Live areas retain a passive registry; never poll their plants for counts.
             if (_orphanTrees.Count > 0)
@@ -143,29 +158,36 @@ namespace TreeDistrict
         {
             base.OnUpdate();
             if (!_ready) return;
-            if (_visible || _tools.activePrefab == Mod.Area) Publish();
+            if (_visible || _tools.activePrefab == Mod.Area)
+            {
+                if (_uiDirty || _lastEnvelope == "") { Publish(); _uiDirty = false; }
+            }
             else if (_lastEnvelope != "") { _binding.Update(""); _lastEnvelope = ""; }
         }
         // Invoked before native tools and modification systems. UIUpdate is too late:
         // cleanup would strip Created/Updated before native object initialization runs.
-        internal void ProcessCommands()
+        internal void ProcessCommands(bool areaNodesChanged)
         {
             if (!_ready) return;
             bool active = _tools.activePrefab == Mod.Area;
-            if (active && !_wasAreaTool) _visible = true;
+            if (active && !_wasAreaTool) { _visible = true; _uiDirty = true; }
             _wasAreaTool = active;
-            // Scan while the tool is active; otherwise only four times a second at 60fps.
-            if (active || ++_frame % 15 == 0 || !_commands.IsEmpty) ScanAreas();
+            // Chunk version/order checks detect native edits and structural deletions without
+            // materializing all areas or touching any plants while the world is unchanged.
+            if (_initialScan || EntityManager.GetComponentOrderVersion<Game.Areas.Area>() != _areaOrderVersion
+                || areaNodesChanged) ScanAreas();
             var selected = _editorMode ? _tools.selected : _selection.selectedEntity;
             if (selected == Entity.Null) selected = _tools.selected;
             if (selected != _lastSelection)
             {
                 _lastSelection = selected;
+                _uiDirty = true;
                 if (_areaIds.TryGetValue(selected, out string id)) { _selectedId = id; _visible = true; }
                 else if (selected != Entity.Null) { _selectedId = null; _visible = false; }
             }
             while (_commands.TryDequeue(out string json))
             {
+                _uiDirty = true;
                 try { Execute(SettingsModel.Parse(json)); _error = null; }
                 catch (Exception ex) { _error = ex.Message; Mod.Log.Warn("Settings command rejected: " + ex.Message); }
             }
