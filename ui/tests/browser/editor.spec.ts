@@ -14,6 +14,30 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await canvas.click({ position: { x: 550, y: 480 } });
     await canvas.click({ position: { x: 220, y: 480 } });
     await page.getByRole("button", { name: "Finish district" }).click();
+    await page
+        .getByRole("button", {
+            name: "Placement: Bulk upload · Switch",
+            exact: true,
+        })
+        .click();
+    await expect(
+        page.getByRole("button", {
+            name: "Placement: Per entity upload · Switch",
+            exact: true,
+        }),
+    ).toBeVisible();
+    await page
+        .getByRole("button", {
+            name: "Placement: Per entity upload · Switch",
+            exact: true,
+        })
+        .click();
+    await expect(
+        page.getByRole("button", {
+            name: "Placement: Bulk upload · Switch",
+            exact: true,
+        }),
+    ).toBeVisible();
     await expect(page.getByLabel("District name")).toHaveValue(
         "Vegetation district 1",
     );

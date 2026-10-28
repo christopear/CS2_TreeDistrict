@@ -96,6 +96,20 @@ same layout in overlapping regions. Effective settings changes select a differen
 entry; the cache is session-only and rebuilt deterministically after restart.
 Logs report planning duration, cache reuse and completed placement jobs.
 Native placement runs in batches of at most 50,000 plants, with at least 0.5 seconds
+of wall-clock time after each batch before the next. The District actions button
+switches between **Bulk upload** (default) and **Per entity upload** before generation.
+Bulk creation groups only the current batch by native archetype. Both paths use
+the same initialization loop and original plan indices for random seeds. Switching
+is disabled during placement. For comparison, keep the same area, set and settings;
+remove the generated plants and let the game settle before the other run. The first
+run may build the stamp cache; compare placement batches separately from planning.
+Each `PlacementBatch` log includes a run ID, method, count, creation-call count,
+grouping/creation/setup/ownership/total work milliseconds, start-to-start interval,
+time since the preceding batch ended, and mean/maximum gaps between command-system
+updates. Update gaps include other game work and scheduling, not an isolated native
+initialization measurement. Managed MB is an estimate without forced GC; gc0/1/2
+are cumulative collection counters. Only batches, completion and cancellation log.
+The scheduler leaves at least 0.5 seconds
 of wall-clock time after each batch before the next. Only one placement job runs
 at a time, and missed intervals never cause catch-up bursts. Planning remains
 synchronous. Progress updates once per batch; idle areas do not scan their plants.
