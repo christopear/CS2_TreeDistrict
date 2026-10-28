@@ -101,7 +101,8 @@ namespace TreeDistrict
             var terrain = World.GetOrCreateSystemManaged<TerrainSystem>().GetHeightData(true);
             var water = World.GetOrCreateSystemManaged<WaterSystem>().GetSurfaceData(out var waterDependency);
             waterDependency.Complete(); // Synchronous snapshot read, no reader job remains after this command.
-            var coordinator = new FoliageGenerationCoordinator(request, point => {
+            var planningTimer = System.Diagnostics.Stopwatch.StartNew();
+            var result = _stampGenerator.Generate(request, point => {
                 var position = new float3((float)point.X, 0, (float)point.Z);
                 float height = TerrainUtils.SampleHeight(ref terrain, position);
                 // Sample world-space rise over run rather than unscaled heightmap normals.
@@ -110,9 +111,10 @@ namespace TreeDistrict
                 double slope = Math.Atan(Math.Sqrt(dx * dx + dz * dz) / 2) * 180 / Math.PI;
                 // Ignore centimetre-scale surface noise when excluding submerged ground.
                 return new GroundSample(height, slope, isWater: WaterUtils.SampleDepth(ref water, position) > 0.01f);
-            });
-            var result = coordinator.Generate(_scatterSettings);
+            }, _scatterSettings, DistrictGenerationAdapter.StampSettingsKey(request, _scatterSettings));
+            planningTimer.Stop();
             var plan = result.Placements;
+            var creationTimer = System.Diagnostics.Stopwatch.StartNew();
             var created = new List<Entity>(plan.Count);
             try
             {
@@ -142,6 +144,12 @@ namespace TreeDistrict
             record["generatedRevision"] = record["revision"].DeepClone();
             int trees = plan.Count(p => native[p.SpeciesId].IsTree);
             record["generationStatus"] = "Placed " + created.Count + " plants (" + trees + " trees, " + (created.Count - trees) + " static plants).";
+            creationTimer.Stop();
+            Mod.Log.Info("Stamp cache=" + (_stampGenerator.LastCacheHit ? "hit" : "miss")
+                + "; build=" + _stampGenerator.LastBuildMilliseconds.ToString("F1")
+                + "ms; terrain/tiling=" + _stampGenerator.LastTileMilliseconds.ToString("F1")
+                + "ms; plan=" + planningTimer.Elapsed.TotalMilliseconds.ToString("F1")
+                + "ms; entity creation/replacement=" + creationTimer.Elapsed.TotalMilliseconds.ToString("F1") + "ms");
             Mod.Log.Info("Generated " + created.Count + " plants for area " + (string)record["id"] + " using " + result.AlgorithmVersion
                 + ": " + string.Join(", ", result.Counts.Select(c => native[c.SpeciesId].Name + "=" + c.Accepted)));
         }

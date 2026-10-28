@@ -28,6 +28,7 @@ namespace TreeDistrict
         private JObject _catalog, _state;
         private PrefabSystem _prefabs;
         private TreeDistrict.Core.Foliage.ProtonScatterSettings _scatterSettings;
+        private readonly TreeDistrict.Core.Foliage.StampFoliageGenerator _stampGenerator = new TreeDistrict.Core.Foliage.StampFoliageGenerator();
         private ToolSystem _tools;
         private SelectedInfoUISystem _selection;
         private EntityQuery _areas;

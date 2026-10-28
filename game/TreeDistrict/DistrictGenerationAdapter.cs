@@ -10,6 +10,12 @@ namespace TreeDistrict
     /// <summary>Copies an editor district snapshot into solver inputs. No game APIs or file I/O.</summary>
     public static class DistrictGenerationAdapter
     {
+        public static string StampSettingsKey(GenerationRequest request, ProtonScatterSettings settings) =>
+            Newtonsoft.Json.JsonConvert.SerializeObject(new {
+                request.Species, request.OverallDensityPercent, request.Climate, request.Terrain,
+                request.MaxCandidates, request.MaxPlacements, request.MaxPositionAttempts, request.MaxNeighbourChecks,
+                Sampler = settings
+            });
         public static GenerationRequest Create(JObject district, JObject city, double? gameTemperatureC = null)
         {
             SettingsModel.ValidateRecord(district);

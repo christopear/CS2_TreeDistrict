@@ -199,8 +199,29 @@ namespace TreeDistrict.Tests
             VegetationSpawnPolicy.ConfigureLargeAreaTest(request);
             Assert.Equal(1000000, request.MaxPlacements);
             Assert.Equal(request.MaxPlacements, request.MaxCandidates);
-            var plan = new FoliageGenerationCoordinator(request, p => new GroundSample(0)).Generate(Scatter());
+            var scatter = Scatter();
+            var plan = new StampFoliageGenerator().Generate(request, p => new GroundSample(0), scatter,
+                DistrictGenerationAdapter.StampSettingsKey(request, scatter));
             Assert.InRange(plan.Placements.Count, 10001, request.MaxPlacements);
+        }
+
+        [Fact]
+        public void StampCacheKeyTracksEffectiveSettingsButNotAreaBoundaryOrSeed()
+        {
+            var catalog=Catalog();var record=District(catalog["sets"][0]["set"]);
+            var request=DistrictGenerationAdapter.Create(record,(JObject)catalog["cityDefaults"]);
+            var scatter=Scatter();var key=DistrictGenerationAdapter.StampSettingsKey(request,scatter);
+            request.Seed++;
+            request.Boundary=new[]{new Position2(0,0),new Position2(500,0),new Position2(500,500),new Position2(0,500)};
+            Assert.Equal(key,DistrictGenerationAdapter.StampSettingsKey(request,scatter));
+            request.Species[0].PreferredSpacingRadiusM+=.5;
+            Assert.NotEqual(key,DistrictGenerationAdapter.StampSettingsKey(request,scatter));
+            key=DistrictGenerationAdapter.StampSettingsKey(request,scatter);
+            request.Species[0].Ages[0].Weight=99;
+            Assert.NotEqual(key,DistrictGenerationAdapter.StampSettingsKey(request,scatter));
+            key=DistrictGenerationAdapter.StampSettingsKey(request,scatter);
+            request.OverallDensityPercent=200;
+            Assert.NotEqual(key,DistrictGenerationAdapter.StampSettingsKey(request,scatter));
         }
     }
 }

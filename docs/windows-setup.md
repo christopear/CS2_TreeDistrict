@@ -83,11 +83,18 @@ editor selection uses ToolSystem instead of the gameplay-only selected-info UI.
 Editor drawing, generation and saved/exported map behaviour need in-game testing.
 The portable test verifies a 600 m square can produce more than 10,000 plants;
 it does not establish that creating a million native entities performs acceptably.
-The environment grid still has a one-million-sample budget (5 m spacing), so a
-single area spanning more than approximately 5 km per side needs smaller areas.
+The stamp path samples each copied plant directly; it does not build the full-area
+environment grid previously used by native generation.
 
 The native Generate action now calls `DistrictGenerationAdapter` and
-`FoliageGenerationCoordinator`, using the embedded `data/proton-scatter.v1.json`.
+`StampFoliageGenerator`, using the embedded `data/proton-scatter.v1.json` to build
+eight neutral templates in [1,199] m on both axes. Randomly selected/quarter-turned
+templates fit world-anchored 200 m tiles. Adjacent tiles have at least 2 m between
+plant centres; no species-specific seam reconciliation is performed. The cache
+excludes area boundary and seed, so extensions reuse the library and retain the
+same layout in overlapping regions. Effective settings changes select a different
+entry; the cache is session-only and rebuilt deterministically after restart.
+Logs separate cache build, tiling/terrain and entity creation/replacement timings.
 Current area nodes supply the polygon. Native terrain supplies exact placement
 heights and sampled slope; water deeper than 1 cm is excluded. Each enabled JSON
 asset resolves its existing prefab name before any owned plants are replaced.
@@ -96,8 +103,10 @@ ordinary plants without a Tree component. Both use the existing area-owned,
 remapped entity-reference save layout (version 2).
 
 Existing vegetation is ignored. Roads/buildings are not supplied as solver
-obstacles in this pass either. Local species composition is enabled, experimental
-abundance thinning and additional shade/competition passes remain off. Clumping
+obstacles in this pass either. Stamps use neutral conditions and relative species
+weights. At world placements, hard limits and zero temperature/slope suitability
+are culled, but positive suitability does not thin or remix the cached distribution.
+Additional shade/competition passes remain off. Clumping
 must be zero. Climate uses the authored city reference and set overrides with
 altitude cooling; no live seasonal temperature is read. Generation is synchronous,
 manual and temporarily limited to 1,000,000 owned plants per area for large-area testing.

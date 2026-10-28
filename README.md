@@ -9,14 +9,22 @@ six regional/low-cover mixes, plus the retained single London Plane preset.
 NZ proxy profiles override the base profiles only inside that set. Saved districts
 retain their existing settings until a new preset is explicitly selected.
 
-The native game path now uses the same editor-to-solver bridge and Proton settings
-as the portable pipeline. It reads the area's current boundary and game terrain,
+The native game path uses the editor-to-solver bridge and cached planting stamps.
+Eight Proton-generated 198 m squares sit inside 200 m tiles with a 1 m margin on
+every side. World-anchored tile choices use random stamp selection and quarter turns.
+The session cache is keyed by effective set/vegetation, climate and sampler settings,
+not area geometry or seed, so boundary edits reuse stamps. It reads the area's current boundary and game terrain,
 resolves each enabled asset's prefab, and creates native trees or static plants.
 Area ownership covers both. Existing vegetation is ignored; regenerate replaces
 only the area's owned plants, after successfully preparing their replacements.
 The official Windows build is staged for in-game testing; mixed spawning,
 save/load, native deletion and bake/delete still need that runtime verification.
 See [Windows staging and test steps](docs/windows-setup.md#mixed-vegetation-integration).
+Stamps are neutral spatial templates: terrain/water and effective plant/set hard
+limits are checked at each world placement, and zero temperature/slope suitability
+is culled. Soft local species remixing is not performed in stamp mode. Age mixes
+are generated within each stamp. The standalone full-area coordinator remains
+available, but is not the new native default.
 
 The editor's density multiplier spans 0–2 (1 = normal, 0 = empty). Storage retains
 `overallDensityPercent` for compatibility: 100 = 1×, 200 = 2×. Vegetation profiles
