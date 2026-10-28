@@ -177,6 +177,7 @@
 }
 .td-game-panel {
     position: absolute;
+    pointer-events: auto;
     left: 16px;
     top: 80px;
 }
@@ -216,7 +217,9 @@
 }
 .td-editor-entry {
     position: absolute;
-    top: 12px;
+    /* Editor extensions inherit pointer-events:none from the game's UI root. */
+    pointer-events: auto;
+    top: 64px;
     left: 50%;
     z-index: 10;
 }
