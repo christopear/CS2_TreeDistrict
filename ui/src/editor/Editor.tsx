@@ -23,6 +23,9 @@ import {
     useControls,
 } from "./controls";
 export interface EditorProps {
+    deleteAllVegetation?: () => void;
+    cleanupActive?: boolean;
+    cleanupStatus?: string;
     state: Workspace;
     selectedId: string | null;
     send: (command: Command) => void;
@@ -200,6 +203,9 @@ export function Editor({
     nativeAreaTools = false,
     topContent,
     generationAction,
+    deleteAllVegetation,
+    cleanupActive = false,
+    cleanupStatus = "",
 }: EditorProps) {
     const { Panel, Button, Choice } = useControls();
     const target = targetOf(state, selectedId),
@@ -234,7 +240,13 @@ export function Editor({
         batchIntervalSeconds >= 0;
     const [assetQuery, setAssetQuery] = useState("");
     const [dialog, setDialog] = useState<
-        "save" | "replace" | "delete" | "bake" | "addVegetation" | null
+        | "save"
+        | "replace"
+        | "delete"
+        | "bake"
+        | "addVegetation"
+        | "deleteAll"
+        | null
     >(null);
     const [pending, setPending] = useState<string | null>(null);
     const [saveName, setSaveName] = useState("");
@@ -763,6 +775,20 @@ export function Editor({
                         </div>
                     </Foldout>
                 )}
+                {deleteAllVegetation && (
+                    <Foldout title="Map cleanup">
+                        <Button
+                            className="td-danger"
+                            disabled={cleanupActive}
+                            onSelect={() => setDialog("deleteAll")}
+                        >
+                            DELETE ALL TREES AND AREAS
+                        </Button>
+                        <p className="td-help" role="status">
+                            {cleanupStatus}
+                        </p>
+                    </Foldout>
+                )}
                 <Foldout title="City defaults">
                     <Choice
                         label="Temperature source"
@@ -816,21 +842,54 @@ export function Editor({
                 {dialog && (
                     <Modal
                         title={
-                            dialog === "bake"
-                                ? "Bake and delete area"
-                                : dialog === "save"
-                                  ? "Save vegetation set"
-                                  : dialog === "replace"
-                                    ? "Replace modified set"
-                                    : dialog === "addVegetation"
-                                      ? "Add vegetation"
-                                      : "Delete district"
+                            dialog === "deleteAll"
+                                ? "Delete all map vegetation?"
+                                : dialog === "bake"
+                                  ? "Bake and delete area"
+                                  : dialog === "save"
+                                    ? "Save vegetation set"
+                                    : dialog === "replace"
+                                      ? "Replace modified set"
+                                      : dialog === "addVegetation"
+                                        ? "Add vegetation"
+                                        : "Delete district"
                         }
                         onClose={() => {
                             setDialog(null);
                             setPending(null);
                         }}
                     >
+                        {dialog === "deleteAll" && (
+                            <>
+                                <p>
+                                    This permanently removes ALL trees and
+                                    shrubs across the entire map, including
+                                    baked, manually placed, and vegetation
+                                    belonging to roads or buildings. It also
+                                    deletes all Tree Areas and Canopy Areas from
+                                    this mod. Ordinary districts, buildings,
+                                    roads and surface areas are kept.
+                                </p>
+                                <p>
+                                    This cannot be undone through this tool.
+                                    Save a backup first. Active generation will
+                                    stop. Wait for cleanup to finish before
+                                    saving, then save a new copy. Road or
+                                    building vegetation may return if the game
+                                    recreates it.
+                                </p>
+                                <Button
+                                    className="td-danger"
+                                    disabled={cleanupActive}
+                                    onSelect={() => {
+                                        deleteAllVegetation?.();
+                                        setDialog(null);
+                                    }}
+                                >
+                                    Confirm DELETE ALL TREES AND AREAS
+                                </Button>
+                            </>
+                        )}
                         {dialog === "addVegetation" && (
                             <>
                                 <h3>Add vegetation</h3>

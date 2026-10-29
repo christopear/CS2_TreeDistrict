@@ -27,6 +27,8 @@ const envelopeSchema = z.object({
     selectedId: z.string().nullable(),
     drawing: z.boolean(),
     error: z.string().nullable(),
+    cleanupActive: z.boolean().optional(),
+    cleanupStatus: z.string().optional(),
 });
 const native: Primitives = {
     Checkbox: ({ label, checked, onChange }) => (
@@ -141,6 +143,11 @@ function GamePanel() {
         <div className="td-game-panel">
             <Controls.Provider value={native}>
                 <Editor
+                    deleteAllVegetation={() =>
+                        send({ type: "deleteAllVegetation", confirmed: true })
+                    }
+                    cleanupActive={envelope.cleanupActive}
+                    cleanupStatus={envelope.cleanupStatus}
                     topContent={
                         <>
                             <native.Choice
