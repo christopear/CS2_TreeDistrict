@@ -48,15 +48,23 @@ namespace TreeDistrict
             GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN());
             updateSystem.UpdateAt<TreeDistrictRegistrationSystem>(SystemUpdatePhase.MainLoop);
             updateSystem.UpdateAt<TreeAreaSettingsSystem>(SystemUpdatePhase.UIUpdate);
+            updateSystem.UpdateAt<AreaOverlapDiagnosticsSystem>(SystemUpdatePhase.UIUpdate);
+            NativePlacementTimings.Register(updateSystem);
+            LightCullingTimings.Install();
+            // Register last so our creation work precedes the ToolSystem timing probe.
             updateSystem.UpdateBefore<TreeAreaCommandSystem, Game.Tools.ToolSystem>(SystemUpdatePhase.MainLoop);
             updateSystem.UpdateBefore<TreeCanopySystem, Game.Tools.ToolSystem>(SystemUpdatePhase.MainLoop);
             Log.Info("Registered TreeDistrict.Area.v1 with manual mixed-vegetation generation (Proton solver).");
         }
         public void OnDispose()
         {
+            NativePlacementTimings.Stop();
+            LightCullingTimings.Uninstall();
             var world = World.DefaultGameObjectInjectionWorld;
             if (world != null && world.IsCreated)
             {
+                var overlapDiagnostics = world.GetExistingSystemManaged<AreaOverlapDiagnosticsSystem>();
+                if (overlapDiagnostics != null) overlapDiagnostics.Enabled = false;
                 var canopy = world.GetExistingSystemManaged<TreeCanopySystem>();
                 if (canopy != null) { canopy.Enabled = false; canopy.Clear(); }
             }

@@ -14,27 +14,40 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await canvas.click({ position: { x: 550, y: 480 } });
     await canvas.click({ position: { x: 220, y: 480 } });
     await page.getByRole("button", { name: "Finish district" }).click();
-    await page
-        .getByRole("button", {
-            name: "Placement: Bulk upload · Switch",
-            exact: true,
-        })
-        .click();
+    const batchSize = page.getByLabel("Plants per batch", { exact: true });
+    const delay = page.getByLabel("Batch delay (seconds)", { exact: true });
+    await expect(batchSize).toHaveValue("50000");
+    await expect(delay).toHaveValue("0.5");
+    await batchSize.fill("1000000");
+    await delay.fill("3");
+    await expect(batchSize).toHaveValue("1000000");
+    await batchSize.fill("20000");
+    await delay.fill("0.25");
+    await expect(delay).toHaveValue("0.25");
+    await batchSize.fill("0");
+    await expect(page.getByRole("alert")).toContainText("positive whole batch size");
+    await batchSize.fill("20000");
+    await expect(page.getByRole("alert")).toHaveCount(0);
+    const bulk = page.getByRole("button", { name: "Bulk upload", exact: true });
+    const perEntity = page.getByRole("button", {
+        name: "Per entity upload",
+        exact: true,
+    });
+    await expect(bulk).toHaveAttribute("aria-pressed", "true");
+    await perEntity.click();
+    await expect(perEntity).toHaveAttribute("aria-pressed", "true");
     await expect(
         page.getByRole("button", {
-            name: "Placement: Per entity upload · Switch",
+            name: "Generate · Per entity upload",
             exact: true,
         }),
     ).toBeVisible();
-    await page
-        .getByRole("button", {
-            name: "Placement: Per entity upload · Switch",
-            exact: true,
-        })
-        .click();
+    await bulk.click();
+    await bulk.click(); // Selecting bulk again must not toggle away from bulk.
+    await expect(bulk).toHaveAttribute("aria-pressed", "true");
     await expect(
         page.getByRole("button", {
-            name: "Placement: Bulk upload · Switch",
+            name: "Generate · Bulk upload",
             exact: true,
         }),
     ).toBeVisible();
@@ -74,7 +87,10 @@ test("draw, edit, save, reselect, reload and remove district", async ({
         .getByLabel("Reference temperature (°C)", { exact: true })
         .fill("18");
     await expect(
-        page.getByRole("button", { name: "Generate", exact: true }),
+        page.getByRole("button", {
+            name: "Generate · Bulk upload",
+            exact: true,
+        }),
     ).toBeDisabled();
     await page.reload();
     await page

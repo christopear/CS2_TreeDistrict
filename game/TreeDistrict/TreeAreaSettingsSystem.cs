@@ -66,6 +66,8 @@ namespace TreeDistrict
         }
         private void ResetState()
         {
+            ResetCleanup();
+            NativePlacementTimings.Stop();
             _state = SettingsModel.Initial(_catalog); _areaIds.Clear(); _selectedId = null; _error = null;
             _trees.Clear(); _orphanTrees.Clear();
             _placement = null;
@@ -77,6 +79,7 @@ namespace TreeDistrict
         protected override void OnGamePreload(Purpose purpose, GameMode mode)
         {
             base.OnGamePreload(purpose, mode);
+            ResetCleanup();
             _ready = false; _visible = false; _binding.Update(""); _lastEnvelope = ""; _uiDirty = true;
             if (_placement != null) CancelPlacement(_placement.Area, "Placement stopped for loading.");
             while (_commands.TryDequeue(out _)) { }
@@ -170,6 +173,7 @@ namespace TreeDistrict
         // cleanup would strip Created/Updated before native object initialization runs.
         internal void ProcessCommands(bool areaNodesChanged)
         {
+            NativePlacementTimings.Tick();
             if (!_ready) return;
             bool active = _tools.activePrefab == Mod.Area;
             if (active && !_wasAreaTool) { _visible = true; _uiDirty = true; }
@@ -194,6 +198,7 @@ namespace TreeDistrict
                 catch (Exception ex) { _error = ex.Message; Mod.Log.Warn("Settings command rejected: " + ex.Message); }
             }
             ProcessPlacement();
+            ProcessCleanup();
         }
         private void SelectNative(Entity entity)
         {
@@ -209,8 +214,11 @@ namespace TreeDistrict
         private void Execute(JObject command)
         {
             string type = SettingsModel.Text(command["type"], 40);
+            if (_cleanupPlants.IsCreated && type != "togglePanel")
+                throw new ArgumentException("Wait for map vegetation cleanup to finish.");
             switch (type)
             {
+                case "deleteAllVegetation": StartCleanup(command); return;
                 case "beginCanopy":
                     _selectedId = null; SelectNative(Entity.Null); _visible = false;
                     _tools.ActivatePrefabTool(Mod.CanopyArea); return;
@@ -245,6 +253,7 @@ namespace TreeDistrict
             var envelope = new JObject {
                 ["protocolVersion"] = 1, ["visible"] = _visible, ["workspace"] = _state,
                 ["selectedId"] = _selectedId, ["drawing"] = false, ["error"] = _error ?? _libraryError
+                , ["cleanupActive"] = _cleanupPlants.IsCreated, ["cleanupStatus"] = _cleanupStatus
             }.ToString(Formatting.None);
             if (envelope != _lastEnvelope) { _binding.Update(envelope); _lastEnvelope = envelope; }
         }

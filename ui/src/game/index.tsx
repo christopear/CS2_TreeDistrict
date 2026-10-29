@@ -27,6 +27,8 @@ const envelopeSchema = z.object({
     selectedId: z.string().nullable(),
     drawing: z.boolean(),
     error: z.string().nullable(),
+    cleanupActive: z.boolean().optional(),
+    cleanupStatus: z.string().optional(),
 });
 const native: Primitives = {
     Checkbox: ({ label, checked, onChange }) => (
@@ -100,9 +102,15 @@ function Entry() {
 }
 function CanopyEntry() {
     return (
-        <Button onSelect={() => send({ type: "beginCanopy" })}
-            tooltipLabel="Draw an automatic forest canopy area" className="td-entry">
-            <Icon className="td-icon" src="coui://treedistrict/TreeCanopy.svg" />
+        <Button
+            onSelect={() => send({ type: "beginCanopy" })}
+            tooltipLabel="Draw an automatic forest canopy area"
+            className="td-entry"
+        >
+            <Icon
+                className="td-icon"
+                src="coui://treedistrict/TreeCanopy.svg"
+            />
             Canopy Areas
         </Button>
     );
@@ -135,6 +143,11 @@ function GamePanel() {
         <div className="td-game-panel">
             <Controls.Provider value={native}>
                 <Editor
+                    deleteAllVegetation={() =>
+                        send({ type: "deleteAllVegetation", confirmed: true })
+                    }
+                    cleanupActive={envelope.cleanupActive}
+                    cleanupStatus={envelope.cleanupStatus}
                     topContent={
                         <>
                             <native.Choice
@@ -158,8 +171,20 @@ function GamePanel() {
                             />
                         </>
                     }
-                    generationAction={(type, districtId, confirmed, placementMethod) =>
-                        send({ type, districtId, confirmed, placementMethod })
+                    generationAction={(
+                        type,
+                        districtId,
+                        confirmed,
+                        placementMethod,
+                        placementSettings,
+                    ) =>
+                        send({
+                            type,
+                            districtId,
+                            confirmed,
+                            placementMethod,
+                            ...placementSettings,
+                        })
                     }
                     nativeAreaTools
                     key={envelope.selectedId ?? "draft"}

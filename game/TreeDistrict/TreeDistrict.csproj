@@ -12,6 +12,7 @@
 	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" />
 
 	<ItemGroup>
+        <PackageReference Include="Lib.Harmony" Version="2.2.2" />
         <ProjectReference Include="../../src/TreeDistrict.Core/TreeDistrict.Core.csproj" />
 		<Reference Include="Newtonsoft.Json"><Private>false</Private></Reference>
 		<Reference Include="Colossal.Mathematics"><Private>false</Private></Reference>

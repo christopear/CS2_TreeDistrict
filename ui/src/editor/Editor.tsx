@@ -23,6 +23,9 @@ import {
     useControls,
 } from "./controls";
 export interface EditorProps {
+    deleteAllVegetation?: () => void;
+    cleanupActive?: boolean;
+    cleanupStatus?: string;
     state: Workspace;
     selectedId: string | null;
     send: (command: Command) => void;
@@ -38,6 +41,7 @@ export interface EditorProps {
         districtId: string,
         confirmed?: boolean,
         placementMethod?: "bulk" | "perEntity",
+        placementSettings?: { batchSize: number; batchIntervalSeconds: number },
     ) => void;
 }
 const climateFields = [
@@ -199,6 +203,9 @@ export function Editor({
     nativeAreaTools = false,
     topContent,
     generationAction,
+    deleteAllVegetation,
+    cleanupActive = false,
+    cleanupStatus = "",
 }: EditorProps) {
     const { Panel, Button, Choice } = useControls();
     const target = targetOf(state, selectedId),
@@ -219,9 +226,27 @@ export function Editor({
     const [placementMethod, setPlacementMethod] = useState<
         "bulk" | "perEntity"
     >("bulk");
+    const [batchSizeText, setBatchSizeText] = useState("50000");
+    const [batchIntervalText, setBatchIntervalText] = useState("0.5");
+    const batchSize = Number(batchSizeText);
+    const batchIntervalSeconds = Number(batchIntervalText);
+    const validPlacementSettings =
+        batchSizeText.trim() !== "" &&
+        Number.isInteger(batchSize) &&
+        batchSize >= 1 &&
+        batchSize <= 2147483647 &&
+        batchIntervalText.trim() !== "" &&
+        Number.isFinite(batchIntervalSeconds) &&
+        batchIntervalSeconds >= 0;
     const [assetQuery, setAssetQuery] = useState("");
     const [dialog, setDialog] = useState<
-        "save" | "replace" | "delete" | "bake" | "addVegetation" | null
+        | "save"
+        | "replace"
+        | "delete"
+        | "bake"
+        | "addVegetation"
+        | "deleteAll"
+        | null
     >(null);
     const [pending, setPending] = useState<string | null>(null);
     const [saveName, setSaveName] = useState("");
@@ -624,28 +649,67 @@ export function Editor({
                                 : ""}
                             {district.generationStatus}
                         </p>
-                        <div className="td-actions">
-                            <Button
+                        <label className="td-field">
+                            <span>Plants per batch</span>
+                            <TextField
+                                type="number"
+                                min={1}
+                                max={2147483647}
+                                step={1}
+                                value={batchSizeText}
+                                onChange={(e) =>
+                                    setBatchSizeText(e.target.value)
+                                }
                                 disabled={state.districts.some(
                                     (d) => d.placementActive,
                                 )}
-                                onSelect={() =>
-                                    setPlacementMethod(
-                                        placementMethod === "bulk"
-                                            ? "perEntity"
-                                            : "bulk",
-                                    )
+                            />
+                        </label>
+                        <label className="td-field">
+                            <span>Batch delay (seconds)</span>
+                            <TextField
+                                type="number"
+                                min={0}
+                                step="any"
+                                value={batchIntervalText}
+                                onChange={(e) =>
+                                    setBatchIntervalText(e.target.value)
                                 }
-                            >
-                                Placement:{" "}
-                                {placementMethod === "bulk"
-                                    ? "Bulk upload"
-                                    : "Per entity upload"}{" "}
-                                · Switch
-                            </Button>
+                                disabled={state.districts.some(
+                                    (d) => d.placementActive,
+                                )}
+                            />
+                        </label>
+                        <p className="td-help">
+                            Minimum delay after each placement batch. Game
+                            processing may make it longer. Applies to the next
+                            generation.
+                        </p>
+                        {!validPlacementSettings && (
+                            <p role="alert">
+                                Enter a positive whole batch size and a
+                                non-negative delay.
+                            </p>
+                        )}
+                        <div className="td-actions">
+                            {(["bulk", "perEntity"] as const).map((method) => (
+                                <Button
+                                    key={method}
+                                    disabled={state.districts.some(
+                                        (d) => d.placementActive,
+                                    )}
+                                    selected={placementMethod === method}
+                                    onSelect={() => setPlacementMethod(method)}
+                                >
+                                    {method === "bulk"
+                                        ? "Bulk upload"
+                                        : "Per entity upload"}
+                                </Button>
+                            ))}
                             <Button
                                 disabled={
                                     !generationAction ||
+                                    !validPlacementSettings ||
                                     state.districts.some(
                                         (d) => d.placementActive,
                                     )
@@ -656,12 +720,17 @@ export function Editor({
                                         district.id,
                                         undefined,
                                         placementMethod,
+                                        { batchSize, batchIntervalSeconds },
                                     )
                                 }
                             >
                                 {(district.generatedCount ?? 0) > 0
                                     ? "Regenerate"
-                                    : "Generate"}
+                                    : "Generate"}{" "}
+                                ·{" "}
+                                {placementMethod === "bulk"
+                                    ? "Bulk upload"
+                                    : "Per entity upload"}
                             </Button>
                             {district.placementActive && (
                                 <Button
@@ -704,6 +773,20 @@ export function Editor({
                                     : "Delete district"}
                             </Button>
                         </div>
+                    </Foldout>
+                )}
+                {deleteAllVegetation && (
+                    <Foldout title="Map cleanup">
+                        <Button
+                            className="td-danger"
+                            disabled={cleanupActive}
+                            onSelect={() => setDialog("deleteAll")}
+                        >
+                            DELETE ALL TREES AND AREAS
+                        </Button>
+                        <p className="td-help" role="status">
+                            {cleanupStatus}
+                        </p>
                     </Foldout>
                 )}
                 <Foldout title="City defaults">
@@ -759,21 +842,54 @@ export function Editor({
                 {dialog && (
                     <Modal
                         title={
-                            dialog === "bake"
-                                ? "Bake and delete area"
-                                : dialog === "save"
-                                  ? "Save vegetation set"
-                                  : dialog === "replace"
-                                    ? "Replace modified set"
-                                    : dialog === "addVegetation"
-                                      ? "Add vegetation"
-                                      : "Delete district"
+                            dialog === "deleteAll"
+                                ? "Delete all map vegetation?"
+                                : dialog === "bake"
+                                  ? "Bake and delete area"
+                                  : dialog === "save"
+                                    ? "Save vegetation set"
+                                    : dialog === "replace"
+                                      ? "Replace modified set"
+                                      : dialog === "addVegetation"
+                                        ? "Add vegetation"
+                                        : "Delete district"
                         }
                         onClose={() => {
                             setDialog(null);
                             setPending(null);
                         }}
                     >
+                        {dialog === "deleteAll" && (
+                            <>
+                                <p>
+                                    This permanently removes ALL trees and
+                                    shrubs across the entire map, including
+                                    baked, manually placed, and vegetation
+                                    belonging to roads or buildings. It also
+                                    deletes all Tree Areas and Canopy Areas from
+                                    this mod. Ordinary districts, buildings,
+                                    roads and surface areas are kept.
+                                </p>
+                                <p>
+                                    This cannot be undone through this tool.
+                                    Save a backup first. Active generation will
+                                    stop. Wait for cleanup to finish before
+                                    saving, then save a new copy. Road or
+                                    building vegetation may return if the game
+                                    recreates it.
+                                </p>
+                                <Button
+                                    className="td-danger"
+                                    disabled={cleanupActive}
+                                    onSelect={() => {
+                                        deleteAllVegetation?.();
+                                        setDialog(null);
+                                    }}
+                                >
+                                    Confirm DELETE ALL TREES AND AREAS
+                                </Button>
+                            </>
+                        )}
                         {dialog === "addVegetation" && (
                             <>
                                 <h3>Add vegetation</h3>
