@@ -3082,6 +3082,171 @@
           }
         ]
       }
+    },
+    {
+      "id": "builtin:evergreen-pine-spruce-bushes",
+      "builtIn": true,
+      "set": {
+        "name": "Evergreen + bushes",
+        "overallDensityPercent": 100,
+        "clumpingPercent": 0,
+        "climate": {},
+        "limits": {
+          "minElevationM": -10000,
+          "maxElevationM": 10000,
+          "maxSlopeDegrees": 60
+        },
+        "assets": [
+          {
+            "id": "cs2:PineTree01",
+            "name": "Pine",
+            "prefabName": "PineTree01",
+            "placeholder": false,
+            "densityPercent": 50,
+            "profile": {
+              "matureSpacingM": 12.6372,
+              "spacingAdjustmentM": 0,
+              "heightM": 21.3319,
+              "canopyRadiusM": 5.8186,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -10,
+                "optimum": 7,
+                "max": 24
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:SpruceTree01",
+            "name": "Spruce",
+            "prefabName": "SpruceTree01",
+            "placeholder": false,
+            "densityPercent": 50,
+            "profile": {
+              "matureSpacingM": 10.3702,
+              "spacingAdjustmentM": 0,
+              "heightM": 21.5699,
+              "canopyRadiusM": 4.68505,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -8,
+                "optimum": 6,
+                "max": 20
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 10,
+                "max": 65
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 45
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:GreenBushWild01",
+            "name": "Wild Green Bush 01",
+            "prefabName": "GreenBushWild01",
+            "placeholder": false,
+            "densityPercent": 30,
+            "profile": {
+              "matureSpacingM": 4.626,
+              "spacingAdjustmentM": 0,
+              "heightM": 2.6933,
+              "canopyRadiusM": 1.813,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": -2,
+                "optimum": 12,
+                "max": 27
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 20,
+                "max": 80
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 60
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          },
+          {
+            "id": "cs2:GreenBushWild02",
+            "name": "Wild Green Bush 02",
+            "prefabName": "GreenBushWild02",
+            "placeholder": false,
+            "densityPercent": 10,
+            "profile": {
+              "matureSpacingM": 6.468,
+              "spacingAdjustmentM": 0,
+              "heightM": 4.4476,
+              "canopyRadiusM": 2.73395,
+              "canopyOpacityPercent": 0,
+              "shadeTolerancePercent": 0,
+              "temperature": {
+                "min": 0,
+                "optimum": 10,
+                "max": 23
+              },
+              "slope": {
+                "min": 0,
+                "optimum": 20,
+                "max": 80
+              },
+              "limits": {
+                "minElevationM": -10000,
+                "maxElevationM": 10000,
+                "maxSlopeDegrees": 60
+              }
+            },
+            "ages": [
+              {
+                "id": "mature",
+                "name": "Mature",
+                "proportionPercent": 100.0
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }
