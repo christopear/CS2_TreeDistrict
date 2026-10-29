@@ -2,6 +2,7 @@ using Game;
 namespace TreeDistrict {
  internal static partial class NativePlacementTimings {
  internal static void Register(UpdateSystem update) {
+RegisterRenderingDetails(update);
 update.UpdateBefore<ProbeModificationBefore, Game.Common.ModificationSystem>(SystemUpdatePhase.MainLoop);
 update.UpdateAfter<ProbeModificationAfter, Game.Common.ModificationSystem>(SystemUpdatePhase.MainLoop);
 update.UpdateBefore<ProbeToolBefore, Game.Tools.ToolSystem>(SystemUpdatePhase.MainLoop);

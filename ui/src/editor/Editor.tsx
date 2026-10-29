@@ -625,24 +625,20 @@ export function Editor({
                             {district.generationStatus}
                         </p>
                         <div className="td-actions">
-                            <Button
-                                disabled={state.districts.some(
-                                    (d) => d.placementActive,
-                                )}
-                                onSelect={() =>
-                                    setPlacementMethod(
-                                        placementMethod === "bulk"
-                                            ? "perEntity"
-                                            : "bulk",
-                                    )
-                                }
-                            >
-                                Placement:{" "}
-                                {placementMethod === "bulk"
-                                    ? "Bulk upload"
-                                    : "Per entity upload"}{" "}
-                                · Switch
-                            </Button>
+                            {(["bulk", "perEntity"] as const).map((method) => (
+                                <Button
+                                    key={method}
+                                    disabled={state.districts.some(
+                                        (d) => d.placementActive,
+                                    )}
+                                    selected={placementMethod === method}
+                                    onSelect={() => setPlacementMethod(method)}
+                                >
+                                    {method === "bulk"
+                                        ? "Bulk upload"
+                                        : "Per entity upload"}
+                                </Button>
+                            ))}
                             <Button
                                 disabled={
                                     !generationAction ||
@@ -661,7 +657,11 @@ export function Editor({
                             >
                                 {(district.generatedCount ?? 0) > 0
                                     ? "Regenerate"
-                                    : "Generate"}
+                                    : "Generate"}{" "}
+                                ·{" "}
+                                {placementMethod === "bulk"
+                                    ? "Bulk upload"
+                                    : "Per entity upload"}
                             </Button>
                             {district.placementActive && (
                                 <Button
