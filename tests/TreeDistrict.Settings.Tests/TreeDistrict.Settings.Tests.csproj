@@ -5,6 +5,8 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+    <Compile Include="../../game/TreeDistrict/CallTimingInstrumentation.cs" Link="CallTimingInstrumentation.cs" />
     <ProjectReference Include="../../src/TreeDistrict.Core/TreeDistrict.Core.csproj" />
     <Compile Include="../../game/TreeDistrict/DistrictGenerationAdapter.cs" Link="DistrictGenerationAdapter.cs" />
     <Compile Include="../../game/TreeDistrict/VegetationSpawnPolicy.cs" Link="VegetationSpawnPolicy.cs" />

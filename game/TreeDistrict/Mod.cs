@@ -49,6 +49,7 @@ namespace TreeDistrict
             updateSystem.UpdateAt<TreeDistrictRegistrationSystem>(SystemUpdatePhase.MainLoop);
             updateSystem.UpdateAt<TreeAreaSettingsSystem>(SystemUpdatePhase.UIUpdate);
             NativePlacementTimings.Register(updateSystem);
+            LightCullingTimings.Install();
             // Register last so our creation work precedes the ToolSystem timing probe.
             updateSystem.UpdateBefore<TreeAreaCommandSystem, Game.Tools.ToolSystem>(SystemUpdatePhase.MainLoop);
             updateSystem.UpdateBefore<TreeCanopySystem, Game.Tools.ToolSystem>(SystemUpdatePhase.MainLoop);
@@ -57,6 +58,7 @@ namespace TreeDistrict
         public void OnDispose()
         {
             NativePlacementTimings.Stop();
+            LightCullingTimings.Uninstall();
             var world = World.DefaultGameObjectInjectionWorld;
             if (world != null && world.IsCreated)
             {
