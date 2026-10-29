@@ -70,3 +70,14 @@ and material functions used by the game and reports geometry timing separately
 from offline sampling. The PNG samples the field at 0.5 m with approximate lighting:
 it is not an image of the exact 1 m mesh, a CS2 screenshot, or an HDRP simulation.
 Use it to evaluate clump shapes before testing the actual game material.
+
+For offline alternatives, run `python scripts/study-canopy-variants.py` after the
+CLI. It creates `artifacts/canopy-variants/comparison.png` (200 m overview),
+`details.png` (60 m crops), reusable numeric fields, and `study.json`. A is the
+current C# shape; B–D are experimental Python fields, not ported into the game.
+All use the same rolling hill (maximum 28% grade), palette, approximate lighting
+and camera, without vertical exaggeration. B widens and interlocks crowns; C
+layers branch-scale masses with occasional taller emergents; D emphasizes ragged
+relief and irregular hollows. Colour shading uses a local concavity estimate,
+not physical ambient occlusion. These plots do not establish in-game quality or
+performance; sub-metre details will need an appropriate mesh/material treatment.
