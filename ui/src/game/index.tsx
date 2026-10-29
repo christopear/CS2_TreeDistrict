@@ -98,6 +98,15 @@ function Entry() {
         </Button>
     );
 }
+function CanopyEntry() {
+    return (
+        <Button onSelect={() => send({ type: "beginCanopy" })}
+            tooltipLabel="Draw an automatic forest canopy area" className="td-entry">
+            <Icon className="td-icon" src="coui://treedistrict/TreeCanopy.svg" />
+            Canopy Areas
+        </Button>
+    );
+}
 function GamePanel() {
     const json = useValue(snapshot);
     if (!json) return null;
@@ -172,11 +181,13 @@ export const hasCSS = true;
 const register: ModRegistrar = (registry) => {
     try {
         registry.append("GameTopLeft", Entry);
+        registry.append("GameTopLeft", CanopyEntry);
         registry.append("Game", GamePanel);
         registry.append("Editor", () => (
             <>
                 <div className="td-editor-entry">
                     <Entry />
+                    <CanopyEntry />
                 </div>
                 <GamePanel />
             </>

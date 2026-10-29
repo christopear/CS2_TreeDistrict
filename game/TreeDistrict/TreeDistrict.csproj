@@ -38,6 +38,7 @@
 		<Reference Include="UnityEngine.CoreModule">
 			<Private>false</Private>
 		</Reference>
+		<Reference Include="Unity.RenderPipelines.HighDefinition.Runtime"><Private>false</Private></Reference>
 		<Reference Include="Unity.Burst">
 			<Private>false</Private>
 		</Reference>
@@ -74,5 +75,6 @@
 
 	<Target Name="DeployTreeDistrictIcons" AfterTargets="DeployWIP">
 		<Copy SourceFiles="Icons/TreeArea.svg" DestinationFolder="$(DeployDir)/Icons" />
+		<Copy SourceFiles="Icons/TreeCanopy.svg" DestinationFolder="$(DeployDir)/Icons" />
 	</Target>
 </Project>

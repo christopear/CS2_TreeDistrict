@@ -17,7 +17,8 @@ namespace TreeDistrict
             // Native UI group buffers are rebuilt during city loading.
             Enabled = true;
             OnUpdate();
-            if (Mod.Area != null && _prefabs.TryGetEntity(Mod.Area, out var areaEntity)
+            foreach (var areaPrefab in new[] { Mod.Area, Mod.CanopyArea })
+            if (areaPrefab != null && _prefabs.TryGetEntity(areaPrefab, out var areaEntity)
                 && EntityManager.HasComponent<AreaGeometryData>(areaEntity))
             {
                 // Native districts use this flag to permit boundaries crossing water.
@@ -61,6 +62,17 @@ namespace TreeDistrict
                     foreach (var element in elements)
                         if (element.m_Prefab == areaEntity) present = true;
                     if (!present) source.m_Group.AddElement(EntityManager, areaEntity);
+                    var canopyUi = Mod.CanopyArea.GetComponent<UIObject>();
+                    canopyUi.m_Group = source.m_Group; canopyUi.m_Priority = ui.m_Priority + 1;
+                    var canopyEntity = _prefabs.GetEntity(Mod.CanopyArea);
+                    EntityManager.SetComponentData(canopyEntity, new UIObjectData {
+                        m_Group = groupEntity, m_Priority = canopyUi.m_Priority
+                    });
+                    bool canopyPresent = false;
+                    // AddElement can invalidate an existing DynamicBuffer; reacquire it.
+                    var canopyElements = EntityManager.GetBuffer<UIGroupElement>(groupEntity);
+                    foreach (var element in canopyElements) if (element.m_Prefab == canopyEntity) canopyPresent = true;
+                    if (!canopyPresent) source.m_Group.AddElement(EntityManager, canopyEntity);
                     Mod.Log.Info("Tree district added to native area menu: " + source.m_Group.name);
                     Enabled = false;
                     return;
