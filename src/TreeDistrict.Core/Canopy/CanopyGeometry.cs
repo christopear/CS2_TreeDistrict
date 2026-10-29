@@ -6,14 +6,13 @@ using TreeDistrict.Core.Foliage;
 namespace TreeDistrict.Core.Canopy
 {
     // A surface, not a collection of trees. All coordinates are metres in world X/Z.
-    // Each square has the same boundary samples as its neighbours. Delaunay triangles
-    // are clipped to the area's ear triangles, preserving concave outlines and holes
-    // between disconnected pieces of an area within a tile. This is clipped Delaunay,
-    // not an implementation of Heuser's unpublished constrained triangulator.
+    // Each square has the same boundary samples as its neighbours. Jittered lattice
+    // triangles are clipped to the area outline. Fixed connectivity keeps generation
+    // linear in sample count; this is not Heuser's constrained Delaunay algorithm.
     public sealed class CanopyGeometry
     {
         public const double TileSize = 48;
-        public const double Spacing = 2;
+        public const double Spacing = 1;
         private const double Epsilon = 1e-8;
         private readonly Position2[] boundary;
         private readonly List<Face> outline;
@@ -77,11 +76,21 @@ namespace TreeDistrict.Core.Canopy
                 {
                     // Keep the square perimeter fixed; jitter the interior deterministically.
                     bool edge = x == 0 || z == 0 || x == n || z == n;
-                    double jx = edge ? 0 : (Hash(tx * n + x, tz * n + z, 17) - .5) * Spacing * .8;
-                    double jz = edge ? 0 : (Hash(tx * n + x, tz * n + z, 93) - .5) * Spacing * .8;
+                    double jx = edge ? 0 : (Hash(tx * n + x, tz * n + z, 17) - .5) * Spacing * .4;
+                    double jz = edge ? 0 : (Hash(tx * n + x, tz * n + z, 93) - .5) * Spacing * .4;
                     points.Add(new Position2(x * Spacing + jx, z * Spacing + jz));
                 }
-            var triangles = Delaunay(points);
+            // Fixed connectivity on a jittered lattice: linear work, no per-tile
+            // circumcircle search. Jitter below .25 cell preserves convex cells.
+            var triangles = new List<(int A, int B, int C)>();
+            for (int z = 0; z < n; z++)
+                for (int x = 0; x < n; x++)
+                {
+                    int a = z * (n + 1) + x, b = a + 1, c = a + n + 1, d = c + 1;
+                    if (Hash(tx * n + x, tz * n + z, 157) < .5)
+                    { triangles.Add((a, b, d)); triangles.Add((a, d, c)); }
+                    else { triangles.Add((a, b, c)); triangles.Add((b, d, c)); }
+                }
             var vertexMap = new Dictionary<(long, long), int>();
             int Vertex(Position2 p)
             {
@@ -133,29 +142,71 @@ namespace TreeDistrict.Core.Canopy
             return result;
         }
 
-        // Shared world-space fields make edits stable and adjacent chunks agree.
-        // Rotate/warp the fields so the canopy does not reveal a square noise lattice.
-        private static double Crown(double x, double z)
+        // The upper envelope of overlapping lobes describes one continuous surface.
+        // Cells are field samples, never individual tree assets or game entities.
+        private static (double Height, double Crown, double Tint) Envelope(double x, double z)
         {
-            double u = .8 * x + .6 * z + 5 * Noise(x / 27, z / 27, 101);
-            double v = -.6 * x + .8 * z + 5 * Noise(x / 27, z / 27, 113);
-            return Noise(u / 9, v / 9, 31);
+            const double cell = 7;
+            int ix = (int)Math.Floor(x / cell), iz = (int)Math.Floor(z / cell);
+            double best = 3, crown = 0, tint = .5;
+            for (int dz = -1; dz <= 1; dz++)
+                for (int dx = -1; dx <= 1; dx++)
+                {
+                    int cx = ix + dx, cz = iz + dz;
+                    double px = (cx + .18 + .64 * Hash(cx, cz, 201)) * cell;
+                    double pz = (cz + .18 + .64 * Hash(cx, cz, 211)) * cell;
+                    double rx = 4.8 + 1.6 * Hash(cx, cz, 223), rz = 4.8 + 1.6 * Hash(cx, cz, 227);
+                    double u = (x - px) / rx, v = (z - pz) / rz;
+                    double q = 1 - u * u - v * v;
+                    if (q <= 0) continue;
+                    double lobe = Math.Pow(q, .65);
+                    double h = 3 + (9 + 7 * Hash(cx, cz, 229)) * lobe;
+                    if (h > best) { best = h; crown = lobe; tint = Hash(cx, cz, 233); }
+                }
+            return (best, crown, tint);
         }
-        public static double Height(double x, double z) => 10 + 6.3 * Crown(x, z)
-            + 2 * Noise((.6 * x - .8 * z) / 4, (.8 * x + .6 * z) / 4, 71)
-            + .7 * Noise(x / 1.8, z / 1.8, 53);
-        public static double Shade(double x, double z) => .55 + .3 * Crown(x, z)
-            + .1 * Noise(x / 1.3, z / 1.3, 19) + .05 * Noise(x / .3, z / .3, 83);
+        public static double Height(double x, double z) => Envelope(x, z).Height
+            + .9 * Noise(x / 1.5, z / 1.5, 53) + .35 * Noise(x / .65, z / .65, 71);
 
-        // Muted olive/sage variation and fine foliage mottling, independent of mesh resolution.
-        // RGB values are sRGB, for a colour texture (not a data/linear texture).
+        public double BoundaryDistance(double x, double z)
+        {
+            double best = double.MaxValue;
+            for (int i = 0; i < boundary.Length; i++)
+            {
+                var a = boundary[i]; var b = boundary[(i + 1) % boundary.Length];
+                double dx = b.X - a.X, dz = b.Z - a.Z;
+                double t = Math.Max(0, Math.Min(1, ((x - a.X) * dx + (z - a.Z) * dz) / (dx * dx + dz * dz)));
+                double u = x - a.X - t * dx, v = z - a.Z - t * dz;
+                best = Math.Min(best, u * u + v * v);
+            }
+            return Math.Sqrt(best);
+        }
+        public double SurfaceHeight(double x, double z)
+        {
+            double width = 2.5 + 2 * Noise(x / 5, z / 5, 239);
+            double t = Math.Min(1, BoundaryDistance(x, z) / width);
+            t = Math.Sqrt(t * (2 - t));
+            return .5 + (Height(x, z) - .5) * t;
+        }
+        public static double Shade(double x, double z) => .32 + .68 * Envelope(x, z).Crown;
         public static (double R, double G, double B) Colour(double x, double z)
         {
-            double patch = Noise((.8 * x + .6 * z) / 18, (-.6 * x + .8 * z) / 18, 137);
-            double detail = .86 + .14 * Noise(x / .45, z / .45, 149);
-            double shade = Shade(x, z) * detail;
-            return ((.18 + .05 * patch) * shade, (.25 + .025 * patch) * shade,
-                (.16 - .025 * patch) * shade);
+            var e = Envelope(x, z);
+            double foliage = .68 + .22 * Noise(x / .65, z / .65, 149) + .1 * Noise(x / .19, z / .19, 151);
+            double shade = (.32 + .68 * e.Crown) * foliage;
+            return ((.29 + .07 * e.Tint) * shade, (.34 + .025 * e.Tint) * shade,
+                (.20 + .035 * e.Tint) * shade);
+        }
+        // Small-scale relief is lighting detail, not extra mesh geometry.
+        public static double Relief(double x, double z) => .22 * Noise(x / .55, z / .55, 251)
+            + .075 * Noise(x / .18, z / .18, 257);
+        public static (double X, double Y, double Z) DetailNormal(double x, double z)
+        {
+            const double e = .08;
+            double nx = (Relief(x - e, z) - Relief(x + e, z)) / (2 * e);
+            double ny = (Relief(x, z - e) - Relief(x, z + e)) / (2 * e);
+            double length = Math.Sqrt(nx * nx + ny * ny + 1);
+            return (nx / length, ny / length, 1 / length);
         }
         private static double Noise(double x, double z, int seed)
         {
@@ -191,45 +242,6 @@ namespace TreeDistrict.Core.Canopy
             }
             faces.Add(new Face(points[order[0]], points[order[1]], points[order[2]]));
             return faces;
-        }
-        private readonly struct Triangle
-        {
-            public readonly int A, B, C;
-            public readonly double X, Z, Radius2;
-            public Triangle(int a, int b, int c, List<Position2> p)
-            {
-                if (Cross(p[a], p[b], p[c]) < 0) { int swap = b; b = c; c = swap; }
-                A = a; B = b; C = c;
-                double bx = p[b].X - p[a].X, bz = p[b].Z - p[a].Z;
-                double cx = p[c].X - p[a].X, cz = p[c].Z - p[a].Z;
-                double d = 2 * (bx * cz - bz * cx);
-                double ux = (cz * (bx * bx + bz * bz) - bz * (cx * cx + cz * cz)) / d;
-                double uz = (bx * (cx * cx + cz * cz) - cx * (bx * bx + bz * bz)) / d;
-                X = p[a].X + ux; Z = p[a].Z + uz; Radius2 = ux * ux + uz * uz;
-            }
-        }
-        private static List<Triangle> Delaunay(List<Position2> p)
-        {
-            int count = p.Count;
-            p.Add(new Position2(-10000, -10000)); p.Add(new Position2(10000, -10000)); p.Add(new Position2(0, 10000));
-            var triangles = new List<Triangle> { new Triangle(count, count + 1, count + 2, p) };
-            for (int i = 0; i < count; i++)
-            {
-                var edges = new Dictionary<(int, int), int>();
-                void Edge(int a, int b) { var key = (Math.Min(a, b), Math.Max(a, b)); edges.TryGetValue(key, out int n); edges[key] = n + 1; }
-                for (int j = triangles.Count - 1; j >= 0; j--)
-                {
-                    var t = triangles[j]; double dx = p[i].X - t.X, dz = p[i].Z - t.Z;
-                    if (dx * dx + dz * dz > t.Radius2 + Epsilon) continue;
-                    Edge(t.A, t.B); Edge(t.B, t.C); Edge(t.C, t.A); triangles.RemoveAt(j);
-                }
-                foreach (var e in edges)
-                    if (e.Value == 1 && Math.Abs(Cross(p[e.Key.Item1], p[e.Key.Item2], p[i])) > Epsilon)
-                        triangles.Add(new Triangle(e.Key.Item1, e.Key.Item2, i, p));
-            }
-            triangles.RemoveAll(t => t.A >= count || t.B >= count || t.C >= count);
-            p.RemoveRange(count, 3);
-            return triangles;
         }
         private static List<Position2> Clip(List<Position2> input, Position2 a, Position2 b)
         {

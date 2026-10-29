@@ -27,6 +27,7 @@ namespace TreeDistrict
             public float3[] Nodes;
             public CanopyGeometry Geometry;
             public int X, Z, Chunks;
+            public double GeometryMs, UploadMs;
             public bool Queued, Cancelled;
             public readonly List<GameObject> Objects = new List<GameObject>();
             public readonly List<Mesh> Meshes = new List<Mesh>();
@@ -39,6 +40,7 @@ namespace TreeDistrict
                 foreach (var material in Materials) Object.Destroy(material);
                 foreach (var texture in Textures) Object.Destroy(texture);
                 Objects.Clear(); Meshes.Clear(); Materials.Clear(); Textures.Clear(); Chunks = 0;
+                GeometryMs = 0; UploadMs = 0;
             }
         }
         private readonly Dictionary<Entity, Record> _records = new Dictionary<Entity, Record>();
@@ -95,11 +97,15 @@ namespace TreeDistrict
             try
             {
                 // Bounded per-frame work, also when the simulation is paused or in the editor.
+                var timer = System.Diagnostics.Stopwatch.StartNew();
                 var tile = job.Geometry.BuildTile(job.X, job.Z);
+                job.GeometryMs += timer.Elapsed.TotalMilliseconds;
+                timer.Restart();
                 if (tile.Indices.Count > 0) CreateMesh(job, tile, job.X, job.Z);
+                job.UploadMs += timer.Elapsed.TotalMilliseconds;
                 if (++job.X > job.Geometry.MaxTileX) { job.X = job.Geometry.MinTileX; job.Z++; }
                 if (job.Z <= job.Geometry.MaxTileZ) Enqueue(job);
-                else Mod.Log.Info($"Canopy complete: area {job.Area.Index}, {job.Chunks} mesh chunks.");
+                else Mod.Log.Info($"Canopy complete: area {job.Area.Index}, {job.Chunks} mesh chunks, geometry {job.GeometryMs:F0} ms, terrain/material/Unity work {job.UploadMs:F0} ms (excludes frame waits).");
             }
             catch (Exception ex)
             {
@@ -166,16 +172,21 @@ namespace TreeDistrict
             var shader = GetShader();
             var terrain = World.GetOrCreateSystemManaged<TerrainSystem>().GetHeightData(true);
             float Ground(double x, double z) => TerrainUtils.SampleHeight(ref terrain, new float3((float)x, 0, (float)z));
-            float Top(double x, double z) => Ground(x, z) + (float)CanopyGeometry.Height(x, z);
+            float Top(double x, double z) => Ground(x, z) + (float)owner.Geometry.SurfaceHeight(x, z);
             double x0 = tx * CanopyGeometry.TileSize, z0 = tz * CanopyGeometry.TileSize;
             var origin = new Vector3((float)x0, Ground(x0, z0), (float)z0);
             var vertices = new List<Vector3>(); var normals = new List<Vector3>(); var uv = new List<Vector2>();
+            var tangents = new List<Vector4>();
             int Vertex(Position2 p, bool bottom, Vector3? normal = null)
             {
                 int index = vertices.Count;
                 vertices.Add(new Vector3((float)(p.X - x0), (bottom ? Ground(p.X, p.Z) - .2f : Top(p.X, p.Z)) - origin.y, (float)(p.Z - z0)));
                 normals.Add(normal ?? new Vector3(Top(p.X - .5, p.Z) - Top(p.X + .5, p.Z), 1,
                     Top(p.X, p.Z - .5) - Top(p.X, p.Z + .5)).normalized);
+                var n = normals[normals.Count - 1];
+                var t = Vector3.ProjectOnPlane(Vector3.right, n).normalized;
+                if (t.sqrMagnitude < .01f) t = Vector3.forward;
+                tangents.Add(new Vector4(t.x, t.y, t.z, -1));
                 uv.Add(new Vector2((float)((p.X - x0) / CanopyGeometry.TileSize), (float)((p.Z - z0) / CanopyGeometry.TileSize)));
                 return index;
             }
@@ -192,7 +203,7 @@ namespace TreeDistrict
             }
             var mesh = new Mesh { name = "TreeCanopy mesh", indexFormat = IndexFormat.UInt32, hideFlags = HideFlags.HideAndDontSave };
             owner.Meshes.Add(mesh);
-            mesh.SetVertices(vertices); mesh.SetNormals(normals); mesh.SetUVs(0, uv); mesh.SetTriangles(indices, 0); mesh.RecalculateBounds();
+            mesh.SetVertices(vertices); mesh.SetNormals(normals); mesh.SetTangents(tangents); mesh.SetUVs(0, uv); mesh.SetTriangles(indices, 0); mesh.RecalculateBounds();
             mesh.UploadMeshData(true);
             // Bake cheap hollow shading/colour into a texture; HDRP/Lit doesn't consume vertex colours.
             const int size = 193; // 25 cm colour samples across a 48 m chunk.
@@ -200,18 +211,34 @@ namespace TreeDistrict
                 name = "TreeCanopy colour", wrapMode = TextureWrapMode.Clamp, hideFlags = HideFlags.HideAndDontSave
             };
             owner.Textures.Add(texture);
+            var normalMap = new Texture2D(size, size, TextureFormat.RGBA32, true, true) {
+                name = "TreeCanopy leaf relief", wrapMode = TextureWrapMode.Clamp, hideFlags = HideFlags.HideAndDontSave
+            };
+            owner.Textures.Add(normalMap);
             var pixels = new Color[size * size];
+            var normalPixels = new Color[size * size];
             for (int z = 0; z < size; z++)
                 for (int x = 0; x < size; x++)
                 {
                     double step = CanopyGeometry.TileSize / (size - 1);
                     var colour = CanopyGeometry.Colour(x0 + x * step, z0 + z * step);
                     pixels[z * size + x] = new Color((float)colour.R, (float)colour.G, (float)colour.B, 1);
+                    var normal = CanopyGeometry.DetailNormal(x0 + x * step, z0 + z * step);
+                    // Unity's RG/AG unpacker multiplies R by A; this encoding supports both.
+                    normalPixels[z * size + x] = new Color(1, (float)(normal.Y * .5 + .5),
+                        (float)(normal.Z * .5 + .5), (float)(normal.X * .5 + .5));
                 }
             texture.SetPixels(pixels); texture.Apply(true, true);
+            normalMap.SetPixels(normalPixels); normalMap.Apply(true, true);
             var material = new Material(shader) { name = "TreeCanopy material", hideFlags = HideFlags.HideAndDontSave };
             owner.Materials.Add(material);
             material.SetColor("_BaseColor", Color.white); material.SetTexture("_BaseColorMap", texture);
+            if (material.HasProperty("_NormalMap"))
+            {
+                material.SetTexture("_NormalMap", normalMap);
+                material.SetFloat("_NormalMapSpace", 0); // Tangent space.
+                material.SetFloat("_NormalScale", 1);
+            }
             if (material.HasProperty("_UnlitColor")) material.SetColor("_UnlitColor", Color.white);
             if (material.HasProperty("_UnlitColorMap")) material.SetTexture("_UnlitColorMap", texture);
             if (material.HasProperty("_Smoothness")) material.SetFloat("_Smoothness", .05f);

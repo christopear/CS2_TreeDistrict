@@ -81,7 +81,7 @@ public class CanopyGeometryTests
         Assert.Equal(a.Points, b.Points); Assert.Equal(a.Indices, b.Indices);
         Assert.InRange(Math.Abs(CanopyGeometry.Height(-1e-6, 0) - CanopyGeometry.Height(1e-6, 0)), 0, 1e-4);
         foreach (var p in a.Points)
-        { Assert.InRange(CanopyGeometry.Height(p.X, p.Z), 10, 19); Assert.InRange(CanopyGeometry.Shade(p.X, p.Z), .55, 1); }
+        { Assert.InRange(CanopyGeometry.Height(p.X, p.Z), 3, 20.25); Assert.InRange(CanopyGeometry.Shade(p.X, p.Z), .32, 1); }
     }
     [Fact]
     public void TwoHundredMetrePlotHasFineGeometryAndBoundedColour()
@@ -89,14 +89,37 @@ public class CanopyGeometryTests
         var g = new CanopyGeometry(new[] { P(0, 0), P(200, 0), P(200, 200), P(0, 200) });
         var tiles = Tiles(g).ToArray();
         Assert.Equal(40000, tiles.Sum(Area), 5);
-        Assert.InRange(tiles.Sum(t => t.Indices.Count / 3), 19000, 25000);
+        Assert.InRange(tiles.Sum(t => t.Indices.Count / 3), 80000, 90000);
         foreach (var p in tiles.SelectMany(t => t.Points))
         {
             var colour = CanopyGeometry.Colour(p.X, p.Z);
-            Assert.InRange(colour.R, .08, .24);
-            Assert.InRange(colour.G, .11, .28);
-            Assert.InRange(colour.B, .06, .17);
+            Assert.InRange(colour.R, .05, .36);
+            Assert.InRange(colour.G, .07, .365);
+            Assert.InRange(colour.B, .04, .235);
         }
+    }
+    [Fact]
+    public void BoundaryTapersAndInteriorRetainsFullCanopyHeight()
+    {
+        var g = new CanopyGeometry(new[] { P(0, 0), P(200, 0), P(200, 200), P(0, 200) });
+        Assert.Equal(.5, g.SurfaceHeight(0, 40), 8);
+        Assert.Equal(CanopyGeometry.Height(50, 50), g.SurfaceHeight(50, 50), 8);
+        Assert.InRange(g.SurfaceHeight(.1, 40), .5, CanopyGeometry.Height(.1, 40));
+        Assert.Equal(50, g.BoundaryDistance(50, 50), 8);
+    }
+    [Fact]
+    public void DetailNormalsAreFiniteUnitVectorsAndClumpsHaveHeightContrast()
+    {
+        var heights = new List<double>();
+        for (double z = -20; z <= 20; z += .7)
+            for (double x = -20; x <= 20; x += .7)
+            {
+                var n = CanopyGeometry.DetailNormal(x, z);
+                Assert.Equal(1, n.X * n.X + n.Y * n.Y + n.Z * n.Z, 8);
+                Assert.True(n.Z > 0);
+                heights.Add(CanopyGeometry.Height(x, z));
+            }
+        Assert.True(heights.Max() - heights.Min() > 9, "Canopy must have distinct peaks and hollows.");
     }
     [Fact]
     public void InvalidBoundaryFailsWithoutProducingNonFiniteGeometry()
