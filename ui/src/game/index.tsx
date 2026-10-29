@@ -100,9 +100,15 @@ function Entry() {
 }
 function CanopyEntry() {
     return (
-        <Button onSelect={() => send({ type: "beginCanopy" })}
-            tooltipLabel="Draw an automatic forest canopy area" className="td-entry">
-            <Icon className="td-icon" src="coui://treedistrict/TreeCanopy.svg" />
+        <Button
+            onSelect={() => send({ type: "beginCanopy" })}
+            tooltipLabel="Draw an automatic forest canopy area"
+            className="td-entry"
+        >
+            <Icon
+                className="td-icon"
+                src="coui://treedistrict/TreeCanopy.svg"
+            />
             Canopy Areas
         </Button>
     );
@@ -158,8 +164,20 @@ function GamePanel() {
                             />
                         </>
                     }
-                    generationAction={(type, districtId, confirmed, placementMethod) =>
-                        send({ type, districtId, confirmed, placementMethod })
+                    generationAction={(
+                        type,
+                        districtId,
+                        confirmed,
+                        placementMethod,
+                        placementSettings,
+                    ) =>
+                        send({
+                            type,
+                            districtId,
+                            confirmed,
+                            placementMethod,
+                            ...placementSettings,
+                        })
                     }
                     nativeAreaTools
                     key={envelope.selectedId ?? "draft"}

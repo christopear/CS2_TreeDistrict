@@ -38,6 +38,7 @@ export interface EditorProps {
         districtId: string,
         confirmed?: boolean,
         placementMethod?: "bulk" | "perEntity",
+        placementSettings?: { batchSize: number; batchIntervalSeconds: number },
     ) => void;
 }
 const climateFields = [
@@ -219,6 +220,18 @@ export function Editor({
     const [placementMethod, setPlacementMethod] = useState<
         "bulk" | "perEntity"
     >("bulk");
+    const [batchSizeText, setBatchSizeText] = useState("50000");
+    const [batchIntervalText, setBatchIntervalText] = useState("0.5");
+    const batchSize = Number(batchSizeText);
+    const batchIntervalSeconds = Number(batchIntervalText);
+    const validPlacementSettings =
+        batchSizeText.trim() !== "" &&
+        Number.isInteger(batchSize) &&
+        batchSize >= 1 &&
+        batchSize <= 2147483647 &&
+        batchIntervalText.trim() !== "" &&
+        Number.isFinite(batchIntervalSeconds) &&
+        batchIntervalSeconds >= 0;
     const [assetQuery, setAssetQuery] = useState("");
     const [dialog, setDialog] = useState<
         "save" | "replace" | "delete" | "bake" | "addVegetation" | null
@@ -624,6 +637,48 @@ export function Editor({
                                 : ""}
                             {district.generationStatus}
                         </p>
+                        <label className="td-field">
+                            <span>Plants per batch</span>
+                            <TextField
+                                type="number"
+                                min={1}
+                                max={2147483647}
+                                step={1}
+                                value={batchSizeText}
+                                onChange={(e) =>
+                                    setBatchSizeText(e.target.value)
+                                }
+                                disabled={state.districts.some(
+                                    (d) => d.placementActive,
+                                )}
+                            />
+                        </label>
+                        <label className="td-field">
+                            <span>Batch delay (seconds)</span>
+                            <TextField
+                                type="number"
+                                min={0}
+                                step="any"
+                                value={batchIntervalText}
+                                onChange={(e) =>
+                                    setBatchIntervalText(e.target.value)
+                                }
+                                disabled={state.districts.some(
+                                    (d) => d.placementActive,
+                                )}
+                            />
+                        </label>
+                        <p className="td-help">
+                            Minimum delay after each placement batch. Game
+                            processing may make it longer. Applies to the next
+                            generation.
+                        </p>
+                        {!validPlacementSettings && (
+                            <p role="alert">
+                                Enter a positive whole batch size and a
+                                non-negative delay.
+                            </p>
+                        )}
                         <div className="td-actions">
                             {(["bulk", "perEntity"] as const).map((method) => (
                                 <Button
@@ -642,6 +697,7 @@ export function Editor({
                             <Button
                                 disabled={
                                     !generationAction ||
+                                    !validPlacementSettings ||
                                     state.districts.some(
                                         (d) => d.placementActive,
                                     )
@@ -652,6 +708,7 @@ export function Editor({
                                         district.id,
                                         undefined,
                                         placementMethod,
+                                        { batchSize, batchIntervalSeconds },
                                     )
                                 }
                             >

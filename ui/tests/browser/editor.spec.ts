@@ -14,6 +14,20 @@ test("draw, edit, save, reselect, reload and remove district", async ({
     await canvas.click({ position: { x: 550, y: 480 } });
     await canvas.click({ position: { x: 220, y: 480 } });
     await page.getByRole("button", { name: "Finish district" }).click();
+    const batchSize = page.getByLabel("Plants per batch", { exact: true });
+    const delay = page.getByLabel("Batch delay (seconds)", { exact: true });
+    await expect(batchSize).toHaveValue("50000");
+    await expect(delay).toHaveValue("0.5");
+    await batchSize.fill("1000000");
+    await delay.fill("3");
+    await expect(batchSize).toHaveValue("1000000");
+    await batchSize.fill("20000");
+    await delay.fill("0.25");
+    await expect(delay).toHaveValue("0.25");
+    await batchSize.fill("0");
+    await expect(page.getByRole("alert")).toContainText("positive whole batch size");
+    await batchSize.fill("20000");
+    await expect(page.getByRole("alert")).toHaveCount(0);
     const bulk = page.getByRole("button", { name: "Bulk upload", exact: true });
     const perEntity = page.getByRole("button", {
         name: "Per entity upload",
