@@ -337,6 +337,16 @@
           "weight": 10
         }
       ]
+    },
+    {
+      "id": "evergreen-pine-spruce",
+      "name": "Evergreen — Pine & Spruce",
+      "description": "Pine and Spruce with equal proposal weights and no bushes. Final counts depend on spacing and terrain suitability.",
+      "overallDensityPercent": 100,
+      "members": [
+        { "assetId": "cs2:PineTree01", "weight": 50 },
+        { "assetId": "cs2:SpruceTree01", "weight": 50 }
+      ]
     }
   ]
 }
