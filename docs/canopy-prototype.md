@@ -81,3 +81,10 @@ layers branch-scale masses with occasional taller emergents; D emphasizes ragged
 relief and irregular hollows. Colour shading uses a local concavity estimate,
 not physical ambient occlusion. These plots do not establish in-game quality or
 performance; sub-metre details will need an appropriate mesh/material treatment.
+
+`python scripts/study-canopy-variants.py --between` writes a second study to
+`artifacts/canopy-between-b-d/`. It keeps original B as the control and blends
+25%, 50%, and 75% toward D's larger-scale shapes and hollows, while retaining B's
+fine roughness amplitude throughout. These percentages are structural blends,
+not a blend with D's full jagged surface. The close-up panels also share vertical
+limits to keep framing consistent. No game code or deployed files are changed.

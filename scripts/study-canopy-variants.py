@@ -4,13 +4,17 @@ Run after TreeDistrict.Canopy.Preview. Needs NumPy and Matplotlib.
 All panels share terrain, scale, palette, lighting, camera and sampling density.
 """
 import json
+import argparse
 from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-OUT = Path('artifacts/canopy-variants')
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--between', action='store_true', help='B to D structure blends with B-level fine roughness')
+args = parser.parse_args()
+OUT = Path('artifacts/canopy-between-b-d' if args.between else 'artifacts/canopy-variants')
 OUT.mkdir(parents=True, exist_ok=True)
 source = json.loads(Path('artifacts/canopy-preview.json').read_text())
 n, size = source['resolution'], source['size']
@@ -95,6 +99,18 @@ labels = ['A — Current dome shape', 'B — Broad, interlocking crowns',
           'C — Layered branch masses', 'D — Broken, ragged canopy']
 notes = ['Control: previous C# surface', 'Wide crowns + smaller asymmetric lobes',
          'Layered foliage with occasional taller clumps', 'Stronger local relief and irregular hollows']
+if args.between:
+    # Blend metre-scale structure, NOT D's amplified sub-metre roughness.
+    # This keeps B's texture while bringing in progressively stronger hollows.
+    b_structure = broad + branch
+    d_structure = broken - 2.5*field(7, 650)
+    weights = [0, .25, .5, .75]
+    heights = [.5 + ((1-w)*b_structure + w*d_structure + rough - .5)*edge
+               for w in weights]
+    labels = ['B — Original', 'B/D 25 — Subtle hollows',
+              'B/D 50 — Balanced structure', 'B/D 75 — Stronger breakup']
+    notes = ['Unchanged reference', '25% toward D’s larger shapes',
+             '50% toward D’s larger shapes', '75% toward D’s larger shapes']
 
 # Common material prevents palette or lighting differences masquerading as shape changes.
 patch = field(13, 800)
@@ -118,7 +134,7 @@ def draw(ax, h, i, close=False):
     span = 60 if close else size
     low = 70 if close else 0
     ax.set_xlim(low, low+span); ax.set_ylim(low, low+span)
-    lo, hi = (float(ground[sl].min()), float(total[sl].max()+3)) if close else (0, 52)
+    lo, hi = (float(ground[sl].min()), max(float((ground+v)[sl].max()) for v in heights)+3) if close else (0, 52)
     ax.set_zlim(lo, hi)
     ax.set_box_aspect((span, span, hi-lo), zoom=1.02)
     ax.view_init(elev=33, azim=-63)
@@ -133,8 +149,9 @@ for close in (False, True):
         draw(ax, h, i, close)
     fig.suptitle(('60 m detail crops' if close else '200 m rolling-hill canopy variants') +
                  ' — offline shape studies, not CS2', fontsize=18)
-    fig.text(.5, .02, 'Same terrain (max 28% grade), camera, palette and light. No vertical exaggeration. '
-             '0.5 m field samples; game mesh/shader not simulated.', ha='center', fontsize=10)
+    footer = ('Fine roughness stays at B’s level in every panel. ' if args.between else '')
+    fig.text(.5, .02, footer + 'Same hill, camera, palette and light. No vertical exaggeration.\n'
+             '0.5 m field samples; offline renderer, not the game mesh/shader.', ha='center', fontsize=10)
     fig.subplots_adjust(left=0, right=1, top=.88, bottom=.05, wspace=0, hspace=.12)
     output = OUT / ('details.png' if close else 'comparison.png')
     fig.savefig(output, dpi=135); plt.close(fig)
