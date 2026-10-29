@@ -41,6 +41,7 @@ namespace TreeDistrict
                 + " placed=" + job.Schedule.Completed + "/" + job.Schedule.Total
                 + " elapsedMs=" + ((PlacementTime - job.StartedAt) * 1000).ToString("F1") + " reason=" + reason);
             job.Schedule.Cancel();
+            NativePlacementTimings.Finish();
             _placement = null; // Release the unplaced plan; keep already placed plants owned.
             if (_areaIds.ContainsKey(area))
             {
@@ -153,6 +154,7 @@ namespace TreeDistrict
             record["placementActive"] = plan.Count > 0;
             record["generationStatus"] = "Placing 0 of " + plan.Count + " plants (50,000 per batch, 0.5 seconds between batches).";
             string runId = Guid.NewGuid().ToString("N").Substring(0, 8);
+            if (plan.Count > 0) NativePlacementTimings.Begin(runId);
             if (plan.Count > 0)
                 _placement = new PlacementJob { Area = area, Id = (string)record["id"], Revision = (int)record["revision"],
                     Plan = plan, Native = native, Schedule = new PlacementBatchSchedule(plan.Count),
@@ -178,6 +180,7 @@ namespace TreeDistrict
             if (!IsTreeArea(job.Area)) { RemoveOwned(job.Area); return; }
             int batchCount = job.Schedule.NextCount(PlacementTime);
             if (batchCount == 0) { job.LastTickEnd = PlacementTime; return; }
+            NativePlacementTimings.BeforeBatch(job.BatchNumber + 1);
             double batchStart = PlacementTime;
             double groupingMs = 0, creationMs = 0, setupMs = 0;
             int creationCalls = 0;
@@ -257,6 +260,7 @@ namespace TreeDistrict
             {
                 current["generatedRevision"] = job.Revision;
                 _placement = null;
+                NativePlacementTimings.Finish();
                 Mod.Log.Info("Finished placing " + job.Schedule.Completed + " plants for area " + job.Id);
             }
             _uiDirty = true;

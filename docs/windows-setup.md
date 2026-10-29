@@ -109,6 +109,14 @@ time since the preceding batch ended, and mean/maximum gaps between command-syst
 updates. Update gaps include other game work and scheduling, not an isolated native
 initialization measurement. Managed MB is an estimate without forced GC; gc0/1/2
 are cumulative collection counters. Only batches, completion and cancellation log.
+Diagnostic `NativeTiming` lines attribute inclusive main-thread elapsed time to
+native object collection/search/override, modification barriers, rendering setup,
+vegetation rendering, upload, UI and simulation. They aggregate between placement
+batches and continue for three seconds after completion/cancellation to capture the
+last batch. Probes are dormant outside that window. Nested system spans overlap:
+do not sum parent and child timings. Asynchronous jobs may be charged to the later
+barrier/system that waits for them; no extra job completion is forced. These are
+scheduler intervals around systems, not GPU timings or exclusive worker-job samples.
 The scheduler leaves at least 0.5 seconds
 of wall-clock time after each batch before the next. Only one placement job runs
 at a time, and missed intervals never cause catch-up bursts. Planning remains

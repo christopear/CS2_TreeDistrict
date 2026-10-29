@@ -66,6 +66,7 @@ namespace TreeDistrict
         }
         private void ResetState()
         {
+            NativePlacementTimings.Stop();
             _state = SettingsModel.Initial(_catalog); _areaIds.Clear(); _selectedId = null; _error = null;
             _trees.Clear(); _orphanTrees.Clear();
             _placement = null;
@@ -170,6 +171,7 @@ namespace TreeDistrict
         // cleanup would strip Created/Updated before native object initialization runs.
         internal void ProcessCommands(bool areaNodesChanged)
         {
+            NativePlacementTimings.Tick();
             if (!_ready) return;
             bool active = _tools.activePrefab == Mod.Area;
             if (active && !_wasAreaTool) { _visible = true; _uiDirty = true; }

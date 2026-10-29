@@ -37,10 +37,12 @@ namespace TreeDistrict
             GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN());
             updateSystem.UpdateAt<TreeDistrictRegistrationSystem>(SystemUpdatePhase.MainLoop);
             updateSystem.UpdateAt<TreeAreaSettingsSystem>(SystemUpdatePhase.UIUpdate);
+            NativePlacementTimings.Register(updateSystem);
+            // Register last so our creation work precedes the ToolSystem timing probe.
             updateSystem.UpdateBefore<TreeAreaCommandSystem, Game.Tools.ToolSystem>(SystemUpdatePhase.MainLoop);
             Log.Info("Registered TreeDistrict.Area.v1 with manual mixed-vegetation generation (Proton solver).");
         }
-        public void OnDispose() { Log.Info("TreeDistrict disposed."); }
+        public void OnDispose() { NativePlacementTimings.Stop(); Log.Info("TreeDistrict disposed."); }
     }
     public sealed class LocaleEN : IDictionarySource
     {
