@@ -206,7 +206,8 @@ namespace TreeDistrict
             mesh.SetVertices(vertices); mesh.SetNormals(normals); mesh.SetTangents(tangents); mesh.SetUVs(0, uv); mesh.SetTriangles(indices, 0); mesh.RecalculateBounds();
             mesh.UploadMeshData(true);
             // Bake cheap hollow shading/colour into a texture; HDRP/Lit doesn't consume vertex colours.
-            const int size = 193; // 25 cm colour samples across a 48 m chunk.
+            const int size = CanopyAppearance.Size; // Match the selected study's 50 cm samples.
+            var appearance = new CanopyAppearance(owner.Geometry, x0, z0);
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, true) {
                 name = "TreeCanopy colour", wrapMode = TextureWrapMode.Clamp, hideFlags = HideFlags.HideAndDontSave
             };
@@ -222,7 +223,8 @@ namespace TreeDistrict
                 {
                     double step = CanopyGeometry.TileSize / (size - 1);
                     var colour = CanopyGeometry.Colour(x0 + x * step, z0 + z * step);
-                    pixels[z * size + x] = new Color((float)colour.R, (float)colour.G, (float)colour.B, 1);
+                    float ao = (float)appearance.Occlusion(x, z);
+                    pixels[z * size + x] = new Color((float)colour.R * ao, (float)colour.G * ao, (float)colour.B * ao, 1);
                     var normal = CanopyGeometry.DetailNormal(x0 + x * step, z0 + z * step);
                     // Unity's RG/AG unpacker multiplies R by A; this encoding supports both.
                     normalPixels[z * size + x] = new Color(1, (float)(normal.Y * .5 + .5),

@@ -20,12 +20,15 @@ The standalone `CanopyGeometry` class builds 48 m chunks with jittered samples
 roughly 1 m apart. Fixed lattice connectivity replaces the repeated Delaunay
 circumcircle searches; triangles are still clipped against the native outline.
 Shared samples and continuous world-space height fields join adjacent chunks.
-The surface is the upper envelope of overlapping, differently sized ellipsoidal
-lobes, with heights around 3–20 m, plus smaller bumps. These are mathematical
-surface features, not stored tree objects. Per-lobe tint and pronounced dark
-hollows separate the clumps. A colour texture and tangent-space normal map sampled
-every 25 cm add foliage mottling and lighting relief. Boundary height tapers to
-0.5 m over a varying 2.5–4.5 m band, replacing the tall flat perimeter wall.
+The current surface is the selected **B/D 50%** study: an equal blend of B's
+broad interlocking crowns and D's broken structure/hollows, retaining B's fine
+roughness. The rotated asymmetric lobes are mathematical surface features, not
+stored tree objects. Colour and grain use the study's palette. A colour texture
+and tangent-space normal map sampled every 50 cm add foliage variation and relief.
+`CanopyAppearance` samples a halo and uses a summed-area table for the study's
+local concavity shading, avoiding a separate expensive height calculation for
+every neighbour. Adjacent chunks agree on shading. Boundary height tapers to
+0.5 m over a varying 3–5 m band, replacing the tall flat perimeter wall.
 HDRP supplies lighting/shadows; mesh tangents support its normal mapping.
 A 200 m square has roughly 82,000 top triangles. This is a look-development
 fixture, not a claim of map-scale rendering readiness or a match to the reference.
@@ -74,7 +77,8 @@ Use it to evaluate clump shapes before testing the actual game material.
 For offline alternatives, run `python scripts/study-canopy-variants.py` after the
 CLI. It creates `artifacts/canopy-variants/comparison.png` (200 m overview),
 `details.png` (60 m crops), reusable numeric fields, and `study.json`. A is the
-current C# shape; B–D are experimental Python fields, not ported into the game.
+current C# shape; B–D are the original experimental Python fields. The selected
+B/D 50% combination is now ported into the game.
 All use the same rolling hill (maximum 28% grade), palette, approximate lighting
 and camera, without vertical exaggeration. B widens and interlocks crowns; C
 layers branch-scale masses with occasional taller emergents; D emphasizes ragged
@@ -87,4 +91,8 @@ performance; sub-metre details will need an appropriate mesh/material treatment.
 25%, 50%, and 75% toward D's larger-scale shapes and hollows, while retaining B's
 fine roughness amplitude throughout. These percentages are structural blends,
 not a blend with D's full jagged surface. The close-up panels also share vertical
-limits to keep framing consistent. No game code or deployed files are changed.
+limits to keep framing consistent. Running this script changes no game or deployed files.
+The C# port was compared against all 160,801 saved 50% study samples: maximum
+height error was below 0.000002 m. Golden-value tests also cover boundary taper,
+interior height, concavity shading and material seams. Game lighting still
+differs from the offline renderer; this verifies the field, not pixel equivalence.

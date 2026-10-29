@@ -142,31 +142,42 @@ namespace TreeDistrict.Core.Canopy
             return result;
         }
 
-        // The upper envelope of overlapping lobes describes one continuous surface.
-        // Cells are field samples, never individual tree assets or game entities.
-        private static (double Height, double Crown, double Tint) Envelope(double x, double z)
+        // Exact B/D 50% structural blend from the rolling-hill study, with B's fine roughness.
+        private static double Field(double x, double z, double scale, int seed) =>
+            Noise((.8 * x + .6 * z) / scale, (-.6 * x + .8 * z) / scale, seed);
+        private static double Lobes(double x, double z, double cell, double radius, double amplitude, int seed, double exponent)
         {
-            const double cell = 7;
-            int ix = (int)Math.Floor(x / cell), iz = (int)Math.Floor(z / cell);
-            double best = 3, crown = 0, tint = .5;
-            for (int dz = -1; dz <= 1; dz++)
-                for (int dx = -1; dx <= 1; dx++)
+            double u = x + 3 * (Field(x, z, 19, seed + 1) - .5);
+            double v = z + 3 * (Field(x, z, 21, seed + 2) - .5);
+            int ix = (int)Math.Floor(u / cell), iz = (int)Math.Floor(v / cell);
+            double best = 0;
+            for (int dz = -2; dz <= 2; dz++)
+                for (int dx = -2; dx <= 2; dx++)
                 {
                     int cx = ix + dx, cz = iz + dz;
-                    double px = (cx + .18 + .64 * Hash(cx, cz, 201)) * cell;
-                    double pz = (cz + .18 + .64 * Hash(cx, cz, 211)) * cell;
-                    double rx = 4.8 + 1.6 * Hash(cx, cz, 223), rz = 4.8 + 1.6 * Hash(cx, cz, 227);
-                    double u = (x - px) / rx, v = (z - pz) / rz;
-                    double q = 1 - u * u - v * v;
+                    double a = u - (cx + .05 + .9 * Hash(cx, cz, seed + 3)) * cell;
+                    double b = v - (cz + .05 + .9 * Hash(cx, cz, seed + 4)) * cell;
+                    double rx = radius * (.8 + .5 * Hash(cx, cz, seed + 6));
+                    double rz = radius * (.6 + .6 * Hash(cx, cz, seed + 7));
+                    // Rotation preserves distance: reject remote cells before trig/power.
+                    double bound = Math.Max(rx, rz);
+                    if (a * a + b * b >= bound * bound) continue;
+                    double angle = Hash(cx, cz, seed + 5) * Math.PI;
+                    double cos = Math.Cos(angle), sin = Math.Sin(angle);
+                    double du = (a * cos + b * sin) / rx, dv = (-a * sin + b * cos) / rz;
+                    double q = 1 - du * du - dv * dv;
                     if (q <= 0) continue;
-                    double lobe = Math.Pow(q, .65);
-                    double h = 3 + (9 + 7 * Hash(cx, cz, 229)) * lobe;
-                    if (h > best) { best = h; crown = lobe; tint = Hash(cx, cz, 233); }
+                    best = Math.Max(best, amplitude * (.55 + .65 * Hash(cx, cz, seed + 8)) * Math.Pow(q, exponent));
                 }
-            return (best, crown, tint);
+            return best;
         }
-        public static double Height(double x, double z) => Envelope(x, z).Height
-            + .9 * Noise(x / 1.5, z / 1.5, 53) + .35 * Noise(x / .65, z / .65, 71);
+        public static double Height(double x, double z)
+        {
+            double b = 7 + Lobes(x, z, 11, 12, 6, 300, .38) + Lobes(x, z, 3.1, 3, 2.7, 350, .42);
+            double d = 6 + Lobes(x, z, 10, 10, 6, 600, .42) + Lobes(x, z, 3.8, 3.5, 4.1, 620, .55)
+                - 2.5 * Field(x, z, 7, 650);
+            return .5 * (b + d) + Relief(x, z);
+        }
 
         public double BoundaryDistance(double x, double z)
         {
@@ -183,23 +194,18 @@ namespace TreeDistrict.Core.Canopy
         }
         public double SurfaceHeight(double x, double z)
         {
-            double width = 2.5 + 2 * Noise(x / 5, z / 5, 239);
+            double width = 3 + 2 * Field(x, z, 6, 900);
             double t = Math.Min(1, BoundaryDistance(x, z) / width);
             t = Math.Sqrt(t * (2 - t));
             return .5 + (Height(x, z) - .5) * t;
         }
-        public static double Shade(double x, double z) => .32 + .68 * Envelope(x, z).Crown;
         public static (double R, double G, double B) Colour(double x, double z)
         {
-            var e = Envelope(x, z);
-            double foliage = .68 + .22 * Noise(x / .65, z / .65, 149) + .1 * Noise(x / .19, z / .19, 151);
-            double shade = (.32 + .68 * e.Crown) * foliage;
-            return ((.29 + .07 * e.Tint) * shade, (.34 + .025 * e.Tint) * shade,
-                (.20 + .035 * e.Tint) * shade);
+            double patch = Field(x, z, 13, 800), grain = .83 + .17 * Field(x, z, .32, 810);
+            return ((.28 + .07 * patch) * grain, (.35 + .045 * patch) * grain, (.18 + .055 * patch) * grain);
         }
-        // Small-scale relief is lighting detail, not extra mesh geometry.
-        public static double Relief(double x, double z) => .22 * Noise(x / .55, z / .55, 251)
-            + .075 * Noise(x / .18, z / .18, 257);
+        public static double Relief(double x, double z) =>
+            1.2 * (Field(x, z, .85, 405) - .5) + .55 * (Field(x, z, .32, 407) - .5);
         public static (double X, double Y, double Z) DetailNormal(double x, double z)
         {
             const double e = .08;

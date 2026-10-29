@@ -81,7 +81,7 @@ public class CanopyGeometryTests
         Assert.Equal(a.Points, b.Points); Assert.Equal(a.Indices, b.Indices);
         Assert.InRange(Math.Abs(CanopyGeometry.Height(-1e-6, 0) - CanopyGeometry.Height(1e-6, 0)), 0, 1e-4);
         foreach (var p in a.Points)
-        { Assert.InRange(CanopyGeometry.Height(p.X, p.Z), 3, 20.25); Assert.InRange(CanopyGeometry.Shade(p.X, p.Z), .32, 1); }
+        { Assert.InRange(CanopyGeometry.Height(p.X, p.Z), 3, 20.25); }
     }
     [Fact]
     public void TwoHundredMetrePlotHasFineGeometryAndBoundedColour()
@@ -94,7 +94,7 @@ public class CanopyGeometryTests
         {
             var colour = CanopyGeometry.Colour(p.X, p.Z);
             Assert.InRange(colour.R, .05, .36);
-            Assert.InRange(colour.G, .07, .365);
+            Assert.InRange(colour.G, .07, .395);
             Assert.InRange(colour.B, .04, .235);
         }
     }
@@ -119,7 +119,33 @@ public class CanopyGeometryTests
                 Assert.True(n.Z > 0);
                 heights.Add(CanopyGeometry.Height(x, z));
             }
-        Assert.True(heights.Max() - heights.Min() > 9, "Canopy must have distinct peaks and hollows.");
+        Assert.True(heights.Max() - heights.Min() > 4, "Canopy must retain irregular peaks and hollows.");
+    }
+    // Independent golden values from the selected Python study (B/D 50%).
+    [Theory]
+    [InlineData(0, 40, .5)]
+    [InlineData(1, 42, 8.231970527724172)]
+    [InlineData(48, 48, 14.745336169430942)]
+    [InlineData(96, 110, 13.73300475463584)]
+    [InlineData(83.5, 120.5, 13.106231366431146)]
+    [InlineData(199, 88, 9.069069704430662)]
+    public void SelectedStudySurfaceIsPreserved(double x, double z, double expected)
+    {
+        var g = new CanopyGeometry(new[] { P(0, 0), P(200, 0), P(200, 200), P(0, 200) });
+        Assert.InRange(Math.Abs(g.SurfaceHeight(x, z) - expected), 0, 2e-6);
+    }
+    [Fact]
+    public void MaterialHaloJoinsAcrossChunkBoundaries()
+    {
+        var g = new CanopyGeometry(new[] { P(0, 0), P(200, 0), P(200, 200), P(0, 200) });
+        var left = new CanopyAppearance(g, 48, 96);
+        var right = new CanopyAppearance(g, 96, 96);
+        Assert.Equal(.7632916816025824, right.Occlusion(8, 28), 6);
+        for (int z = 0; z < CanopyAppearance.Size; z++)
+        {
+            Assert.Equal(left.Occlusion(96, z), right.Occlusion(0, z), 8);
+            Assert.InRange(right.Occlusion(0, z), 0, 1);
+        }
     }
     [Fact]
     public void InvalidBoundaryFailsWithoutProducingNonFiniteGeometry()

@@ -95,7 +95,7 @@ heights = [
     .5 + (layered + .7*branch + 1.5*rough - .5)*edge,
     .5 + (broken + 1.8*rough - 2.5*field(7, 650) - .5)*edge,
 ]
-labels = ['A — Current dome shape', 'B — Broad, interlocking crowns',
+labels = ['A — Current C# shape', 'B — Broad, interlocking crowns',
           'C — Layered branch masses', 'D — Broken, ragged canopy']
 notes = ['Control: previous C# surface', 'Wide crowns + smaller asymmetric lobes',
          'Layered foliage with occasional taller clumps', 'Stronger local relief and irregular hollows']
