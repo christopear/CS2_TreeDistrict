@@ -48,6 +48,7 @@ namespace TreeDistrict
             GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN());
             updateSystem.UpdateAt<TreeDistrictRegistrationSystem>(SystemUpdatePhase.MainLoop);
             updateSystem.UpdateAt<TreeAreaSettingsSystem>(SystemUpdatePhase.UIUpdate);
+            updateSystem.UpdateAt<AreaOverlapDiagnosticsSystem>(SystemUpdatePhase.UIUpdate);
             NativePlacementTimings.Register(updateSystem);
             LightCullingTimings.Install();
             // Register last so our creation work precedes the ToolSystem timing probe.
@@ -62,6 +63,8 @@ namespace TreeDistrict
             var world = World.DefaultGameObjectInjectionWorld;
             if (world != null && world.IsCreated)
             {
+                var overlapDiagnostics = world.GetExistingSystemManaged<AreaOverlapDiagnosticsSystem>();
+                if (overlapDiagnostics != null) overlapDiagnostics.Enabled = false;
                 var canopy = world.GetExistingSystemManaged<TreeCanopySystem>();
                 if (canopy != null) { canopy.Enabled = false; canopy.Clear(); }
             }
